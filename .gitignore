@@ -1,0 +1,6 @@
+vendor/
+.*
+!.editorconfig
+!.gitignore
+!.php_cs.dist
+tests/public/app.php

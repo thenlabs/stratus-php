@@ -1,0 +1,27 @@
+{
+    "name": "thenlabs/stratus",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andy Daniel Navarro Taño",
+            "email": "andaniel05@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.12",
+        "thenlabs/pyramidal-tests": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "ThenLabs\\Stratus\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ThenLabs\\Stratus\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php-webdriver/webdriver": "^1.8"
+    }
+}
