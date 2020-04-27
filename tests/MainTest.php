@@ -41,14 +41,14 @@ testCase('MainTest.php', function () {
         static::dumpApp($app);
         static::openApp();
 
-        // $secret = uniqid();
+        $secret = uniqid();
 
-        // static::findElement('input')->sendKeys($secret);
-        // static::findElement('button')->click();
+        static::findElement('input')->sendKeys($secret);
+        static::findElement('button')->click();
 
-        // $this->assertContains(
-        //     $secret,
-        //     static::findElement('label')->getText()
-        // );
+        $this->assertContains(
+            $secret,
+            static::findElement('label')->getText()
+        );
     });
 });

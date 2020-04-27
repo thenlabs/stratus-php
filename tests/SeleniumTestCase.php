@@ -97,6 +97,7 @@ class SeleniumTestCase extends TestCase
 
     public static function openApp(): void
     {
+        static::getDriver()->get($_ENV['TEST_URL']);
     }
 
     public static function findElement(string $cssSelector): ?RemoteWebElement
