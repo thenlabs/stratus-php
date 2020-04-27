@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\Stratus\Tests;
+namespace ThenLabs\StratusPHP\Tests;
 
-use ThenLabs\Stratus\AbstractApp;
+use ThenLabs\StratusPHP\AbstractApp;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;

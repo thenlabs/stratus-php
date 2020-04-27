@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\Stratus\Tests;
+namespace ThenLabs\StratusPHP\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use ThenLabs\PyramidalTests\Utils\StaticVarsInjectionTrait;

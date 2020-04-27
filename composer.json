@@ -1,5 +1,5 @@
 {
-    "name": "thenlabs/stratus",
+    "name": "thenlabs/stratus-php",
     "license": "MIT",
     "authors": [
         {
@@ -13,12 +13,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ThenLabs\\Stratus\\": "src/"
+            "ThenLabs\\StratusPHP\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ThenLabs\\Stratus\\Tests\\": "tests/"
+            "ThenLabs\\StratusPHP\\Tests\\": "tests/"
         }
     },
     "require": {
