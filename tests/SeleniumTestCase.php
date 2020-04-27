@@ -87,6 +87,8 @@ class SeleniumTestCase extends TestCase
         {$members}
         }
 
+        \$app = new App;
+
         {$rest}
         PHP;
 

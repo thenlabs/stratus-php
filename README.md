@@ -1,5 +1,5 @@
 
-# Stratus
+# StratusPHP
 
 ## Ejecutando las pruebas.
 
