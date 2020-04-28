@@ -78,18 +78,20 @@ class SeleniumTestCase extends TestCase
         }
 
         $source = <<<PHP
-        <?php
+            <?php
 
-        {$uses}
+            {$uses}
 
-        class App extends AbstractApp
-        {
-        {$members}
-        }
+            class App extends AbstractApp
+            {
+            {$members}
+            }
 
-        \$app = new App;
+            \$app = new App('/controller.php');
 
-        {$rest}
+            {$rest}
+
+            return \$app;
         PHP;
 
         file_put_contents(__DIR__.'/public/app.php', $source);

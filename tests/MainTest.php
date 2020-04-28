@@ -10,8 +10,8 @@ setTestCaseClass(SeleniumTestCase::class);
 
 testCase('MainTest.php', function () {
     test(function () {
-        $app = new class extends AbstractApp {
-            public function getView(array $data = []): string
+        $app = new class('') extends AbstractApp {
+            public function getView(): string
             {
                 return <<<HTML
                     <!DOCTYPE html>
@@ -22,8 +22,8 @@ testCase('MainTest.php', function () {
                     </head>
                     <body>
                         <input type="text" name="">
-                        <label></label>
-                        <button></button>
+                        <label>label</label>
+                        <button>Button</button>
                     </body>
                     </html>
                 HTML;

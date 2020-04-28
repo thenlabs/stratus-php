@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e0224d531c8a12509560049f1c2ce4c5",
+    "content-hash": "cfce3f1e02b578450221a7b624b5bb62",
     "packages": [
         {
             "name": "artyuum/html-element",
@@ -1149,16 +1149,16 @@
         },
         {
             "name": "thenlabs/composed-views",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thenlabs/composed-views.git",
-                "reference": "303d251a7278948bed2d4dae84974dbca999aa9f"
+                "reference": "93e041999bd34f3eafb8ada36ab0e929da6689be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thenlabs/composed-views/zipball/303d251a7278948bed2d4dae84974dbca999aa9f",
-                "reference": "303d251a7278948bed2d4dae84974dbca999aa9f",
+                "url": "https://api.github.com/repos/thenlabs/composed-views/zipball/93e041999bd34f3eafb8ada36ab0e929da6689be",
+                "reference": "93e041999bd34f3eafb8ada36ab0e929da6689be",
                 "shasum": ""
             },
             "require": {
@@ -1189,7 +1189,7 @@
                     "email": "andaniel05@gmail.com"
                 }
             ],
-            "time": "2020-04-27T19:13:45+00:00"
+            "time": "2020-04-28T12:47:16+00:00"
         },
         {
             "name": "wa72/htmlpagedom",
