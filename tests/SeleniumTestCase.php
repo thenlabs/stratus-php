@@ -113,4 +113,9 @@ class SeleniumTestCase extends TestCase
     {
         return static::getDriver()->findElements(WebDriverBy::cssSelector($cssSelector));
     }
+
+    public static function executeScript(string $script)
+    {
+        return static::getDriver()->executeScript($script);
+    }
 }

@@ -32,6 +32,11 @@ abstract class AbstractApp extends AbstractCompositeView
         });
     }
 
+    public function getToken(): string
+    {
+        return uniqid('token', true);
+    }
+
     public function getControllerUri(): string
     {
         return $this->controllerUri;
