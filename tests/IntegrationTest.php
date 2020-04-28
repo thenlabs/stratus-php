@@ -47,16 +47,49 @@ testCase('IntegrationTest.php', function () {
             $this->assertTrue(static::executeScript('return stratusAppInstance instanceof StratusApp'));
         });
 
+        // test(function () {
+        //     $secret = uniqid();
+
+        //     static::findElement('input')->sendKeys($secret);
+        //     static::findElement('button')->click();
+
+        //     $this->assertContains(
+        //         $secret,
+        //         static::findElement('label')->getText()
+        //     );
+        // });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $jsVarName = uniqid('app');
+
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $app->setJSVarName($jsVarName);
+            static::dumpApp($app);
+
+            static::setVar('jsVarName', $jsVarName);
+            static::openApp();
+        });
+
         test(function () {
-            $secret = uniqid();
-
-            static::findElement('input')->sendKeys($secret);
-            static::findElement('button')->click();
-
-            $this->assertContains(
-                $secret,
-                static::findElement('label')->getText()
-            );
+            $this->assertTrue(static::executeScript("return {$this->jsVarName} instanceof StratusApp"));
         });
     });
 });

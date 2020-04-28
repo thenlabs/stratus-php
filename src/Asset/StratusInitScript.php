@@ -18,7 +18,7 @@ class StratusInitScript extends Script
     public function getSource(): string
     {
         return <<<JAVASCRIPT
-            window.stratusAppInstance = new StratusApp('{$this->app->getControllerUri()}');
+            window.{$this->app->getJSVarName()} = new StratusApp('{$this->app->getControllerUri()}');
         JAVASCRIPT;
     }
 }

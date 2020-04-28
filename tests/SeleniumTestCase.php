@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Tests;
 
+use ThenLabs\PyramidalTests\Utils\StaticVarsInjectionTrait;
 use ThenLabs\StratusPHP\AbstractApp;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -16,7 +17,14 @@ use Exception;
  */
 class SeleniumTestCase extends TestCase
 {
+    use StaticVarsInjectionTrait;
+
     private static $driver;
+
+    public function setUp()
+    {
+        $this->injectVars();
+    }
 
     public static function getDriver(): RemoteWebDriver
     {
@@ -101,7 +109,7 @@ class SeleniumTestCase extends TestCase
 
     public static function openApp(): void
     {
-        static::getDriver()->get($_ENV['TEST_URL']);
+        static::getDriver()->get($_ENV['TEST_URL'].'?data='.serialize(static::$vars));
     }
 
     public static function findElement(string $cssSelector): ?RemoteWebElement

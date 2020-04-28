@@ -14,6 +14,7 @@ use ThenLabs\StratusPHP\Asset\StratusInitScript;
 abstract class AbstractApp extends AbstractCompositeView
 {
     protected $controllerUri;
+    protected $jsVarName = 'stratusAppInstance';
 
     public function __construct(string $controllerUri)
     {
@@ -40,6 +41,16 @@ abstract class AbstractApp extends AbstractCompositeView
     public function getControllerUri(): string
     {
         return $this->controllerUri;
+    }
+
+    public function setJSVarName(string $varName): void
+    {
+        $this->jsVarName = $varName;
+    }
+
+    public function getJSVarName(): string
+    {
+        return $this->jsVarName;
     }
 
     public function filter(string $cssSelector): Element
