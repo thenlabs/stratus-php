@@ -68,14 +68,11 @@ testCase('IntegrationTest.php', function () {
                 public function getView(): string
                 {
                     return <<<HTML
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>Document</title>
-                        </head>
-                        <body>
-                        </body>
+                        <html>
+                            <head>
+                            </head>
+                            <body>
+                            </body>
                         </html>
                     HTML;
                 }
