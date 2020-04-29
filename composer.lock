@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfce3f1e02b578450221a7b624b5bb62",
+    "content-hash": "b3e65f6949adad790c01cbb6f828c89e",
     "packages": [
         {
             "name": "artyuum/html-element",
@@ -1055,6 +1055,46 @@
                 "standards"
             ],
             "time": "2019-11-18T17:27:11+00:00"
+        },
+        {
+            "name": "thenlabs/class-builder",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thenlabs/class-builder.git",
+                "reference": "d9890184b357d05090c66bb1f886f4808ed3a405"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thenlabs/class-builder/zipball/d9890184b357d05090c66bb1f886f4808ed3a405",
+                "reference": "d9890184b357d05090c66bb1f886f4808ed3a405",
+                "shasum": ""
+            },
+            "require-dev": {
+                "doctrine/annotations": "^1.8",
+                "friendsofphp/php-cs-fixer": "^2.12",
+                "thenlabs/pyramidal-tests": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ThenLabs\\ClassBuilder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Daniel Navarro Taño",
+                    "email": "andaniel05@gmail.com"
+                },
+                {
+                    "name": "ThenLabs Community"
+                }
+            ],
+            "time": "2020-04-22T16:48:06+00:00"
         },
         {
             "name": "thenlabs/cli",
