@@ -150,7 +150,7 @@ testCase('IntegrationTest.php', function () {
 
             $child3 = (new ClassBuilder($className3))
                 ->setNamespace($namespace)
-                ->extends(AbstractCompositeView::class)
+                ->extends($className1)
                 ->implements(JavaScriptInstanceInterface::class)
                 ->addMethod('getView', function (): string {
                     return '';
@@ -160,6 +160,7 @@ testCase('IntegrationTest.php', function () {
                     ->setClosure(function (): string {
                         return <<<JAVASCRIPT
                             constructor (secret) {
+                                super();
                                 this.secret = secret;
                             }
 
@@ -267,6 +268,23 @@ testCase('IntegrationTest.php', function () {
             JAVASCRIPT;
 
             $this->assertEquals($this->secret, static::executeScript($script));
+        });
+
+        test(function () {
+            $script = <<<JAVASCRIPT
+                let Class1 = stratusAppInstance.getClass('{$this->fcqn1}');
+                return {
+                    isInstance: child3 instanceof Class1,
+                    result1: child3.getValue1(),
+                    result3: child3.getValue3(),
+                };
+            JAVASCRIPT;
+
+            $result = static::executeScript($script);
+
+            $this->assertTrue($result['isInstance']);
+            $this->assertEquals(1, $result['result1']);
+            $this->assertEquals(3, $result['result3']);
         });
     });
 });

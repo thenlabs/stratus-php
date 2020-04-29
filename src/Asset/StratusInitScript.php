@@ -7,6 +7,7 @@ use ThenLabs\StratusPHP\AbstractApp;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\ComposedViews\Asset\Script;
+use ReflectionClass;
 
 class StratusInitScript extends Script
 {
@@ -20,23 +21,40 @@ class StratusInitScript extends Script
     public function getSource(): string
     {
         $jsVarName = $this->app->getJSVarName();
+        $jsClasses = '';
+        $jsInstances = '';
 
-        $classes = '';
-        $instances = '';
         foreach ($this->app->children() as $child) {
             if ($child instanceof JavaScriptClassInterface) {
-                $className = get_class($child);
-                $classMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
+                $class = new ReflectionClass($child);
+                $className = $class->getName();
 
-                $classes .= <<<JAVASCRIPT
-                    \n{$jsVarName}.addClass('{$className}', class {
-                        {$classMembers}
+                $jsClassMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
+                $jsClassName = $className;
+                $jsExtends = '';
+
+                $parentClass = $class->getParentClass();
+                if ($parentClass instanceof ReflectionClass &&
+                    $parentClass->implementsInterface(JavaScriptClassInterface::class)
+                ) {
+                    $jsParentClassName = $parentClass->getName();
+
+                    $jsClasses .= <<<JAVASCRIPT
+                        \nlet ParentClass = {$jsVarName}.getClass('{$jsParentClassName}');
+                    JAVASCRIPT;
+
+                    $jsExtends = 'extends ParentClass';
+                }
+
+                $jsClasses .= <<<JAVASCRIPT
+                    \n{$jsVarName}.addClass('{$jsClassName}', class {$jsExtends} {
+                        {$jsClassMembers}
                     });\n\n
                 JAVASCRIPT;
 
                 if ($child instanceof JavaScriptInstanceInterface) {
-                    $instances .= <<<JAVASCRIPT
-                        \nlet ComponentClass = {$jsVarName}.getClass('{$className}');
+                    $jsInstances .= <<<JAVASCRIPT
+                        \nlet ComponentClass = {$jsVarName}.getClass('{$jsClassName}');
                         {$child->getJavaScriptCreateInstance()}\n\n
                     JAVASCRIPT;
                 }
@@ -47,9 +65,9 @@ class StratusInitScript extends Script
             "use strict";
             window.{$jsVarName} = new StratusApp('{$this->app->getControllerUri()}');
 
-            {$classes}
+            {$jsClasses}
 
-            {$instances}
+            {$jsInstances}
         JAVASCRIPT;
     }
 }
