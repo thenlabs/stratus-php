@@ -5,6 +5,7 @@ namespace ThenLabs\StratusPHP\Asset;
 
 use ThenLabs\StratusPHP\AbstractApp;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
+use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\ComposedViews\Asset\Script;
 
 class StratusInitScript extends Script
@@ -20,17 +21,25 @@ class StratusInitScript extends Script
     {
         $jsVarName = $this->app->getJSVarName();
 
-        $jsClasses = '';
+        $classes = '';
+        $instances = '';
         foreach ($this->app->children() as $child) {
             if ($child instanceof JavaScriptClassInterface) {
                 $className = get_class($child);
                 $classMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
 
-                $jsClasses .= <<<JAVASCRIPT
-                    {$jsVarName}.addClass('{$className}', class {
+                $classes .= <<<JAVASCRIPT
+                    \n{$jsVarName}.addClass('{$className}', class {
                         {$classMembers}
-                    });
+                    });\n\n
                 JAVASCRIPT;
+
+                if ($child instanceof JavaScriptInstanceInterface) {
+                    $instances .= <<<JAVASCRIPT
+                        \nlet ComponentClass = {$jsVarName}.getClass('{$className}');
+                        {$child->getJavaScriptCreateInstance()}\n\n
+                    JAVASCRIPT;
+                }
             }
         }
 
@@ -38,7 +47,9 @@ class StratusInitScript extends Script
             "use strict";
             window.{$jsVarName} = new StratusApp('{$this->app->getControllerUri()}');
 
-            {$jsClasses}
+            {$classes}
+
+            {$instances}
         JAVASCRIPT;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests;
 
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
+use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\StratusPHP\AbstractApp;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ClassBuilder\ClassBuilder;
@@ -102,6 +103,8 @@ testCase('IntegrationTest.php', function () {
 
             $namespace = uniqid('Namespace');
 
+            $secret = uniqid();
+
             $app = new class('') extends AbstractApp {
                 public function getView(): string
                 {
@@ -148,7 +151,7 @@ testCase('IntegrationTest.php', function () {
             $child3 = (new ClassBuilder($className3))
                 ->setNamespace($namespace)
                 ->extends(AbstractCompositeView::class)
-                ->implements(JavaScriptClassInterface::class)
+                ->implements(JavaScriptInstanceInterface::class)
                 ->addMethod('getView', function (): string {
                     return '';
                 })->end()
@@ -156,7 +159,20 @@ testCase('IntegrationTest.php', function () {
                     ->setStatic(true)
                     ->setClosure(function (): string {
                         return <<<JAVASCRIPT
-                            getValue3() { return 3 }
+                            constructor (secret) {
+                                this.secret = secret;
+                            }
+
+                            getValue3() {
+                                return 3;
+                            }
+                        JAVASCRIPT;
+                    })
+                ->end()
+                ->addMethod('getJavaScriptCreateInstance')
+                    ->setClosure(function () use ($secret): string {
+                        return <<<JAVASCRIPT
+                            window.child3 = new ComponentClass('{$secret}');
                         JAVASCRIPT;
                     })
                 ->end()
@@ -189,7 +205,15 @@ testCase('IntegrationTest.php', function () {
 
             static::dumpApp($app);
 
-            static::addVars(compact('className1', 'className2', 'className3', 'className4', 'namespace'));
+            static::addVars(compact(
+                'className1',
+                'className2',
+                'className3',
+                'className4',
+                'namespace',
+                'secret',
+            ));
+
             static::openApp();
 
             static::setVar('fcqn1', $className1);
@@ -235,6 +259,14 @@ testCase('IntegrationTest.php', function () {
             JAVASCRIPT;
 
             $this->assertEquals(4, static::executeScript($script));
+        });
+
+        test(function () {
+            $script = <<<JAVASCRIPT
+                return window.child3.secret;
+            JAVASCRIPT;
+
+            $this->assertEquals($this->secret, static::executeScript($script));
         });
     });
 });
