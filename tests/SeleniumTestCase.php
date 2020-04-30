@@ -85,6 +85,12 @@ class SeleniumTestCase extends TestCase
             }
         }
 
+        (function () {
+            $this->updateJavaScriptClasses();
+        })->call($app);
+
+        $javaScriptClassesDef = var_export($app->getJavaScriptClasses(), true);
+
         $source = <<<PHP
             <?php
 
@@ -96,6 +102,7 @@ class SeleniumTestCase extends TestCase
             }
 
             \$app = new App('/controller.php');
+            \$app->setJavaScriptClasses({$javaScriptClassesDef});
 
             {$rest}
 

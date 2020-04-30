@@ -100,6 +100,11 @@ abstract class AbstractApp extends AbstractCompositeView
         return $this->javaScriptClasses;
     }
 
+    public function setJavaScriptClasses(array $javaScriptClasses): void
+    {
+        $this->javaScriptClasses = $javaScriptClasses;
+    }
+
     protected function updateJavaScriptClasses(): void
     {
         foreach ($this->children() as $child) {

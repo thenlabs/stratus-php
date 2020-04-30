@@ -358,4 +358,68 @@ testCase('IntegrationTest.php', function () {
             $this->assertEquals(6, $result['result6']);
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $className1 = uniqid('Class1_');
+            $secret = uniqid();
+
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title></title>
+                        </head>
+                        <body>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $child1 = (new ClassBuilder($className1))
+                ->extends(AbstractCompositeView::class)
+                ->implements(JavaScriptClassInterface::class)
+                ->addMethod('getView', function (): string {
+                    return '';
+                })->end()
+                ->addMethod('getJavaScriptClassMembers')
+                    ->setStatic(true)
+                    ->setClosure(function (): string {
+                        return <<<JAVASCRIPT
+                            getValue1() { return 1 }
+                        JAVASCRIPT;
+                    })
+                ->end()
+                ->newInstance()
+            ;
+
+            $app->addChild($child1);
+
+            static::dumpApp($app);
+
+            static::addVars(compact(
+                'className1',
+                'secret',
+            ));
+
+            static::openApp();
+
+            static::setVar('jsClassId1', $app->getJavaScriptClassId($className1));
+        });
+
+        test(function () {
+            $script = <<<JAVASCRIPT
+                let c = stratusAppInstance.getClass('{$this->jsClassId1}');
+                let instance = new c;
+                return instance.getValue1();
+            JAVASCRIPT;
+
+            $this->assertEquals(1, static::executeScript($script));
+        });
+    });
 });
