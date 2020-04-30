@@ -96,10 +96,11 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $className1 = uniqid('Class');
-            $className2 = uniqid('Class');
-            $className3 = uniqid('Class');
-            $className4 = uniqid('Class');
+            $className1 = uniqid('Class1_');
+            $className2 = uniqid('Class2_');
+            $className3 = uniqid('Class3_');
+            $className4 = uniqid('Class4_');
+            $className5 = uniqid('Class5_');
 
             $namespace = uniqid('Namespace');
 
@@ -180,9 +181,27 @@ testCase('IntegrationTest.php', function () {
                 ->newInstance()
             ;
 
-            $child4 = (new ClassBuilder($className4))
+            $class5 = (new ClassBuilder($className5))
                 ->setNamespace($namespace)
                 ->extends(AbstractCompositeView::class)
+                ->implements(JavaScriptClassInterface::class)
+                ->addMethod('getView', function (): string {
+                    return '';
+                })->end()
+                ->addMethod('getJavaScriptClassMembers')
+                    ->setStatic(true)
+                    ->setClosure(function (): string {
+                        return <<<JAVASCRIPT
+                            getValue5() { return 5 }
+                        JAVASCRIPT;
+                    })
+                ->end()
+                ->install()
+            ;
+
+            $child4 = (new ClassBuilder($className4))
+                ->setNamespace($namespace)
+                ->extends($class5->getFCQN())
                 ->implements(JavaScriptClassInterface::class)
                 ->addMethod('getView', function (): string {
                     return '';
@@ -211,6 +230,7 @@ testCase('IntegrationTest.php', function () {
                 'className2',
                 'className3',
                 'className4',
+                'className5',
                 'namespace',
                 'secret',
             ));
@@ -221,6 +241,7 @@ testCase('IntegrationTest.php', function () {
             static::setVar('fcqn2', "{$namespace}\\$className2");
             static::setVar('fcqn3', "{$namespace}\\$className3");
             static::setVar('fcqn4', "{$namespace}\\$className4");
+            static::setVar('fcqn5', "{$namespace}\\$className5");
         });
 
         test(function () {
@@ -285,6 +306,27 @@ testCase('IntegrationTest.php', function () {
             $this->assertTrue($result['isInstance']);
             $this->assertEquals(1, $result['result1']);
             $this->assertEquals(3, $result['result3']);
+        });
+
+        test(function () {
+            $script = <<<JAVASCRIPT
+                let Class4 = stratusAppInstance.getClass('{$this->fcqn4}');
+                let Class5 = stratusAppInstance.getClass('{$this->fcqn5}');
+
+                let child4 = new Class4();
+
+                return {
+                    isInstance: child4 instanceof Class5,
+                    result4: child4.getValue4(),
+                    result5: child4.getValue5(),
+                };
+            JAVASCRIPT;
+
+            $result = static::executeScript($script);
+
+            $this->assertTrue($result['isInstance']);
+            $this->assertEquals(4, $result['result4']);
+            $this->assertEquals(5, $result['result5']);
         });
     });
 });

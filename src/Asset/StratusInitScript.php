@@ -25,39 +25,21 @@ class StratusInitScript extends Script
         $jsInstances = '';
 
         foreach ($this->app->children() as $child) {
-            if ($child instanceof JavaScriptClassInterface) {
-                $class = new ReflectionClass($child);
-                $className = $class->getName();
+            $className = get_class($child);
+            $jsClassIndex = $className;
 
-                $jsClassMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
-                $jsClassName = $className;
-                $jsExtends = '';
+            if ($child instanceof JavaScriptClassInterface &&
+                ! $this->app->hasJavaScriptClass($className)
+            ) {
+                $jsClasses .= $this->getJavaScriptClassDefinition($className, $jsClassIndex, $jsVarName);
+                $this->app->registerJavaScriptClass($className);
+            }
 
-                $parentClass = $class->getParentClass();
-                if ($parentClass instanceof ReflectionClass &&
-                    $parentClass->implementsInterface(JavaScriptClassInterface::class)
-                ) {
-                    $jsParentClassName = $parentClass->getName();
-
-                    $jsClasses .= <<<JAVASCRIPT
-                        \nlet ParentClass = {$jsVarName}.getClass('{$jsParentClassName}');
-                    JAVASCRIPT;
-
-                    $jsExtends = 'extends ParentClass';
-                }
-
-                $jsClasses .= <<<JAVASCRIPT
-                    \n{$jsVarName}.addClass('{$jsClassName}', class {$jsExtends} {
-                        {$jsClassMembers}
-                    });\n\n
+            if ($child instanceof JavaScriptInstanceInterface) {
+                $jsInstances .= <<<JAVASCRIPT
+                    \nvar ComponentClass = {$jsVarName}.getClass('{$jsClassIndex}');
+                    {$child->getJavaScriptCreateInstance()}\n\n
                 JAVASCRIPT;
-
-                if ($child instanceof JavaScriptInstanceInterface) {
-                    $jsInstances .= <<<JAVASCRIPT
-                        \nlet ComponentClass = {$jsVarName}.getClass('{$jsClassName}');
-                        {$child->getJavaScriptCreateInstance()}\n\n
-                    JAVASCRIPT;
-                }
             }
         }
 
@@ -69,5 +51,42 @@ class StratusInitScript extends Script
 
             {$jsInstances}
         JAVASCRIPT;
+    }
+
+    private function getJavaScriptClassDefinition(string $className, string $jsClassIndex, string $jsVarName): string
+    {
+        $result = '';
+
+        $class = new ReflectionClass($className);
+        $parentClass = $class->getParentClass();
+
+        $jsClassMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
+        $jsExtends = '';
+
+        if ($parentClass instanceof ReflectionClass &&
+            $parentClass->implementsInterface(JavaScriptClassInterface::class)
+        ) {
+            $parentClassName = $parentClass->getName();
+            $jsParentClassIndex = $parentClassName;
+
+            if (! $this->app->hasJavaScriptClass($parentClassName)) {
+                $result .= $this->getJavaScriptClassDefinition($parentClassName, $jsParentClassIndex, $jsVarName);
+                $this->app->registerJavaScriptClass($parentClassName);
+            }
+
+            $result .= <<<JAVASCRIPT
+                \nvar ParentClass = {$jsVarName}.getClass('{$jsParentClassIndex}');
+            JAVASCRIPT;
+
+            $jsExtends = 'extends ParentClass';
+        }
+
+        $result .= <<<JAVASCRIPT
+            \n{$jsVarName}.addClass('{$jsClassIndex}', class {$jsExtends} {
+                {$jsClassMembers}
+            });\n\n
+        JAVASCRIPT;
+
+        return $result;
     }
 }

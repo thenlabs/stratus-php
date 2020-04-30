@@ -15,6 +15,7 @@ abstract class AbstractApp extends AbstractCompositeView
 {
     protected $controllerUri;
     protected $jsVarName = 'stratusAppInstance';
+    protected $javaScriptClasses = [];
 
     public function __construct(string $controllerUri)
     {
@@ -58,5 +59,15 @@ abstract class AbstractApp extends AbstractCompositeView
         $element = new Element($cssSelector);
 
         return $element;
+    }
+
+    public function hasJavaScriptClass(string $className): bool
+    {
+        return array_key_exists($className, $this->javaScriptClasses);
+    }
+
+    public function registerJavaScriptClass(string $className): void
+    {
+        $this->javaScriptClasses[$className] = $className;
     }
 }
