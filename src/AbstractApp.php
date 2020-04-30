@@ -71,14 +71,6 @@ abstract class AbstractApp extends AbstractCompositeView
         return $element;
     }
 
-    /**
-     * @deprecated
-     */
-    public function hasJavaScriptClass(string $className): bool
-    {
-        return array_key_exists($className, $this->javaScriptClasses);
-    }
-
     public function registerJavaScriptClass(string $className): string
     {
         $classId = $this->debug ? $className : uniqid('Class');
@@ -113,24 +105,21 @@ abstract class AbstractApp extends AbstractCompositeView
         foreach ($this->children() as $child) {
             if ($child instanceof JavaScriptClassInterface) {
                 $class = new ReflectionClass($child);
-                $parentClass = $class->getParentClass();
-                $className = $class->getName();
 
-                while ($parentClass) {
-                    $parentClassName = $parentClass->getName();
+                $registerJavaScriptClass = function (ReflectionClass $class) use (&$registerJavaScriptClass) {
+                    $parentClass = $class->getParentClass();
+                    $className = $class->getName();
 
-                    if ($parentClass->implementsInterface(JavaScriptClassInterface::class) &&
-                        ! isset($this->javaScriptClasses[$parentClassName])
-                    ) {
-                        $this->registerJavaScriptClass($parentClassName);
+                    if ($parentClass->implementsInterface(JavaScriptClassInterface::class)) {
+                        $registerJavaScriptClass($parentClass);
                     }
 
-                    $parentClass = $parentClass->getParentClass();
-                }
+                    if (! isset($this->javaScriptClasses[$className])) {
+                        $this->registerJavaScriptClass($className);
+                    }
+                };
 
-                if (! isset($this->javaScriptClasses[$className])) {
-                    $this->registerJavaScriptClass($className);
-                }
+                $registerJavaScriptClass($class);
             }
         }
     }
