@@ -102,6 +102,7 @@ testCase('IntegrationTest.php', function () {
             $className3 = uniqid('Class3_');
             $className4 = uniqid('Class4_');
             $className5 = uniqid('Class5_');
+            $className6 = uniqid('Class6_');
 
             $namespace = uniqid('Namespace');
 
@@ -184,9 +185,27 @@ testCase('IntegrationTest.php', function () {
                 ->newInstance()
             ;
 
-            $class5 = (new ClassBuilder($className5))
+            $class6 = (new ClassBuilder($className6))
                 ->setNamespace($namespace)
                 ->extends(AbstractCompositeView::class)
+                ->implements(JavaScriptClassInterface::class)
+                ->addMethod('getView', function (): string {
+                    return '';
+                })->end()
+                ->addMethod('getJavaScriptClassMembers')
+                    ->setStatic(true)
+                    ->setClosure(function (): string {
+                        return <<<JAVASCRIPT
+                            getValue6() { return 6 }
+                        JAVASCRIPT;
+                    })
+                ->end()
+                ->install()
+            ;
+
+            $class5 = (new ClassBuilder($className5))
+                ->setNamespace($namespace)
+                ->extends($class6->getFCQN())
                 ->implements(JavaScriptClassInterface::class)
                 ->addMethod('getView', function (): string {
                     return '';
@@ -234,6 +253,7 @@ testCase('IntegrationTest.php', function () {
                 'className3',
                 'className4',
                 'className5',
+                'className6',
                 'namespace',
                 'secret',
             ));
@@ -245,6 +265,7 @@ testCase('IntegrationTest.php', function () {
             static::setVar('fcqn3', "{$namespace}\\$className3");
             static::setVar('fcqn4', "{$namespace}\\$className4");
             static::setVar('fcqn5', "{$namespace}\\$className5");
+            static::setVar('fcqn6', "{$namespace}\\$className6");
         });
 
         test(function () {
@@ -315,21 +336,26 @@ testCase('IntegrationTest.php', function () {
             $script = <<<JAVASCRIPT
                 let Class4 = stratusAppInstance.getClass('{$this->fcqn4}');
                 let Class5 = stratusAppInstance.getClass('{$this->fcqn5}');
+                let Class6 = stratusAppInstance.getClass('{$this->fcqn6}');
 
                 let child4 = new Class4();
 
                 return {
-                    isInstance: child4 instanceof Class5,
+                    isInstance5: child4 instanceof Class5,
+                    isInstance6: child4 instanceof Class6,
                     result4: child4.getValue4(),
                     result5: child4.getValue5(),
+                    result6: child4.getValue6(),
                 };
             JAVASCRIPT;
 
             $result = static::executeScript($script);
 
-            $this->assertTrue($result['isInstance']);
+            $this->assertTrue($result['isInstance5']);
+            $this->assertTrue($result['isInstance6']);
             $this->assertEquals(4, $result['result4']);
             $this->assertEquals(5, $result['result5']);
+            $this->assertEquals(6, $result['result6']);
         });
     });
 });
