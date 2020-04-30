@@ -85,5 +85,15 @@ testCase('AbstractAppTest.php', function () {
                 $this->assertEquals(18, strlen($jsClassId));
             });
         });
+
+        testCase(function () {
+            setUp(function () {
+                $this->app->setBooted(true);
+            });
+
+            test(function () {
+                $this->assertTrue($this->app->isBooted());
+            });
+        });
     });
 });
