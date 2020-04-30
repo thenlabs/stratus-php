@@ -26,13 +26,16 @@ class StratusInitScript extends Script
 
         foreach ($this->app->children() as $child) {
             $className = get_class($child);
-            $jsClassId = $className;
 
             if ($child instanceof JavaScriptClassInterface &&
                 ! $this->app->hasJavaScriptClass($className)
             ) {
+                $jsClassId = $this->app->registerJavaScriptClass($className);
                 $jsClasses .= $this->getJavaScriptClassDefinition($className, $jsClassId, $jsVarName);
-                $this->app->registerJavaScriptClass($className);
+            }
+
+            if (! isset($jsClassId)) {
+                $jsClassId = $this->app->getJavaScriptClassId($className);
             }
 
             if ($child instanceof JavaScriptInstanceInterface) {
@@ -67,11 +70,14 @@ class StratusInitScript extends Script
             $parentClass->implementsInterface(JavaScriptClassInterface::class)
         ) {
             $parentClassName = $parentClass->getName();
-            $jsParentClassId = $parentClassName;
 
             if (! $this->app->hasJavaScriptClass($parentClassName)) {
+                $jsParentClassId = $this->app->registerJavaScriptClass($parentClassName);
                 $result .= $this->getJavaScriptClassDefinition($parentClassName, $jsParentClassId, $jsVarName);
-                $this->app->registerJavaScriptClass($parentClassName);
+            }
+
+            if (! isset($jsParentClassId)) {
+                $jsParentClassId = $this->app->getJavaScriptClassId($parentClassName);
             }
 
             $result .= <<<JAVASCRIPT

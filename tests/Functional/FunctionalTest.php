@@ -124,6 +124,8 @@ testCase('IntegrationTest.php', function () {
                 }
             };
 
+            $app->setDebug(true);
+
             $child1 = (new ClassBuilder($className1))
                 ->extends(AbstractCompositeView::class)
                 ->implements(JavaScriptClassInterface::class)
