@@ -31,5 +31,15 @@ testCase('AbstractAppTest.php', function () {
             $this->assertStringStartsWith('token', $token);
             $this->assertGreaterThan(23, strlen($token));
         });
+
+        test(function () {
+            $this->assertFalse($this->app->isDebug());
+        });
+
+        test(function () {
+            $this->app->setDebug(true);
+
+            $this->assertTrue($this->app->isDebug());
+        });
     });
 });

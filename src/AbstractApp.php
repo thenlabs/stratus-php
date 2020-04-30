@@ -16,6 +16,7 @@ abstract class AbstractApp extends AbstractCompositeView
     protected $controllerUri;
     protected $jsVarName = 'stratusAppInstance';
     protected $javaScriptClasses = [];
+    protected $debug = false;
 
     public function __construct(string $controllerUri)
     {
@@ -69,5 +70,15 @@ abstract class AbstractApp extends AbstractCompositeView
     public function registerJavaScriptClass(string $className): void
     {
         $this->javaScriptClasses[$className] = $className;
+    }
+
+    public function isDebug(): bool
+    {
+        return $this->debug;
+    }
+
+    public function setDebug(bool $value): void
+    {
+        $this->debug = $value;
     }
 }
