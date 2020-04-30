@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP\Tests;
+namespace ThenLabs\StratusPHP\Tests\Unit;
 
 use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\Tests\TestCase;
 
 setTestCaseNamespace(__NAMESPACE__);
-setTestCaseClass(SeleniumTestCase::class);
+setTestCaseClass(TestCase::class);
 
 testCase('AbstractAppTest.php', function () {
     testCase('create a new app instance', function () {
