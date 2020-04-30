@@ -38,9 +38,48 @@ testCase('AbstractAppTest.php', function () {
         });
 
         test(function () {
-            $this->app->setDebug(true);
+            $this->assertNull($this->app->getJavaScriptClassId(uniqid('Class')));
+        });
 
-            $this->assertTrue($this->app->isDebug());
+        testCase(function () {
+            setUp(function () {
+                $this->app->setDebug(true);
+            });
+
+            test(function () {
+                $this->assertTrue($this->app->isDebug());
+            });
+
+            testCase(function () {
+                setUp(function () {
+                    $this->className = uniqid('Class');
+
+                    $this->app->registerJavaScriptClass($this->className);
+                });
+
+                test(function () {
+                    $this->assertSame(
+                        $this->className,
+                        $this->app->getJavaScriptClassId($this->className)
+                    );
+                });
+            });
+        });
+
+        testCase(function () {
+            setUp(function () {
+                $this->className = uniqid('Class');
+
+                $this->app->registerJavaScriptClass($this->className);
+            });
+
+            test(function () {
+                $jsClassId = $this->app->getJavaScriptClassId($this->className);
+
+                $this->assertNotEquals($this->className, $jsClassId);
+                $this->assertStringStartsWith('Class', $jsClassId);
+                $this->assertEquals(18, strlen($jsClassId));
+            });
         });
     });
 });

@@ -26,18 +26,18 @@ class StratusInitScript extends Script
 
         foreach ($this->app->children() as $child) {
             $className = get_class($child);
-            $jsClassIndex = $className;
+            $jsClassId = $className;
 
             if ($child instanceof JavaScriptClassInterface &&
                 ! $this->app->hasJavaScriptClass($className)
             ) {
-                $jsClasses .= $this->getJavaScriptClassDefinition($className, $jsClassIndex, $jsVarName);
+                $jsClasses .= $this->getJavaScriptClassDefinition($className, $jsClassId, $jsVarName);
                 $this->app->registerJavaScriptClass($className);
             }
 
             if ($child instanceof JavaScriptInstanceInterface) {
                 $jsInstances .= <<<JAVASCRIPT
-                    \nvar ComponentClass = {$jsVarName}.getClass('{$jsClassIndex}');
+                    \nvar ComponentClass = {$jsVarName}.getClass('{$jsClassId}');
                     {$child->getJavaScriptCreateInstance()}\n\n
                 JAVASCRIPT;
             }
@@ -53,7 +53,7 @@ class StratusInitScript extends Script
         JAVASCRIPT;
     }
 
-    private function getJavaScriptClassDefinition(string $className, string $jsClassIndex, string $jsVarName): string
+    private function getJavaScriptClassDefinition(string $className, string $jsClassId, string $jsVarName): string
     {
         $result = '';
 
@@ -67,22 +67,22 @@ class StratusInitScript extends Script
             $parentClass->implementsInterface(JavaScriptClassInterface::class)
         ) {
             $parentClassName = $parentClass->getName();
-            $jsParentClassIndex = $parentClassName;
+            $jsParentClassId = $parentClassName;
 
             if (! $this->app->hasJavaScriptClass($parentClassName)) {
-                $result .= $this->getJavaScriptClassDefinition($parentClassName, $jsParentClassIndex, $jsVarName);
+                $result .= $this->getJavaScriptClassDefinition($parentClassName, $jsParentClassId, $jsVarName);
                 $this->app->registerJavaScriptClass($parentClassName);
             }
 
             $result .= <<<JAVASCRIPT
-                \nvar ParentClass = {$jsVarName}.getClass('{$jsParentClassIndex}');
+                \nvar ParentClass = {$jsVarName}.getClass('{$jsParentClassId}');
             JAVASCRIPT;
 
             $jsExtends = 'extends ParentClass';
         }
 
         $result .= <<<JAVASCRIPT
-            \n{$jsVarName}.addClass('{$jsClassIndex}', class {$jsExtends} {
+            \n{$jsVarName}.addClass('{$jsClassId}', class {$jsExtends} {
                 {$jsClassMembers}
             });\n\n
         JAVASCRIPT;

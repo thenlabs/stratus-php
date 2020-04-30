@@ -69,7 +69,14 @@ abstract class AbstractApp extends AbstractCompositeView
 
     public function registerJavaScriptClass(string $className): void
     {
-        $this->javaScriptClasses[$className] = $className;
+        $classId = $this->debug ? $className : uniqid('Class');
+
+        $this->javaScriptClasses[$className] = $classId;
+    }
+
+    public function getJavaScriptClassId(string $className): ?string
+    {
+        return $this->javaScriptClasses[$className] ?? null;
     }
 
     public function isDebug(): bool
