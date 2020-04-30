@@ -20,12 +20,14 @@ abstract class AbstractApp extends AbstractCompositeView
     protected $javaScriptClasses = [];
     protected $debug = false;
     protected $booted = false;
+    protected $bus;
 
     public function __construct(string $controllerUri)
     {
         parent::__construct();
 
         $this->controllerUri = $controllerUri;
+        $this->bus = new StreamingBus;
 
         $this->addFilter(function ($event) {
             $stratusScript = new StratusScript('stratus-js', null, '');
