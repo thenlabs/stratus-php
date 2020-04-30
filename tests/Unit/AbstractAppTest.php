@@ -10,7 +10,7 @@ setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(TestCase::class);
 
 testCase('AbstractAppTest.php', function () {
-    testCase('create a new app instance', function () {
+    testCase(function () {
         setUp(function () {
             $this->controllerUri = uniqid('controllerUri');
 
@@ -35,6 +35,10 @@ testCase('AbstractAppTest.php', function () {
 
         test(function () {
             $this->assertFalse($this->app->isDebug());
+        });
+
+        test(function () {
+            $this->assertFalse($this->app->isBooted());
         });
 
         test(function () {

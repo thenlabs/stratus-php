@@ -95,6 +95,11 @@ abstract class AbstractApp extends AbstractCompositeView
         $this->debug = $value;
     }
 
+    public function isBooted(): bool
+    {
+        return false;
+    }
+
     public function getJavaScriptClasses(): array
     {
         return $this->javaScriptClasses;
