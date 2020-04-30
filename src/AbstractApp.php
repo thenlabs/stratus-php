@@ -6,6 +6,8 @@ namespace ThenLabs\StratusPHP;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
+use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
+use ReflectionClass;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -35,6 +37,13 @@ abstract class AbstractApp extends AbstractCompositeView
         });
     }
 
+    public function render(array $data = [], bool $dispatchRenderEvent = true): string
+    {
+        $this->updateJavaScriptClasses();
+
+        return parent::render($data, $dispatchRenderEvent);
+    }
+
     public function getToken(): string
     {
         return uniqid('token', true);
@@ -62,6 +71,9 @@ abstract class AbstractApp extends AbstractCompositeView
         return $element;
     }
 
+    /**
+     * @deprecated
+     */
     public function hasJavaScriptClass(string $className): bool
     {
         return array_key_exists($className, $this->javaScriptClasses);
@@ -89,5 +101,37 @@ abstract class AbstractApp extends AbstractCompositeView
     public function setDebug(bool $value): void
     {
         $this->debug = $value;
+    }
+
+    public function getJavaScriptClasses(): array
+    {
+        return $this->javaScriptClasses;
+    }
+
+    protected function updateJavaScriptClasses(): void
+    {
+        foreach ($this->children() as $child) {
+            if ($child instanceof JavaScriptClassInterface) {
+                $class = new ReflectionClass($child);
+                $parentClass = $class->getParentClass();
+                $className = $class->getName();
+
+                while ($parentClass) {
+                    $parentClassName = $parentClass->getName();
+
+                    if ($parentClass->implementsInterface(JavaScriptClassInterface::class) &&
+                        ! isset($this->javaScriptClasses[$parentClassName])
+                    ) {
+                        $this->registerJavaScriptClass($parentClassName);
+                    }
+
+                    $parentClass = $parentClass->getParentClass();
+                }
+
+                if (! isset($this->javaScriptClasses[$className])) {
+                    $this->registerJavaScriptClass($className);
+                }
+            }
+        }
     }
 }

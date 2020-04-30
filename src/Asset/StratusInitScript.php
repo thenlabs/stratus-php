@@ -24,21 +24,36 @@ class StratusInitScript extends Script
         $jsClasses = '';
         $jsInstances = '';
 
+        foreach ($this->app->getJavaScriptClasses() as $className => $jsClassId) {
+            $jsClassMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
+            $jsExtends = null;
+            $jsParentClass = null;
+
+            $class = new ReflectionClass($className);
+            $parentClass = $class->getParentClass();
+
+            if ($parentClass) {
+                $jsParentClassId = $this->app->getJavaScriptClassId($parentClass->getName());
+
+                $jsParentClass = <<<JAVASCRIPT
+                    var ParentClass = {$jsVarName}.getClass('{$jsParentClassId}');
+                JAVASCRIPT;
+
+                $jsExtends = 'extends ParentClass';
+            }
+
+            $jsClasses .= <<<JAVASCRIPT
+                \n\n{$jsParentClass}
+                {$jsVarName}.addClass('{$jsClassId}', class {$jsExtends} {
+                    {$jsClassMembers}
+                });\n
+            JAVASCRIPT;
+        }
+
         foreach ($this->app->children() as $child) {
-            $className = get_class($child);
-
-            if ($child instanceof JavaScriptClassInterface &&
-                ! $this->app->hasJavaScriptClass($className)
-            ) {
-                $jsClassId = $this->app->registerJavaScriptClass($className);
-                $jsClasses .= $this->getJavaScriptClassDefinition($className, $jsClassId, $jsVarName);
-            }
-
-            if (! isset($jsClassId)) {
-                $jsClassId = $this->app->getJavaScriptClassId($className);
-            }
-
             if ($child instanceof JavaScriptInstanceInterface) {
+                $jsClassId = $this->app->getJavaScriptClassId(get_class($child));
+
                 $jsInstances .= <<<JAVASCRIPT
                     \nvar ComponentClass = {$jsVarName}.getClass('{$jsClassId}');
                     {$child->getJavaScriptCreateInstance()}\n\n
@@ -54,45 +69,5 @@ class StratusInitScript extends Script
 
             {$jsInstances}
         JAVASCRIPT;
-    }
-
-    private function getJavaScriptClassDefinition(string $className, string $jsClassId, string $jsVarName): string
-    {
-        $result = '';
-
-        $class = new ReflectionClass($className);
-        $parentClass = $class->getParentClass();
-
-        $jsClassMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
-        $jsExtends = '';
-
-        if ($parentClass instanceof ReflectionClass &&
-            $parentClass->implementsInterface(JavaScriptClassInterface::class)
-        ) {
-            $parentClassName = $parentClass->getName();
-
-            if (! $this->app->hasJavaScriptClass($parentClassName)) {
-                $jsParentClassId = $this->app->registerJavaScriptClass($parentClassName);
-                $result .= $this->getJavaScriptClassDefinition($parentClassName, $jsParentClassId, $jsVarName);
-            }
-
-            if (! isset($jsParentClassId)) {
-                $jsParentClassId = $this->app->getJavaScriptClassId($parentClassName);
-            }
-
-            $result .= <<<JAVASCRIPT
-                \nvar ParentClass = {$jsVarName}.getClass('{$jsParentClassId}');
-            JAVASCRIPT;
-
-            $jsExtends = 'extends ParentClass';
-        }
-
-        $result .= <<<JAVASCRIPT
-            \n{$jsVarName}.addClass('{$jsClassId}', class {$jsExtends} {
-                {$jsClassMembers}
-            });\n\n
-        JAVASCRIPT;
-
-        return $result;
     }
 }
