@@ -8,5 +8,5 @@ namespace ThenLabs\StratusPHP\JavaScript;
  */
 interface JavaScriptInstanceInterface extends JavaScriptClassInterface
 {
-    public function getJavaScriptCreateInstance(): string;
+    public function getJavaScriptCreateInstanceScript(): string;
 }

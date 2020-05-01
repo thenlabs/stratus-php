@@ -175,7 +175,7 @@ testCase('IntegrationTest.php', function () {
                         JAVASCRIPT;
                     })
                 ->end()
-                ->addMethod('getJavaScriptCreateInstance')
+                ->addMethod('getJavaScriptCreateInstanceScript')
                     ->setClosure(function () use ($secret): string {
                         return <<<JAVASCRIPT
                             window.child3 = new ComponentClass('{$secret}');
