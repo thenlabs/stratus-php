@@ -68,13 +68,6 @@ abstract class AbstractApp extends AbstractCompositeView
         return $this->jsVarName;
     }
 
-    public function filter(string $cssSelector): Element
-    {
-        $element = new Element($cssSelector);
-
-        return $element;
-    }
-
     public function registerJavaScriptClass(string $className): string
     {
         $classId = $this->debug ? $className : uniqid('Class');

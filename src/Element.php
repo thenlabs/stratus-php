@@ -8,6 +8,13 @@ namespace ThenLabs\StratusPHP;
  */
 class Element
 {
+    protected $cssSelector;
+
+    public function __construct(string $cssSelector)
+    {
+        $this->cssSelector = $cssSelector;
+    }
+
     public function click()
     {
     }

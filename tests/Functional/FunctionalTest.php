@@ -14,56 +14,56 @@ setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
 
 testCase('IntegrationTest.php', function () {
-    testCase(function () {
-        setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
-                public function getView(): string
-                {
-                    return <<<HTML
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>Document</title>
-                        </head>
-                        <body>
-                            <input type="text" name="">
-                            <label>label</label>
-                            <button>Button</button>
-                        </body>
-                        </html>
-                    HTML;
-                }
-            };
+    // testCase(function () {
+    //     setUpBeforeClassOnce(function () {
+    //         $app = new class('') extends AbstractApp {
+    //             public function getView(): string
+    //             {
+    //                 return <<<HTML
+    //                     <!DOCTYPE html>
+    //                     <html lang="en">
+    //                     <head>
+    //                         <meta charset="UTF-8">
+    //                         <title>Document</title>
+    //                     </head>
+    //                     <body>
+    //                         <input type="text" name="">
+    //                         <label>label</label>
+    //                         <button>Button</button>
+    //                     </body>
+    //                     </html>
+    //                 HTML;
+    //             }
+    //         };
 
-            $input = $app->filter('input');
-            $label = $app->filter('label');
-            $button = $app->filter('button');
+    //         $input = $app->filter('input');
+    //         $label = $app->filter('label');
+    //         $button = $app->filter('button');
 
-            $button->click(function () use ($input, $label) {
-                $label->setInnerHtml($input->value);
-            });
+    //         $button->click(function () use ($input, $label) {
+    //             $label->setInnerHtml($input->value);
+    //         });
 
-            static::dumpApp($app);
-            static::openApp();
-        });
+    //         static::dumpApp($app);
+    //         static::openApp();
+    //     });
 
-        test(function () {
-            $this->assertTrue(static::executeScript('return stratusAppInstance instanceof StratusApp'));
-        });
+    //     test(function () {
+    //         $this->assertTrue(static::executeScript('return stratusAppInstance instanceof StratusApp'));
+    //     });
 
-        // test(function () {
-        //     $secret = uniqid();
+    //     test(function () {
+    //         $secret = uniqid();
 
-        //     static::findElement('input')->sendKeys($secret);
-        //     static::findElement('button')->click();
+    //         static::findElement('input')->sendKeys($secret);
+    //         static::findElement('button')->click();
 
-        //     $this->assertContains(
-        //         $secret,
-        //         static::findElement('label')->getText()
-        //     );
-        // });
-    });
+    //         $this->assertContains(
+    //             $secret,
+    //             static::findElement('label')->getText()
+    //         );
+    //     });
+    // });
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
@@ -422,4 +422,44 @@ testCase('IntegrationTest.php', function () {
             $this->assertEquals(1, static::executeScript($script));
         });
     });
+
+    // testCase(function () {
+    //     setUpBeforeClassOnce(function () {
+    //         $attribute = uniqid('attr-');
+    //         $value = uniqid();
+
+    //         $app = new class('') extends AbstractApp {
+    //             public function getView(): string
+    //             {
+    //                 return <<<HTML
+    //                     <!DOCTYPE html>
+    //                     <html lang="en">
+    //                     <head>
+    //                         <meta charset="UTF-8">
+    //                         <title></title>
+    //                     </head>
+    //                     <body>
+    //                     </body>
+    //                     </html>
+    //                 HTML;
+    //             }
+    //         };
+
+    //         $app->sq('body')->setAttribute($attribute, $value);
+
+    //         static::dumpApp($app);
+
+    //         static::addVars(compact('attribute', 'value'));
+
+    //         static::openApp();
+    //     });
+
+    //     test(function () {
+    //         $script = <<<JAVASCRIPT
+    //             return document.querySelector('body').getAttribute('{$this->attribute}');
+    //         JAVASCRIPT;
+
+    //         $this->assertEquals($this->value, static::executeScript($script));
+    //     });
+    // });
 });
