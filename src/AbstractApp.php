@@ -6,6 +6,7 @@ namespace ThenLabs\StratusPHP;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
+use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ReflectionClass;
 
