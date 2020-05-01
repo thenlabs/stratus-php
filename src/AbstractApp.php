@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP;
 
 use ThenLabs\ComposedViews\AbstractCompositeView;
+use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
@@ -30,15 +31,7 @@ abstract class AbstractApp extends AbstractCompositeView
         $this->controllerUri = $controllerUri;
         $this->bus = new StreamingBus;
 
-        $this->addFilter(function ($event) {
-            $stratusScript = new StratusScript('stratus-js', null, '');
-
-            $stratusInitScript = new StratusInitScript('stratus-init-script', null, '');
-            $stratusInitScript->setApp($this);
-
-            $event->filter('body')->append($stratusScript->render());
-            $event->filter('body')->append($stratusInitScript->render());
-        });
+        $this->addFilter([$this, '_addStratusAssetScripts']);
     }
 
     public function render(array $data = [], bool $dispatchRenderEvent = true): string
@@ -134,5 +127,16 @@ abstract class AbstractApp extends AbstractCompositeView
                 $registerJavaScriptClass($class);
             }
         }
+    }
+
+    public function _addStratusAssetScripts(RenderEvent $event): void
+    {
+        $stratusScript = new StratusScript('stratus-js', null, '');
+
+        $stratusInitScript = new StratusInitScript('stratus-init-script', null, '');
+        $stratusInitScript->setApp($this);
+
+        $event->filter('body')->append($stratusScript->render());
+        $event->filter('body')->append($stratusInitScript->render());
     }
 }
