@@ -423,43 +423,43 @@ testCase('IntegrationTest.php', function () {
         });
     });
 
-    // testCase(function () {
-    //     setUpBeforeClassOnce(function () {
-    //         $attribute = uniqid('attr-');
-    //         $value = uniqid();
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $attribute = uniqid('attr-');
+            $value = uniqid();
 
-    //         $app = new class('') extends AbstractApp {
-    //             public function getView(): string
-    //             {
-    //                 return <<<HTML
-    //                     <!DOCTYPE html>
-    //                     <html lang="en">
-    //                     <head>
-    //                         <meta charset="UTF-8">
-    //                         <title></title>
-    //                     </head>
-    //                     <body>
-    //                     </body>
-    //                     </html>
-    //                 HTML;
-    //             }
-    //         };
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title></title>
+                        </head>
+                        <body>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
 
-    //         $app->sq('body')->setAttribute($attribute, $value);
+            $app->querySelector('body')->setAttribute($attribute, $value);
 
-    //         static::dumpApp($app);
+            static::dumpApp($app);
 
-    //         static::addVars(compact('attribute', 'value'));
+            static::addVars(compact('attribute', 'value'));
 
-    //         static::openApp();
-    //     });
+            static::openApp();
+        });
 
-    //     test(function () {
-    //         $script = <<<JAVASCRIPT
-    //             return document.querySelector('body').getAttribute('{$this->attribute}');
-    //         JAVASCRIPT;
+        test(function () {
+            $script = <<<JAVASCRIPT
+                return document.querySelector('body').getAttribute('{$this->attribute}');
+            JAVASCRIPT;
 
-    //         $this->assertEquals($this->value, static::executeScript($script));
-    //     });
-    // });
+            $this->assertEquals($this->value, static::executeScript($script));
+        });
+    });
 });

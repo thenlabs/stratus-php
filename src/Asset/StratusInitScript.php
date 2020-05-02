@@ -32,7 +32,9 @@ class StratusInitScript extends Script
             $class = new ReflectionClass($className);
             $parentClass = $class->getParentClass();
 
-            if ($parentClass->implementsInterface(JavaScriptClassInterface::class)) {
+            if ($parentClass &&
+                $parentClass->implementsInterface(JavaScriptClassInterface::class)
+            ) {
                 $jsParentClassId = $this->app->getJavaScriptClassId($parentClass->getName());
 
                 $jsParentClass = <<<JAVASCRIPT

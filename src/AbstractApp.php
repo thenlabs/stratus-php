@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP;
 
+use ThenLabs\Components\ComponentInterface;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\StratusPHP\Asset\StratusScript;
@@ -105,6 +106,15 @@ abstract class AbstractApp extends AbstractCompositeView
         $this->javaScriptClasses = $javaScriptClasses;
     }
 
+    public function querySelector(string $cssSelector): Element
+    {
+        $element = new Element($cssSelector);
+
+        $this->addChild($element);
+
+        return $element;
+    }
+
     protected function updateJavaScriptClasses(): void
     {
         foreach ($this->children() as $child) {
@@ -115,7 +125,9 @@ abstract class AbstractApp extends AbstractCompositeView
                     $parentClass = $class->getParentClass();
                     $className = $class->getName();
 
-                    if ($parentClass->implementsInterface(JavaScriptClassInterface::class)) {
+                    if ($parentClass &&
+                        $parentClass->implementsInterface(JavaScriptClassInterface::class)
+                    ) {
                         $registerJavaScriptClass($parentClass);
                     }
 
@@ -138,5 +150,10 @@ abstract class AbstractApp extends AbstractCompositeView
 
         $event->filter('body')->append($stratusScript->render());
         $event->filter('body')->append($stratusInitScript->render());
+    }
+
+    public function validateChild(ComponentInterface $child): bool
+    {
+        return true;
     }
 }
