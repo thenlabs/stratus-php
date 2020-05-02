@@ -33,6 +33,10 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         $jsAttributes = '';
 
         foreach ($this->attributes as $attribute => $value) {
+            if ($value === null) {
+                continue;
+            }
+
             $jsAttribute = var_export($attribute, true);
             $jsValue = var_export($value, true);
 
@@ -54,5 +58,10 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     public function setAttribute(string $attribute, $value): void
     {
         $this->attributes[$attribute] = $value;
+    }
+
+    public function getAttribute(string $attribute)
+    {
+        return $this->attributes[$attribute] ?? null;
     }
 }

@@ -10,6 +10,7 @@ use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
+use Wa72\HtmlPageDom\HtmlPageCrawler;
 use ReflectionClass;
 
 /**
@@ -108,7 +109,12 @@ abstract class AbstractApp extends AbstractCompositeView
 
     public function querySelector(string $cssSelector): Element
     {
+        $appView = $this->render();
+        $crawler = new HtmlPageCrawler($appView);
+        $htmlElement = $crawler->filter($cssSelector);
+
         $element = new Element($cssSelector);
+        $element->setAttribute('class', $htmlElement->getAttribute('class'));
 
         $this->addChild($element);
 

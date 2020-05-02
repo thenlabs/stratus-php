@@ -17,7 +17,18 @@ testCase('AbstractAppTest.php', function () {
             $this->app = new class($this->controllerUri) extends AbstractApp {
                 public function getView(): string
                 {
-                    return '';
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title></title>
+                        </head>
+                        <body>
+                            <button class="btn-class-1 btn-class-2"></button>
+                        </body>
+                        </html>
+                    HTML;
                 }
             };
         });
@@ -93,6 +104,19 @@ testCase('AbstractAppTest.php', function () {
 
             test(function () {
                 $this->assertTrue($this->app->isBooted());
+            });
+        });
+
+        testCase(function () {
+            setUp(function () {
+                $this->buttonElement = $this->app->querySelector('button');
+            });
+
+            test(function () {
+                $this->assertEquals(
+                    'btn-class-1 btn-class-2',
+                    $this->buttonElement->getAttribute('class')
+                );
             });
         });
     });
