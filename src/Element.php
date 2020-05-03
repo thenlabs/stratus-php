@@ -35,10 +35,6 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         $jsAttributes = '';
 
         foreach ($this->attributes as $attribute => $value) {
-            if ($value === null) {
-                continue;
-            }
-
             $jsAttribute = var_export($attribute, true);
             $jsValue = var_export($value, true);
 
@@ -95,13 +91,13 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
     public function querySelector(string $cssSelector): Element
     {
-        // foreach ($this->childs as $component) {
-        //     if ($component instanceof Element &&
-        //         $component->getCssSelector() == $cssSelector
-        //     ) {
-        //         return $component;
-        //     }
-        // }
+        foreach ($this->childs as $component) {
+            if ($component instanceof Element &&
+                $component->getCssSelector() == $cssSelector
+            ) {
+                return $component;
+            }
+        }
 
         $element = new Element($cssSelector);
         $element->setCrawler($this->crawler->filter($cssSelector));

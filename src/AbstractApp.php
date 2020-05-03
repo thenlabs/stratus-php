@@ -121,7 +121,9 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             }
         }
 
-        $view = $this->isFrozen() ? $this->frozenView : $this->render();
+        $isFrozen = $this->isFrozen();
+
+        $view = $isFrozen ? $this->frozenView : $this->render();
         $crawler = new HtmlPageCrawler($view);
         $elementCrawler = $crawler->filter($cssSelector);
 
@@ -130,7 +132,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $this->addChild($element);
 
-        if (! $this->isFrozen()) {
+        if (! $isFrozen) {
             $this->frozenView = $view;
         }
 
