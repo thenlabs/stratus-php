@@ -6,6 +6,7 @@ namespace ThenLabs\StratusPHP;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
+use Wa72\HtmlPageDom\HtmlPageCrawler;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -16,6 +17,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
     protected $cssSelector;
     protected $attributes = [];
+    protected $crawler;
 
     public function __construct(string $cssSelector)
     {
@@ -58,10 +60,31 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     public function setAttribute(string $attribute, $value): void
     {
         $this->attributes[$attribute] = $value;
+        $this->crawler->setAttribute($attribute, $value);
     }
 
     public function getAttribute(string $attribute)
     {
-        return $this->attributes[$attribute] ?? null;
+        return $this->crawler->getAttribute($attribute);
+    }
+
+    public function hasClass(string $cssClass): bool
+    {
+        return $this->crawler->hasClass($cssClass);
+    }
+
+    public function addClass(string $cssClass): void
+    {
+        $this->crawler->addClass($cssClass);
+    }
+
+    public function getCrawler(): ?HtmlPageCrawler
+    {
+        return $this->crawler;
+    }
+
+    public function setCrawler(HtmlPageCrawler $crawler): void
+    {
+        $this->crawler = $crawler;
     }
 }

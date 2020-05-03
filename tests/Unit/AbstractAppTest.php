@@ -118,6 +118,33 @@ testCase('AbstractAppTest.php', function () {
                     $this->buttonElement->getAttribute('class')
                 );
             });
+
+            test(function () {
+                $this->assertTrue($this->buttonElement->hasClass('btn-class-1'));
+                $this->assertTrue($this->buttonElement->hasClass('btn-class-2'));
+            });
+
+            test(function () {
+                $this->assertFalse($this->buttonElement->hasClass(uniqid()));
+            });
+
+            testCase(function () {
+                setUp(function () {
+                    $this->newClass = uniqid('class-');
+                    $this->buttonElement->addClass($this->newClass);
+                });
+
+                test(function () {
+                    $this->assertEquals(
+                        "btn-class-1 btn-class-2 {$this->newClass}",
+                        $this->buttonElement->getAttribute('class')
+                    );
+                });
+
+                test(function () {
+                    $this->assertTrue($this->buttonElement->hasClass($this->newClass));
+                });
+            });
         });
     });
 });

@@ -13,7 +13,7 @@ use ThenLabs\ClassBuilder\ClassBuilder;
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
 
-testCase('IntegrationTest.php', function () {
+testCase('FunctionalTest.php', function () {
     // testCase(function () {
     //     setUpBeforeClassOnce(function () {
     //         $app = new class('') extends AbstractApp {

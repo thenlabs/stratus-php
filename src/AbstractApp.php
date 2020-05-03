@@ -111,10 +111,10 @@ abstract class AbstractApp extends AbstractCompositeView
     {
         $appView = $this->render();
         $crawler = new HtmlPageCrawler($appView);
-        $htmlElement = $crawler->filter($cssSelector);
+        $elementCrawler = $crawler->filter($cssSelector);
 
         $element = new Element($cssSelector);
-        $element->setAttribute('class', $htmlElement->getAttribute('class'));
+        $element->setCrawler($elementCrawler);
 
         $this->addChild($element);
 
