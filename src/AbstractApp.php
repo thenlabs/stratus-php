@@ -109,6 +109,14 @@ abstract class AbstractApp extends AbstractCompositeView
 
     public function querySelector(string $cssSelector): Element
     {
+        foreach ($this->childs as $component) {
+            if ($component instanceof Element &&
+                $component->getCssSelector() == $cssSelector
+            ) {
+                return $component;
+            }
+        }
+
         $appView = $this->render();
         $crawler = new HtmlPageCrawler($appView);
         $elementCrawler = $crawler->filter($cssSelector);

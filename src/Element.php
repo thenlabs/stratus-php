@@ -87,4 +87,9 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     {
         $this->crawler = $crawler;
     }
+
+    public function getCssSelector(): string
+    {
+        return $this->cssSelector;
+    }
 }

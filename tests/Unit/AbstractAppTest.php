@@ -128,6 +128,10 @@ testCase('AbstractAppTest.php', function () {
                 $this->assertFalse($this->buttonElement->hasClass(uniqid()));
             });
 
+            test(function () {
+                $this->assertSame($this->buttonElement, $this->app->querySelector('button'));
+            });
+
             testCase(function () {
                 setUp(function () {
                     $this->newClass = uniqid('class-');
