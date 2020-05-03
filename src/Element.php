@@ -11,7 +11,7 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class Element implements CompositeComponentInterface, JavaScriptInstanceInterface
+class Element implements CompositeComponentInterface, JavaScriptInstanceInterface, QuerySelectorInterface
 {
     use CompositeComponentTrait;
 
@@ -91,5 +91,23 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     public function getCssSelector(): string
     {
         return $this->cssSelector;
+    }
+
+    public function querySelector(string $cssSelector): Element
+    {
+        // foreach ($this->childs as $component) {
+        //     if ($component instanceof Element &&
+        //         $component->getCssSelector() == $cssSelector
+        //     ) {
+        //         return $component;
+        //     }
+        // }
+
+        $element = new Element($cssSelector);
+        $element->setCrawler($this->crawler->filter($cssSelector));
+
+        $this->addChild($element);
+
+        return $element;
     }
 }

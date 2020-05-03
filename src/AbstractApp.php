@@ -19,7 +19,7 @@ use ReflectionClass;
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  * @abstract
  */
-abstract class AbstractApp extends AbstractCompositeView
+abstract class AbstractApp extends AbstractCompositeView implements QuerySelectorInterface
 {
     protected $controllerUri;
     protected $jsVarName = 'stratusAppInstance';
@@ -176,7 +176,9 @@ abstract class AbstractApp extends AbstractCompositeView
 
     public function _beforeInsertionEvent(BeforeInsertionEvent $event): void
     {
-        if ($this->isFrozen()) {
+        $child = $event->getChild();
+
+        if ($this->isFrozen() && ! $child instanceof Element) {
             throw new FrozenViewException;
         }
     }
