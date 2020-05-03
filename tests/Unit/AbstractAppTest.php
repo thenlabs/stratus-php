@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Unit;
 
 use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\Exception\FrozenViewException;
 use ThenLabs\StratusPHP\Tests\TestCase;
+use ThenLabs\Components\ComponentInterface;
+use ThenLabs\Components\ComponentTrait;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(TestCase::class);
@@ -50,6 +53,10 @@ testCase('AbstractAppTest.php', function () {
 
         test(function () {
             $this->assertFalse($this->app->isBooted());
+        });
+
+        test(function () {
+            $this->assertFalse($this->app->isFrozen());
         });
 
         test(function () {
@@ -132,6 +139,10 @@ testCase('AbstractAppTest.php', function () {
                 $this->assertSame($this->buttonElement, $this->app->querySelector('button'));
             });
 
+            test(function () {
+                $this->assertTrue($this->app->isFrozen());
+            });
+
             testCase(function () {
                 setUp(function () {
                     $this->newClass = uniqid('class-');
@@ -147,6 +158,24 @@ testCase('AbstractAppTest.php', function () {
 
                 test(function () {
                     $this->assertTrue($this->buttonElement->hasClass($this->newClass));
+                });
+            });
+
+            testCase(function () {
+                setUp(function () {
+                    $this->expectException(FrozenViewException::class);
+                });
+
+                test(function () {
+                    $this->app->addFilter(function () {});
+                });
+
+                test(function () {
+                    $child = new class implements ComponentInterface {
+                        use ComponentTrait;
+                    };
+
+                    $this->app->addChild($child);
                 });
             });
         });

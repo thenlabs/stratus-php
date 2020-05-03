@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP;
 
 use ThenLabs\Components\ComponentInterface;
+use ThenLabs\Components\Event\BeforeInsertionEvent;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
+use ThenLabs\StratusPHP\Exception\FrozenViewException;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
@@ -25,6 +27,7 @@ abstract class AbstractApp extends AbstractCompositeView
     protected $debug = false;
     protected $booted = false;
     protected $bus;
+    protected $frozenView;
 
     public function __construct(string $controllerUri)
     {
@@ -34,6 +37,7 @@ abstract class AbstractApp extends AbstractCompositeView
         $this->bus = new StreamingBus;
 
         $this->addFilter([$this, '_addStratusAssetScripts']);
+        $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
     }
 
     public function render(array $data = [], bool $dispatchRenderEvent = true): string
@@ -117,14 +121,18 @@ abstract class AbstractApp extends AbstractCompositeView
             }
         }
 
-        $appView = $this->render();
-        $crawler = new HtmlPageCrawler($appView);
+        $view = $this->isFrozen() ? $this->frozenView : $this->render();
+        $crawler = new HtmlPageCrawler($view);
         $elementCrawler = $crawler->filter($cssSelector);
 
         $element = new Element($cssSelector);
         $element->setCrawler($elementCrawler);
 
         $this->addChild($element);
+
+        if (! $this->isFrozen()) {
+            $this->frozenView = $view;
+        }
 
         return $element;
     }
@@ -166,8 +174,29 @@ abstract class AbstractApp extends AbstractCompositeView
         $event->filter('body')->append($stratusInitScript->render());
     }
 
+    public function _beforeInsertionEvent(BeforeInsertionEvent $event): void
+    {
+        if ($this->isFrozen()) {
+            throw new FrozenViewException;
+        }
+    }
+
     public function validateChild(ComponentInterface $child): bool
     {
         return true;
+    }
+
+    public function isFrozen(): bool
+    {
+        return $this->frozenView ? true : false;
+    }
+
+    public function addFilter(callable $callback): void
+    {
+        if ($this->isFrozen()) {
+            throw new FrozenViewException;
+        }
+
+        parent::addFilter($callback);
     }
 }
