@@ -18,6 +18,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     protected $cssSelector;
     protected $attributes = [];
     protected $crawler;
+    protected $app;
 
     public function __construct(string $cssSelector)
     {
@@ -103,8 +104,22 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         $element = new Element($cssSelector);
         $element->setCrawler($this->crawler->filter($cssSelector));
 
+        if ($this->app instanceof AbstractApp) {
+            $element->setApp($this->app);
+        }
+
         $this->addChild($element);
 
         return $element;
+    }
+
+    public function setApp(AbstractApp $app): void
+    {
+        $this->app = $app;
+    }
+
+    public function getApp(): AbstractApp
+    {
+        return $this->app;
     }
 }

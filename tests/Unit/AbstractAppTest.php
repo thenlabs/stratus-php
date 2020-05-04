@@ -70,6 +70,20 @@ testCase('AbstractAppTest.php', function () {
             $this->app->run([]);
         });
 
+        test(function () {
+            $this->expectException(InvalidTokenException::class);
+
+            $this->app->run([]);
+        });
+
+        test(function () {
+            $this->body = $this->app->querySelector('body');
+            $this->button = $this->body->querySelector('button');
+
+            $this->assertSame($this->app, $this->body->getApp());
+            $this->assertSame($this->app, $this->button->getApp());
+        });
+
         testCase(function () {
             setUp(function () {
                 $this->app->setDebug(true);
@@ -148,6 +162,10 @@ testCase('AbstractAppTest.php', function () {
 
             test(function () {
                 $this->assertTrue($this->app->isFrozen());
+            });
+
+            test(function () {
+                $this->assertSame($this->app, $this->buttonElement->getApp());
             });
 
             testCase(function () {

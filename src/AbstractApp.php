@@ -130,6 +130,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $element = new Element($cssSelector);
         $element->setCrawler($elementCrawler);
+        $element->setApp($this);
 
         $this->addChild($element);
 

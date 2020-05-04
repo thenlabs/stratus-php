@@ -2,8 +2,11 @@
 
 class StratusApp {
 
-    constructor() {
+    constructor(controller, token) {
+        this.controller = controller;
+        this.token = token;
         this.classes = {};
+        this.components = {};
     }
 
     getClass(id) {
