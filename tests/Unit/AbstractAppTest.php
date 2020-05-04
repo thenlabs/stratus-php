@@ -5,6 +5,7 @@ namespace ThenLabs\StratusPHP\Tests\Unit;
 
 use ThenLabs\StratusPHP\AbstractApp;
 use ThenLabs\StratusPHP\Exception\FrozenViewException;
+use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Tests\TestCase;
 use ThenLabs\Components\ComponentInterface;
 use ThenLabs\Components\ComponentTrait;
@@ -61,6 +62,12 @@ testCase('AbstractAppTest.php', function () {
 
         test(function () {
             $this->assertNull($this->app->getJavaScriptClassId(uniqid('Class')));
+        });
+
+        test(function () {
+            $this->expectException(InvalidTokenException::class);
+
+            $this->app->run([]);
         });
 
         testCase(function () {

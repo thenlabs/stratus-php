@@ -49,8 +49,9 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         JAVASCRIPT;
     }
 
-    public function click(): void
+    public function click(callable $listener): void
     {
+        $this->on('click', $listener);
     }
 
     public function setAttribute(string $attribute, $value): void

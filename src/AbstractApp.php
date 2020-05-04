@@ -10,6 +10,7 @@ use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Exception\FrozenViewException;
+use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
@@ -202,5 +203,10 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         }
 
         parent::addFilter($callback);
+    }
+
+    public function run(array $message): void
+    {
+        throw new InvalidTokenException;
     }
 }

@@ -10,7 +10,7 @@ class StratusApp {
         return this.classes[id];
     }
 
-    addClass(id, c) {
-        this.classes[id] = c;
+    addClass(id, classInstance) {
+        this.classes[id] = classInstance;
     }
 }
