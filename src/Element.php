@@ -17,6 +17,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
     protected $cssSelector;
     protected $attributes = [];
+    protected $properties = [];
     protected $crawler;
     protected $app;
 
@@ -28,25 +29,49 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     public static function getJavaScriptClassMembers(): string
     {
         return <<<JAVASCRIPT
+            constructor(id, parentElement, selector) {
+                this.id = id;
+                this.parentElement = parentElement;
+                this.selector = selector;
+                this.element = parentElement.querySelector(selector);
+            }
         JAVASCRIPT;
     }
 
     public function getJavaScriptCreateInstanceScript(): string
     {
         $jsAttributes = '';
+        $jsEvents = '';
 
         foreach ($this->attributes as $attribute => $value) {
             $jsAttribute = var_export($attribute, true);
             $jsValue = var_export($value, true);
 
             $jsAttributes .= <<<JAVASCRIPT
-                element.setAttribute({$jsAttribute}, {$jsValue});\n
+                component.element.setAttribute({$jsAttribute}, {$jsValue});\n
             JAVASCRIPT;
         }
 
+        foreach ($this->eventDispatcher->getListeners() as $eventName => $listeners) {
+            $jsEvents .= <<<JAVASCRIPT
+                component.element.addEventListener('{$eventName}', () => {
+                    app.dispatch('{$eventName}');
+                });
+            JAVASCRIPT;
+        }
+
+        $parent = $this->getParent();
+        $jsParentElement = $parent instanceof AbstractApp ?
+            'document' :
+            "app.getComponent('{$parent->getId()}').element"
+        ;
+
         return <<<JAVASCRIPT
-            var element = document.querySelector('{$this->cssSelector}');
+            const parentElement = {$jsParentElement};
+            const component = new ComponentClass('{$this->getId()}', parentElement, '{$this->cssSelector}');
+            app.addComponent(component);
             {$jsAttributes}
+            {$jsEvents}
         JAVASCRIPT;
     }
 
@@ -121,5 +146,21 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     public function getApp(): AbstractApp
     {
         return $this->app;
+    }
+
+    public function __get($name)
+    {
+        return $this->properties[$name] ?? null;
+    }
+
+    public function __set($name, $value)
+    {
+        $this->app->getBus()->write([
+            'componentId' => $this->getId(),
+            'property' => $name,
+            'value' => $value,
+        ]);
+
+        $this->properties[$name] = $value;
     }
 }

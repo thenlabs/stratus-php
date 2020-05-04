@@ -10,5 +10,9 @@ class StreamingBus implements BusInterface
 {
     public function write(array $data)
     {
+        echo json_encode($data) . '%SSS%';
+
+        ob_flush();
+        flush();
     }
 }

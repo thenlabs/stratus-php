@@ -5,6 +5,7 @@ namespace ThenLabs\StratusPHP;
 
 use ThenLabs\Components\ComponentInterface;
 use ThenLabs\Components\Event\BeforeInsertionEvent;
+use ThenLabs\Components\Event\Event;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\StratusPHP\Asset\StratusScript;
@@ -208,6 +209,25 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
     public function run(array $message): void
     {
-        throw new InvalidTokenException;
+        if (! isset($message['token']) || $message['token'] != $this->token) {
+            throw new InvalidTokenException;
+        }
+
+        foreach ($message['componentData'] as $componentId => $data) {
+            $component = $this->findChildById($componentId);
+
+            foreach ($data as $property => $value) {
+                $component->{$property} = $value;
+            }
+        }
+
+        $eventInfo = explode('.', $message['eventName']);
+        $componentId = $eventInfo[0];
+        $eventName = $eventInfo[1];
+
+        $component = $this->findChildById($componentId);
+        $event = new Event;
+
+        $component->dispatchEvent($eventName, $event);
     }
 }
