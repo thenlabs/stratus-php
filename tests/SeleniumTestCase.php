@@ -91,7 +91,7 @@ class SeleniumTestCase extends TestCase
 
         $javaScriptClassesDef = var_export($app->getJavaScriptClasses(), true);
 
-        $source = <<<PHP
+        $classSource = <<<PHP
             <?php
 
             {$uses}
@@ -100,6 +100,14 @@ class SeleniumTestCase extends TestCase
             {
             {$members}
             }
+        PHP;
+
+        $source = <<<PHP
+            <?php
+
+            {$uses}
+
+            require_once 'App.class.php';
 
             \$app = new App('/controller.php');
             \$app->setJavaScriptClasses({$javaScriptClassesDef});
@@ -109,6 +117,7 @@ class SeleniumTestCase extends TestCase
             return \$app;
         PHP;
 
+        file_put_contents(__DIR__.'/public/App.class.php', $classSource);
         file_put_contents(__DIR__.'/public/app.php', $source);
 
         fclose($file);

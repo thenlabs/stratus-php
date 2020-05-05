@@ -64,7 +64,7 @@ class StratusApp {
             eventName,
         };
 
-        xhr.send(`stratus.app.${this.token}=` + JSON.stringify(request));
+        xhr.send(`stratus_message=` + JSON.stringify(request));
         this.buffer = {};
     }
 }

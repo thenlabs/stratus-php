@@ -473,7 +473,7 @@ testCase('FunctionalTest.php', function () {
         });
     });
 
-    testCase(function () {
+    testCase('temp', function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends AbstractApp {
                 public function getView(): string
@@ -493,15 +493,18 @@ testCase('FunctionalTest.php', function () {
                         </html>
                     HTML;
                 }
+
+                public function listener($event): void
+                {
+                    $app = $event->getApp();
+                    $input = $app->querySelector('input');
+                    $label = $app->querySelector('label');
+
+                    $label->innerHTML = $input->value;
+                }
             };
 
-            $app->querySelector('button')->click(function ($event) {
-                $app = $event->getApp();
-                $input = $app->querySelector('input');
-                $label = $app->querySelector('label');
-
-                $label->innerHTML = $input->value;
-            });
+            $app->querySelector('button')->click([$app, 'listener']);
 
             static::dumpApp($app);
             static::openApp();

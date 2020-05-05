@@ -68,7 +68,10 @@ class StratusInitScript extends Script
 
         return <<<JAVASCRIPT
             "use strict";
-            window.{$jsVarName} = new StratusApp('{$this->app->getControllerUri()}');
+            window.{$jsVarName} = new StratusApp(
+                '{$this->app->getControllerUri()}',
+                '{$this->app->getToken()}'
+            );
 
             {$jsClasses}
 

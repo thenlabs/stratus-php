@@ -5,11 +5,11 @@ namespace ThenLabs\StratusPHP;
 
 use ThenLabs\Components\ComponentInterface;
 use ThenLabs\Components\Event\BeforeInsertionEvent;
-use ThenLabs\Components\Event\Event;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
+use ThenLabs\StratusPHP\Event\StratusEvent;
 use ThenLabs\StratusPHP\Exception\FrozenViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
@@ -30,6 +30,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     protected $booted = false;
     protected $bus;
     protected $frozenView;
+    protected $token;
 
     public function __construct(string $controllerUri)
     {
@@ -37,6 +38,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $this->controllerUri = $controllerUri;
         $this->bus = new StreamingBus;
+        $this->token = uniqid('token', true);
 
         $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
@@ -51,7 +53,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
     public function getToken(): string
     {
-        return uniqid('token', true);
+        return $this->token;
     }
 
     public function getControllerUri(): string
@@ -121,6 +123,15 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             ) {
                 return $component;
             }
+        }
+
+        if ($this->booted) {
+            $element = new Element($cssSelector);
+            $element->setApp($this);
+
+            $this->addChild($element);
+
+            return $element;
         }
 
         $isFrozen = $this->isFrozen();
@@ -209,6 +220,10 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
     public function run(array $message): void
     {
+        if (! $this->booted) {
+            $this->booted = true;
+        }
+
         if (! isset($message['token']) || $message['token'] != $this->token) {
             throw new InvalidTokenException;
         }
@@ -222,12 +237,15 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         }
 
         $eventInfo = explode('.', $message['eventName']);
-        $componentId = $eventInfo[0];
-        $eventName = $eventInfo[1];
+        if (count($eventInfo) == 2) {
+            $componentId = $eventInfo[0];
+            $eventName = $eventInfo[1];
 
-        $component = $this->findChildById($componentId);
-        $event = new Event;
+            $event = new StratusEvent;
+            $event->setApp($this);
 
-        $component->dispatchEvent($eventName, $event);
+            $component = $this->findChildById($componentId);
+            $component->dispatchEvent($eventName, $event);
+        }
     }
 }

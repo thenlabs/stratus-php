@@ -40,6 +40,8 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
     public function getJavaScriptCreateInstanceScript(): string
     {
+        $myId = $this->getId();
+
         $jsAttributes = '';
         $jsEvents = '';
 
@@ -55,7 +57,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         foreach ($this->eventDispatcher->getListeners() as $eventName => $listeners) {
             $jsEvents .= <<<JAVASCRIPT
                 component.element.addEventListener('{$eventName}', () => {
-                    app.dispatch('{$eventName}');
+                    app.dispatch('{$myId}.{$eventName}');
                 });
             JAVASCRIPT;
         }
@@ -68,7 +70,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
         return <<<JAVASCRIPT
             const parentElement = {$jsParentElement};
-            const component = new ComponentClass('{$this->getId()}', parentElement, '{$this->cssSelector}');
+            const component = new ComponentClass('{$myId}', parentElement, '{$this->cssSelector}');
             app.addComponent(component);
             {$jsAttributes}
             {$jsEvents}
