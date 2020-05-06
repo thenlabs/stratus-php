@@ -14,6 +14,7 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 class Element implements CompositeComponentInterface, JavaScriptInstanceInterface, QuerySelectorInterface
 {
     use CompositeComponentTrait;
+    use SleepTrait;
 
     protected $cssSelector;
     protected $attributes = [];

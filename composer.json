@@ -9,7 +9,8 @@
     ],
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.12",
-        "thenlabs/pyramidal-tests": "^1.0"
+        "thenlabs/pyramidal-tests": "^1.0",
+        "symfony/var-dumper": "^5.0"
     },
     "autoload": {
         "psr-4": {

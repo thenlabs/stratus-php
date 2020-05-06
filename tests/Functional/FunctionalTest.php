@@ -473,7 +473,7 @@ testCase('FunctionalTest.php', function () {
         });
     });
 
-    testCase('temp', function () {
+    testCase('my temp', function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends AbstractApp {
                 public function getView(): string

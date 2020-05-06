@@ -12,6 +12,7 @@ use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Event\StratusEvent;
 use ThenLabs\StratusPHP\Exception\FrozenViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
+use ThenLabs\StratusPHP\Bus\BusInterface;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
@@ -23,6 +24,8 @@ use ReflectionClass;
  */
 abstract class AbstractApp extends AbstractCompositeView implements QuerySelectorInterface
 {
+    use SleepTrait;
+
     protected $controllerUri;
     protected $jsVarName = 'stratusAppInstance';
     protected $javaScriptClasses = [];
@@ -247,5 +250,10 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             $component = $this->findChildById($componentId);
             $component->dispatchEvent($eventName, $event);
         }
+    }
+
+    public function getBus(): BusInterface
+    {
+        return $this->bus;
     }
 }
