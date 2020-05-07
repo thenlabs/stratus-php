@@ -468,7 +468,6 @@ testCase('FunctionalTest.php', function () {
                                 <title>Document</title>
                             </head>
                             <body>
-                                <input type="text" name="">
                                 <label></label>
                                 <button>Button</button>
                             </body>
@@ -479,7 +478,6 @@ testCase('FunctionalTest.php', function () {
                     public function listener($event): void
                     {
                         $app = $event->getApp();
-                        $input = $app->querySelector('input');
                         $label = $app->querySelector('label');
 
                         $label->innerHTML = uniqid();
@@ -508,7 +506,6 @@ testCase('FunctionalTest.php', function () {
                                 <title>Document</title>
                             </head>
                             <body>
-                                <input type="text" name="">
                                 <label></label>
                                 <button>Button</button>
                             </body>
