@@ -481,6 +481,7 @@ testCase('FunctionalTest.php', function () {
                         $label = $app->querySelector('label');
 
                         $label->innerHTML = uniqid();
+                        $label->{'style.color'} = 'red';
                     }
                 };
 
@@ -491,6 +492,13 @@ testCase('FunctionalTest.php', function () {
             });
 
             useMacro('tests');
+
+            test(function () {
+                $this->assertEquals(
+                    'red',
+                    $this->executeScript('return document.querySelector("label").style.color')
+                );
+            });
         });
 
         testCase(function () {
