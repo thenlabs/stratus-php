@@ -142,4 +142,11 @@ class SeleniumTestCase extends TestCase
     {
         return static::getDriver()->executeScript($script);
     }
+
+    public static function waitForResponse()
+    {
+        do {
+            $httpRequestsLen = static::executeScript('return stratusAppInstance.httpRequests.length');
+        } while ($httpRequestsLen > 0);
+    }
 }

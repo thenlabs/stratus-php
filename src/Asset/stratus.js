@@ -8,6 +8,8 @@ class StratusApp {
         this.classes = {};
         this.components = {};
         this.buffer = {};
+        this.rootElement = document;
+        this.httpRequests = [];
     }
 
     getClass(id) {
@@ -50,8 +52,14 @@ class StratusApp {
         };
 
         xhr.onreadystatechange = () => {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                this.processMessage(xhr.responseText);
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                this.httpRequests.splice(
+                    this.httpRequests.indexOf(xhr), 1
+                );
+
+                if (xhr.status === 200) {
+                    this.processMessage(xhr.responseText);
+                }
             }
         };
 
@@ -64,7 +72,8 @@ class StratusApp {
             eventName,
         };
 
-        xhr.send(`stratus_message=` + JSON.stringify(request));
+        xhr.send('stratus_message=' + JSON.stringify(request));
+        this.httpRequests.push(xhr);
         this.buffer = {};
     }
 

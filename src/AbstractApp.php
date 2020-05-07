@@ -123,6 +123,21 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
             $this->addChild($element);
 
+            $jsElementClassId = $this->getJavaScriptClassId(Element::class);
+
+            $this->bus->write([
+                'handler' => [
+                    'classId' => $jsElementClassId,
+                    'method' => 'createNew'
+                ],
+                'data' => [
+                    'classId' => $jsElementClassId,
+                    'componentId' => $element->getId(),
+                    'parent' => null,
+                    'selector' => $cssSelector,
+                ],
+            ]);
+
             return $element;
         }
 

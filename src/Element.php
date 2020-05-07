@@ -41,6 +41,17 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
                 const component = app.getComponent(messageData.componentId);
                 component.element[messageData.property] = messageData.value;
             }
+
+            static createNew(messageData) {
+                const ComponentClass = stratusAppInstance.classes[messageData.classId];
+                const component = new ComponentClass(
+                    messageData.componentId,
+                    stratusAppInstance.rootElement,
+                    messageData.selector
+                );
+
+                stratusAppInstance.addComponent(component);
+            }
         JAVASCRIPT;
     }
 

@@ -443,7 +443,7 @@ testCase('FunctionalTest.php', function () {
         });
     });
 
-    testCase('my temp', function () {
+    testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends AbstractApp {
                 public function getView(): string
@@ -457,7 +457,7 @@ testCase('FunctionalTest.php', function () {
                         </head>
                         <body>
                             <input type="text" name="">
-                            <label>label</label>
+                            <label></label>
                             <button>Button</button>
                         </body>
                         </html>
@@ -470,7 +470,7 @@ testCase('FunctionalTest.php', function () {
                     $input = $app->querySelector('input');
                     $label = $app->querySelector('label');
 
-                    $label->innerHTML = $input->value;
+                    $label->innerHTML = uniqid();
                 }
             };
 
@@ -485,13 +485,10 @@ testCase('FunctionalTest.php', function () {
         });
 
         test(function () {
-            $secret = uniqid();
-
-            static::findElement('input')->sendKeys($secret);
             static::findElement('button')->click();
+            static::waitForResponse();
 
-            $this->assertContains(
-                $secret,
+            $this->assertNotEmpty(
                 static::findElement('label')->getText()
             );
         });
