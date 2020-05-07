@@ -27,7 +27,6 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     use SleepTrait;
 
     protected $controllerUri;
-    protected $jsVarName = 'stratusAppInstance';
     protected $javaScriptClasses = [];
     protected $debug = false;
     protected $booted = false;
@@ -62,16 +61,6 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     public function getControllerUri(): string
     {
         return $this->controllerUri;
-    }
-
-    public function setJSVarName(string $varName): void
-    {
-        $this->jsVarName = $varName;
-    }
-
-    public function getJSVarName(): string
-    {
-        return $this->jsVarName;
     }
 
     public function registerJavaScriptClass(string $className): string

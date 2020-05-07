@@ -20,7 +20,6 @@ class StratusInitScript extends Script
 
     public function getSource(): string
     {
-        $jsVarName = $this->app->getJSVarName();
         $jsClasses = '';
         $jsInstances = '';
 
@@ -38,7 +37,7 @@ class StratusInitScript extends Script
                 $jsParentClassId = $this->app->getJavaScriptClassId($parentClass->getName());
 
                 $jsParentClass = <<<JAVASCRIPT
-                    var ParentClass = {$jsVarName}.getClass('{$jsParentClassId}');
+                    var ParentClass = stratusAppInstance.getClass('{$jsParentClassId}');
                 JAVASCRIPT;
 
                 $jsExtends = 'extends ParentClass';
@@ -46,7 +45,7 @@ class StratusInitScript extends Script
 
             $jsClasses .= <<<JAVASCRIPT
                 \n\n{$jsParentClass}
-                {$jsVarName}.addClass('{$jsClassId}', class {$jsExtends} {
+                stratusAppInstance.addClass('{$jsClassId}', class {$jsExtends} {
                     {$jsClassMembers}
                 });\n
             JAVASCRIPT;
@@ -68,7 +67,7 @@ class StratusInitScript extends Script
         return <<<JAVASCRIPT
             "use strict";
 
-            window.{$jsVarName} = new StratusApp(
+            window.stratusAppInstance = new StratusApp(
                 '{$this->app->getControllerUri()}',
                 '{$this->app->getToken()}'
             );
@@ -77,7 +76,7 @@ class StratusInitScript extends Script
                 {$jsClasses}
 
                 {$jsInstances}
-            })(window.{$jsVarName});
+            })(window.stratusAppInstance);
         JAVASCRIPT;
     }
 }

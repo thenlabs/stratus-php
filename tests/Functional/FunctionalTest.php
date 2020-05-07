@@ -16,36 +16,6 @@ setTestCaseClass(SeleniumTestCase::class);
 testCase('FunctionalTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $jsVarName = uniqid('app');
-
-            $app = new class('') extends AbstractApp {
-                public function getView(): string
-                {
-                    return <<<HTML
-                        <html>
-                            <head>
-                            </head>
-                            <body>
-                            </body>
-                        </html>
-                    HTML;
-                }
-            };
-
-            $app->setJSVarName($jsVarName);
-            static::dumpApp($app);
-
-            static::setVar('jsVarName', $jsVarName);
-            static::openApp();
-        });
-
-        test(function () {
-            $this->assertTrue(static::executeScript("return {$this->jsVarName} instanceof StratusApp"));
-        });
-    });
-
-    testCase(function () {
-        setUpBeforeClassOnce(function () {
             $className1 = uniqid('Class1_');
             $className2 = uniqid('Class2_');
             $className3 = uniqid('Class3_');
