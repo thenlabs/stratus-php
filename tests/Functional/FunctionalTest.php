@@ -481,7 +481,7 @@ testCase('FunctionalTest.php', function () {
                         $label = $app->querySelector('label');
 
                         $label->innerHTML = uniqid();
-                        $label->{'style.color'} = 'red';
+                        $label->style = 'color: red';
                     }
                 };
 
