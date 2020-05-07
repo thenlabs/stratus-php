@@ -45,13 +45,13 @@ class StratusApp {
             }
 
             if ('string' === typeof(currentResponse)) {
-                processMessage(currentResponse);
+                this.processMessage(currentResponse);
             }
         };
 
         xhr.onreadystatechange = () => {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                processMessage(xhr.responseText);
+                this.processMessage(xhr.responseText);
             }
         };
 
@@ -66,5 +66,25 @@ class StratusApp {
 
         xhr.send(`stratus_message=` + JSON.stringify(request));
         this.buffer = {};
+    }
+
+    processMessage(text) {
+        if ('string' !== typeof(text)) {
+            return;
+        }
+
+        var lines = text.split('%SSS%');
+        for (var id in lines) {
+            var line = lines[id];
+
+            if (! line.length) {
+                continue;
+            }
+
+            var message = JSON.parse(line);
+            var HandlerClass = this.classes[message.handler.classId];
+
+            HandlerClass[message.handler.method](message.data);
+        }
     }
 }

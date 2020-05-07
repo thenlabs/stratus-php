@@ -36,6 +36,11 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
                 this.selector = selector;
                 this.element = parentElement.querySelector(selector);
             }
+
+            static setProperty(messageData) {
+                const component = app.getComponent(messageData.componentId);
+                component.element[messageData.property] = messageData.value;
+            }
         JAVASCRIPT;
     }
 
@@ -159,9 +164,15 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     public function __set($name, $value)
     {
         $this->app->getBus()->write([
-            'componentId' => $this->getId(),
-            'property' => $name,
-            'value' => $value,
+            'handler' => [
+                'classId' => $this->app->getJavaScriptClassId(self::class),
+                'method' => 'setProperty'
+            ],
+            'data' => [
+                'componentId' => $this->getId(),
+                'property' => $name,
+                'value' => $value,
+            ],
         ]);
 
         $this->properties[$name] = $value;
