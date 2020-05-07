@@ -493,4 +493,51 @@ testCase('FunctionalTest.php', function () {
             );
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input type="text" name="">
+                            <label></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $app->querySelector('button')->click(function ($event) {
+                $app = $event->getApp();
+                $label = $app->querySelector('label');
+
+                $label->innerHTML = uniqid();
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $this->assertTrue(static::executeScript('return stratusAppInstance instanceof StratusApp'));
+        });
+
+        test(function () {
+            static::findElement('button')->click();
+            static::waitForResponse();
+
+            $this->assertNotEmpty(
+                static::findElement('label')->getText()
+            );
+        });
+    });
 });
