@@ -57,8 +57,10 @@ class StratusInitScript extends Script
                 $jsClassId = $this->app->getJavaScriptClassId(get_class($child));
 
                 $jsInstances .= <<<JAVASCRIPT
-                    \nconst ComponentClass = app.getClass('{$jsClassId}');
-                    {$child->getJavaScriptCreateInstanceScript()}\n\n
+                    \n{
+                        const ComponentClass = app.getClass('{$jsClassId}');
+                        {$child->getJavaScriptCreateInstanceScript()}
+                    }\n\n
                 JAVASCRIPT;
             }
         }
