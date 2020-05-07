@@ -444,100 +444,91 @@ testCase('FunctionalTest.php', function () {
     });
 
     testCase(function () {
-        setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
-                public function getView(): string
-                {
-                    return <<<HTML
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>Document</title>
-                        </head>
-                        <body>
-                            <input type="text" name="">
-                            <label></label>
-                            <button>Button</button>
-                        </body>
-                        </html>
-                    HTML;
-                }
+        createMacro('tests', function () {
+            test(function () {
+                static::findElement('button')->click();
+                static::waitForResponse();
 
-                public function listener($event): void
-                {
+                $this->assertNotEmpty(
+                    static::findElement('label')->getText()
+                );
+            });
+        });
+
+        testCase(function () {
+            setUpBeforeClassOnce(function () {
+                $app = new class('') extends AbstractApp {
+                    public function getView(): string
+                    {
+                        return <<<HTML
+                            <!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Document</title>
+                            </head>
+                            <body>
+                                <input type="text" name="">
+                                <label></label>
+                                <button>Button</button>
+                            </body>
+                            </html>
+                        HTML;
+                    }
+
+                    public function listener($event): void
+                    {
+                        $app = $event->getApp();
+                        $input = $app->querySelector('input');
+                        $label = $app->querySelector('label');
+
+                        $label->innerHTML = uniqid();
+                    }
+                };
+
+                $app->querySelector('button')->click([$app, 'listener']);
+
+                static::dumpApp($app);
+                static::openApp();
+            });
+
+            useMacro('tests');
+        });
+
+        testCase(function () {
+            setUpBeforeClassOnce(function () {
+                $app = new class('') extends AbstractApp {
+                    public function getView(): string
+                    {
+                        return <<<HTML
+                            <!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Document</title>
+                            </head>
+                            <body>
+                                <input type="text" name="">
+                                <label></label>
+                                <button>Button</button>
+                            </body>
+                            </html>
+                        HTML;
+                    }
+                };
+
+                $app->querySelector('button')->click(function ($event) {
                     $app = $event->getApp();
-                    $input = $app->querySelector('input');
                     $label = $app->querySelector('label');
 
                     $label->innerHTML = uniqid();
-                }
-            };
+                });
 
-            $app->querySelector('button')->click([$app, 'listener']);
-
-            static::dumpApp($app);
-            static::openApp();
-        });
-
-        test(function () {
-            $this->assertTrue(static::executeScript('return stratusAppInstance instanceof StratusApp'));
-        });
-
-        test(function () {
-            static::findElement('button')->click();
-            static::waitForResponse();
-
-            $this->assertNotEmpty(
-                static::findElement('label')->getText()
-            );
-        });
-    });
-
-    testCase(function () {
-        setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
-                public function getView(): string
-                {
-                    return <<<HTML
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>Document</title>
-                        </head>
-                        <body>
-                            <input type="text" name="">
-                            <label></label>
-                            <button>Button</button>
-                        </body>
-                        </html>
-                    HTML;
-                }
-            };
-
-            $app->querySelector('button')->click(function ($event) {
-                $app = $event->getApp();
-                $label = $app->querySelector('label');
-
-                $label->innerHTML = uniqid();
+                static::dumpApp($app);
+                static::openApp();
             });
 
-            static::dumpApp($app);
-            static::openApp();
-        });
-
-        test(function () {
-            $this->assertTrue(static::executeScript('return stratusAppInstance instanceof StratusApp'));
-        });
-
-        test(function () {
-            static::findElement('button')->click();
-            static::waitForResponse();
-
-            $this->assertNotEmpty(
-                static::findElement('label')->getText()
-            );
+            useMacro('tests');
         });
     });
 });
