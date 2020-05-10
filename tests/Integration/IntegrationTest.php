@@ -127,14 +127,17 @@ testCase('IntegrationTest.php', function () {
                         </html>
                     HTML;
                 }
+
+                public function onButtonClick($event): void
+                {
+                    $label = $event->getApp()->querySelector('label');
+
+                    $label->innerHTML = uniqid();
+                    $label->css('color', 'red');
+                }
             };
 
-            $app->querySelector('button')->click(function ($event) {
-                $label = $event->getApp()->querySelector('label');
-
-                $label->innerHTML = uniqid();
-                $label->css('color', 'red');
-            });
+            $app->querySelector('button')->click([$app, 'onButtonClick']);
 
             static::dumpApp($app);
             static::openApp();
