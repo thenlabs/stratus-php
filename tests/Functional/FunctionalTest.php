@@ -536,4 +536,95 @@ testCase('FunctionalTest.php', function () {
             useMacro('tests');
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <label></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $app->querySelector('button')->click(function ($event) {
+                $label = $event->getApp()->querySelector('label');
+
+                $label->innerHTML = uniqid();
+                $label->css('color', 'red');
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            static::findElement('button')->click();
+            static::waitForResponse();
+
+            $this->assertEquals(
+                'red',
+                $this->executeScript('return document.querySelector("label").style.color')
+            );
+        });
+    });
+
+    // testCase(function () {
+    //     setUpBeforeClassOnce(function () {
+    //         $app = new class('') extends AbstractApp {
+    //             public function getView(): string
+    //             {
+    //                 return <<<HTML
+    //                     <!DOCTYPE html>
+    //                     <html lang="en">
+    //                     <head>
+    //                         <meta charset="UTF-8">
+    //                         <title>Document</title>
+    //                     </head>
+    //                     <body>
+    //                         <input type="" name="">
+    //                         <label></label>
+    //                         <button>Button</button>
+    //                     </body>
+    //                     </html>
+    //                 HTML;
+    //             }
+    //         };
+
+    //         $app->querySelector('button')->click(function ($event) {
+    //             $app = $event->getApp();
+    //             $input = $app->querySelector('input');
+    //             $label = $app->querySelector('label');
+
+    //             $label->innerHTML = $input->value;
+    //         });
+
+    //         static::dumpApp($app);
+    //         static::openApp();
+    //     });
+
+    //     test(function () {
+    //         $secret = uniqid();
+    //         $input = static::findElement('input');
+    //         $button = static::findElement('button');
+    //         $label = static::findElement('label');
+
+    //         $input->sendKeys($secret);
+    //         $button->click();
+    //         static::waitForResponse();
+
+    //         $this->assertEquals($secret, $label->getText());
+    //     });
+    // });
 });

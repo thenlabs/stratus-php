@@ -52,6 +52,11 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
                 stratusAppInstance.addComponent(component);
             }
+
+            static setStyle(messageData) {
+                const component = app.getComponent(messageData.componentId);
+                component.element.style[messageData.property] = messageData.value;
+            }
         JAVASCRIPT;
     }
 
@@ -187,5 +192,20 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         ]);
 
         $this->properties[$name] = $value;
+    }
+
+    public function css(string $property, string $value): void
+    {
+        $this->app->getBus()->write([
+            'handler' => [
+                'classId' => $this->app->getJavaScriptClassId(self::class),
+                'method' => 'setStyle'
+            ],
+            'data' => [
+                'componentId' => $this->getId(),
+                'property' => $property,
+                'value' => $value,
+            ],
+        ]);
     }
 }
