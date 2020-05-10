@@ -37,25 +37,25 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
                 this.element = parentElement.querySelector(selector);
             }
 
-            static setProperty(messageData) {
-                const component = app.getComponent(messageData.componentId);
-                component.element[messageData.property] = messageData.value;
+            static setProperty(componentId, property, value) {
+                const component = app.getComponent(componentId);
+                component.element[property] = value;
             }
 
-            static createNew(messageData) {
-                const ComponentClass = stratusAppInstance.classes[messageData.classId];
+            static createNew(classId, componentId, parent, selector) {
+                const ComponentClass = stratusAppInstance.classes[classId];
                 const component = new ComponentClass(
-                    messageData.componentId,
+                    componentId,
                     stratusAppInstance.rootElement,
-                    messageData.selector
+                    selector
                 );
 
                 stratusAppInstance.addComponent(component);
             }
 
-            static setStyle(messageData) {
-                const component = app.getComponent(messageData.componentId);
-                component.element.style[messageData.property] = messageData.value;
+            static setStyle(componentId, property, value) {
+                const component = app.getComponent(componentId);
+                component.element.style[property] = value;
             }
         JAVASCRIPT;
     }

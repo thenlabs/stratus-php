@@ -82,18 +82,19 @@ class StratusApp {
             return;
         }
 
-        var lines = text.split('%SSS%');
-        for (var id in lines) {
-            var line = lines[id];
+        let lines = text.split('%SSS%');
+        for (let id in lines) {
+            let line = lines[id];
 
             if (! line.length) {
                 continue;
             }
 
-            var message = JSON.parse(line);
-            var HandlerClass = this.classes[message.handler.classId];
+            let message = JSON.parse(line);
+            let HandlerClass = this.classes[message.handler.classId];
+            let handler = HandlerClass[message.handler.method];
 
-            HandlerClass[message.handler.method](message.data);
+            handler.apply(null, Object.values(message.data));
         }
     }
 }
