@@ -8,8 +8,15 @@ namespace ThenLabs\StratusPHP\Messaging;
  */
 class Result
 {
+    protected $successful = true;
+
     public function isSuccessful(): bool
     {
-        return true;
+        return $this->successful;
+    }
+
+    public function setSuccessful(bool $successful): void
+    {
+        $this->successful = $successful;
     }
 }
