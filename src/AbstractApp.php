@@ -127,18 +127,14 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
             $jsElementClassId = $this->getJavaScriptClassId(Element::class);
 
-            $this->bus->write([
-                'handler' => [
-                    'classId' => $jsElementClassId,
-                    'method' => 'createNew'
-                ],
-                'data' => [
-                    'classId' => $jsElementClassId,
-                    'componentId' => $element->getId(),
-                    'parent' => null,
-                    'selector' => $cssSelector,
-                ],
-            ]);
+            $data = [
+                'classId' => $jsElementClassId,
+                'componentId' => $element->getId(),
+                'parent' => null,
+                'selector' => $cssSelector,
+            ];
+
+            $this->invokeJavaScriptFunction(Element::class, 'createNew', $data);
 
             return $element;
         }
@@ -263,5 +259,16 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     public function getBus(): BusInterface
     {
         return $this->bus;
+    }
+
+    public function invokeJavaScriptFunction(string $class, string $function, array $data): void
+    {
+        $this->bus->write([
+            'handler' => [
+                'classId' => $this->javaScriptClasses[$class],
+                'method' => $function,
+            ],
+            'data' => $data,
+        ]);
     }
 }

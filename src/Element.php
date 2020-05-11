@@ -179,33 +179,25 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
     public function __set($name, $value)
     {
-        $this->app->getBus()->write([
-            'handler' => [
-                'classId' => $this->app->getJavaScriptClassId(self::class),
-                'method' => 'setProperty'
-            ],
-            'data' => [
-                'componentId' => $this->getId(),
-                'property' => $name,
-                'value' => $value,
-            ],
-        ]);
+        $data = [
+            'componentId' => $this->getId(),
+            'property' => $name,
+            'value' => $value,
+        ];
+
+        $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);
 
         $this->properties[$name] = $value;
     }
 
     public function css(string $property, string $value): void
     {
-        $this->app->getBus()->write([
-            'handler' => [
-                'classId' => $this->app->getJavaScriptClassId(self::class),
-                'method' => 'setStyle'
-            ],
-            'data' => [
-                'componentId' => $this->getId(),
-                'property' => $property,
-                'value' => $value,
-            ],
-        ]);
+        $data = [
+            'componentId' => $this->getId(),
+            'property' => $property,
+            'value' => $value,
+        ];
+
+        $this->app->invokeJavaScriptFunction(self::class, 'setStyle', $data);
     }
 }
