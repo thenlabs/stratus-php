@@ -91,14 +91,17 @@ testCase('IntegrationTest.php', function () {
                             </html>
                         HTML;
                     }
+
+                    public function onButtonClick($event): void
+                    {
+                        $app = $event->getApp();
+                        $label = $app->querySelector('label');
+
+                        $label->innerHTML = uniqid();
+                    }
                 };
 
-                $app->querySelector('button')->click(function ($event) {
-                    $app = $event->getApp();
-                    $label = $app->querySelector('label');
-
-                    $label->innerHTML = uniqid();
-                });
+                $app->querySelector('button')->click([$app, 'onButtonClick']);
 
                 static::dumpApp($app);
                 static::openApp();

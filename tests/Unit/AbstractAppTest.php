@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Unit;
 
 use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\Messaging\Request;
 use ThenLabs\StratusPHP\Exception\FrozenViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Tests\TestCase;
@@ -67,13 +68,19 @@ testCase('AbstractAppTest.php', function () {
         test(function () {
             $this->expectException(InvalidTokenException::class);
 
-            $this->app->run([]);
+            $request = new Request;
+            $request->setToken(uniqid());
+
+            $this->app->run($request);
         });
 
         test(function () {
             $this->expectException(InvalidTokenException::class);
 
-            $this->app->run([]);
+            $request = new Request;
+            $request->setToken(uniqid());
+
+            $this->app->run($request);
         });
 
         test(function () {

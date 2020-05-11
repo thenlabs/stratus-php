@@ -72,7 +72,7 @@ class StratusApp {
             eventName,
         };
 
-        xhr.send('stratus_message=' + JSON.stringify(request));
+        xhr.send('stratus_request=' + JSON.stringify(request));
         this.httpRequests.push(xhr);
         this.buffer = {};
     }

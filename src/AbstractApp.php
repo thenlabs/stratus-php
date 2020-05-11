@@ -12,8 +12,10 @@ use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Event\StratusEvent;
 use ThenLabs\StratusPHP\Exception\FrozenViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
-use ThenLabs\StratusPHP\Bus\BusInterface;
-use ThenLabs\StratusPHP\Bus\StreamingBus;
+use ThenLabs\StratusPHP\Messaging\Bus\BusInterface;
+use ThenLabs\StratusPHP\Messaging\Bus\StreamingBus;
+use ThenLabs\StratusPHP\Messaging\Request;
+use ThenLabs\StratusPHP\Messaging\Result;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use ReflectionClass;
@@ -225,17 +227,17 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         parent::addFilter($callback);
     }
 
-    public function run(array $message): void
+    public function run(Request $request): Result
     {
         if (! $this->booted) {
             $this->booted = true;
         }
 
-        if (! isset($message['token']) || $message['token'] != $this->token) {
+        if ($request->getToken() != $this->token) {
             throw new InvalidTokenException;
         }
 
-        foreach ($message['componentData'] as $componentId => $data) {
+        foreach ($request->getComponentData() as $componentId => $data) {
             $component = $this->findChildById($componentId);
 
             foreach ($data as $property => $value) {
@@ -243,7 +245,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             }
         }
 
-        $eventInfo = explode('.', $message['eventName']);
+        $eventInfo = explode('.', $request->getEventName());
         if (count($eventInfo) == 2) {
             $componentId = $eventInfo[0];
             $eventName = $eventInfo[1];
@@ -254,6 +256,8 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             $component = $this->findChildById($componentId);
             $component->dispatchEvent($eventName, $event);
         }
+
+        return new Result;
     }
 
     public function getBus(): BusInterface

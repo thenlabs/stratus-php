@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP\Bus;
+namespace ThenLabs\StratusPHP\Messaging\Bus;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

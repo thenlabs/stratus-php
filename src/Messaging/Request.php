@@ -44,12 +44,12 @@ class Request
 
     public static function createFromJson(string $json): self
     {
-        $data = json_decode($json);
+        $data = json_decode($json, true);
 
         $request = new self;
-        $request->setToken($data->token);
-        $request->setComponentData($data->componentData);
-        $request->setEventName($data->eventName);
+        $request->setToken($data['token']);
+        $request->setComponentData($data['componentData']);
+        $request->setEventName($data['eventName']);
 
         return $request;
     }
