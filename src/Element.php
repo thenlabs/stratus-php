@@ -179,7 +179,11 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
             throw new MissingComponentDataException(<<<JAVASCRIPT
                 const component = stratusAppInstance.getComponent('{$this->getId()}');
                 return {
-                    '{$name}': component.element['{$name}']
+                    componentData: {
+                        '{$this->getId()}': {
+                            '{$name}': component.element['{$name}']
+                        }
+                    }
                 };
             JAVASCRIPT);
         }

@@ -188,6 +188,9 @@ testCase('IntegrationTest.php', function () {
                 }
             };
 
+            $app->querySelector('input');
+            $app->querySelector('label');
+
             $app->querySelector('button')->click([$app, 'listener']);
 
             static::dumpApp($app);
