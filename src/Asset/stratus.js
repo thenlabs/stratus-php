@@ -28,56 +28,71 @@ class StratusApp {
         this.components[component.id] = component;
     }
 
-    dispatch(eventName) {
+    getNewXMLHttpRequest() {
         const xhr = new XMLHttpRequest();
         xhr.lastResponseLen = 0;
 
-        xhr.onprogress = event => {
-            if (! event.currentTarget) return;
-
-            let currentResponse = null;
-            let responseBuffer = event.currentTarget.response;
-
-            if (xhr.lastResponseLen === false) {
-                currentResponse = responseBuffer;
-                xhr.lastResponseLen = responseBuffer.length;
-            } else {
-                currentResponse = responseBuffer.substring(xhr.lastResponseLen);
-                xhr.lastResponseLen = responseBuffer.length;
-            }
-
-            if ('string' === typeof(currentResponse)) {
-                this.processMessage(currentResponse);
-            }
-        };
-
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                this.httpRequests.splice(
-                    this.httpRequests.indexOf(xhr), 1
-                );
-
-                if (xhr.status === 200) {
-                    this.processMessage(xhr.responseText);
-                }
-            }
-        };
+        xhr.onprogress = this._onprogress;
+        xhr.onreadystatechange = this._onreadystatechange;
 
         xhr.open('POST', this.controller, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        const request = {
+        return xhr;
+    }
+
+    _onprogress(event) {
+        if (! event.currentTarget) return;
+
+        let currentResponse = null;
+        let responseBuffer = event.currentTarget.response;
+
+        if (this.lastResponseLen === false) {
+            currentResponse = responseBuffer;
+            this.lastResponseLen = responseBuffer.length;
+        } else {
+            currentResponse = responseBuffer.substring(this.lastResponseLen);
+            this.lastResponseLen = responseBuffer.length;
+        }
+
+        if ('string' === typeof(currentResponse)) {
+            stratusAppInstance.processMessage(currentResponse, this);
+        }
+    }
+
+    _onreadystatechange() {
+        const xhr = this;
+
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            stratusAppInstance.httpRequests.splice(
+                stratusAppInstance.httpRequests.indexOf(xhr), 1
+            );
+
+            if (xhr.status === 200) {
+                stratusAppInstance.processMessage(xhr.responseText, xhr);
+            }
+        }
+    }
+
+    dispatch(eventName) {
+        const xhr = this.getNewXMLHttpRequest();
+        const data = {
             token: this.token,
             componentData: this.buffer,
             eventName,
         };
 
-        xhr.send('stratus_request=' + JSON.stringify(request));
-        this.httpRequests.push(xhr);
+        this.sendRequest(xhr, data);
         this.buffer = {};
     }
 
-    processMessage(text) {
+    sendRequest(xhr, data) {
+        xhr.data = data;
+        xhr.send('stratus_request=' + JSON.stringify(data));
+        this.httpRequests.push(xhr);
+    }
+
+    processMessage(text, xhr) {
         if ('string' !== typeof(text)) {
             return;
         }
@@ -91,10 +106,24 @@ class StratusApp {
             }
 
             let message = JSON.parse(line);
-            let HandlerClass = this.classes[message.handler.classId];
-            let handler = HandlerClass[message.handler.method];
 
-            handler.apply(null, Object.values(message.data));
+            if ('boolean' === typeof(message.resend) &&
+                true === message.resend &&
+                'string' === typeof(message.code)
+            ) {
+                let newXhr = this.getNewXMLHttpRequest();
+                let data = xhr.data;
+                let result = eval(`(() => {${message.code}})()`);
+
+                Object.assign(data, data, result);
+
+                this.sendRequest(newXhr, data);
+            } else {
+                let HandlerClass = this.classes[message.handler.classId];
+                let handler = HandlerClass[message.handler.method];
+
+                handler.apply(null, Object.values(message.data));
+            }
         }
     }
 }

@@ -8,5 +8,9 @@ namespace ThenLabs\StratusPHP\Messaging\Bus;
  */
 interface BusInterface
 {
+    public function open();
+
     public function write(array $data);
+
+    public function close();
 }

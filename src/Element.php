@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP;
 
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
+use ThenLabs\StratusPHP\Exception\MissingComponentDataException;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
@@ -174,7 +175,16 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
     public function __get($name)
     {
-        return $this->properties[$name] ?? null;
+        if (! isset($this->properties[$name])) {
+            throw new MissingComponentDataException(<<<JAVASCRIPT
+                const component = stratusAppInstance.getComponent('{$this->getId()}');
+                return {
+                    '{$name}': component.element['{$name}']
+                };
+            JAVASCRIPT);
+        }
+
+        return $this->properties[$name];
     }
 
     public function __set($name, $value)

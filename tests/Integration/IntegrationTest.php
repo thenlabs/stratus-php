@@ -157,51 +157,54 @@ testCase('IntegrationTest.php', function () {
         });
     });
 
-    // testCase(function () {
-    //     setUpBeforeClassOnce(function () {
-    //         $app = new class('') extends AbstractApp {
-    //             public function getView(): string
-    //             {
-    //                 return <<<HTML
-    //                     <!DOCTYPE html>
-    //                     <html lang="en">
-    //                     <head>
-    //                         <meta charset="UTF-8">
-    //                         <title>Document</title>
-    //                     </head>
-    //                     <body>
-    //                         <input type="" name="">
-    //                         <label></label>
-    //                         <button>Button</button>
-    //                     </body>
-    //                     </html>
-    //                 HTML;
-    //             }
-    //         };
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input type="" name="">
+                            <label></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
 
-    //         $app->querySelector('button')->click(function ($event) {
-    //             $app = $event->getApp();
-    //             $input = $app->querySelector('input');
-    //             $label = $app->querySelector('label');
+                public function listener($event): void
+                {
+                    $app = $event->getApp();
+                    $input = $app->querySelector('input');
+                    $label = $app->querySelector('label');
 
-    //             $label->innerHTML = $input->value;
-    //         });
+                    $label->innerHTML = $input->value;
+                }
+            };
 
-    //         static::dumpApp($app);
-    //         static::openApp();
-    //     });
+            $app->querySelector('button')->click([$app, 'listener']);
 
-    //     test(function () {
-    //         $secret = uniqid();
-    //         $input = static::findElement('input');
-    //         $button = static::findElement('button');
-    //         $label = static::findElement('label');
+            static::dumpApp($app);
+            static::openApp();
+        });
 
-    //         $input->sendKeys($secret);
-    //         $button->click();
-    //         static::waitForResponse();
+        test(function () {
+            $secret = uniqid();
+            $input = static::findElement('input');
+            $button = static::findElement('button');
+            $label = static::findElement('label');
 
-    //         $this->assertEquals($secret, $label->getText());
-    //     });
-    // });
+            $input->sendKeys($secret);
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals($secret, $label->getText());
+        });
+    });
 });

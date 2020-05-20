@@ -12,6 +12,7 @@ use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Event\StratusEvent;
 use ThenLabs\StratusPHP\Exception\FrozenViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
+use ThenLabs\StratusPHP\Exception\MissingComponentDataException;
 use ThenLabs\StratusPHP\Messaging\Bus\BusInterface;
 use ThenLabs\StratusPHP\Messaging\Bus\StreamingBus;
 use ThenLabs\StratusPHP\Messaging\Request;
@@ -250,7 +251,17 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             $event->setApp($this);
 
             $component = $this->findChildById($componentId);
-            $component->dispatchEvent($eventName, $event);
+
+            try {
+                $component->dispatchEvent($eventName, $event);
+            } catch (MissingComponentDataException $exception) {
+                $this->bus->write([
+                    'resend' => true,
+                    'code' => $exception->getJavaScript(),
+                ]);
+
+                $this->bus->close();
+            }
         }
 
         return new Result;
