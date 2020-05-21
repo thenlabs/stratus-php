@@ -225,4 +225,113 @@ testCase('IntegrationTest.php', function () {
             $this->assertEquals($secret2, $this->label->getText());
         });
     });
+
+    testCase(function () {
+        createMacro('tests', function () {
+            setUp(function () {
+                $this->input = static::findElement('input');
+                $this->button = static::findElement('button');
+                $this->label = static::findElement('label');
+
+                $this->input->clear();
+            });
+
+            test(function () {
+                $secret1 = uniqid();
+
+                $this->input->sendKeys($secret1);
+                $this->button->click();
+                static::waitForResponse();
+
+                $this->assertEquals($secret1, $this->label->getText());
+            });
+
+            test(function () {
+                $secret2 = uniqid();
+
+                $this->input->sendKeys($secret2);
+                $this->button->click();
+                static::waitForResponse();
+
+                $this->assertEquals($secret2, $this->label->getText());
+            });
+        });
+
+        testCase(function () {
+            setUpBeforeClassOnce(function () {
+                $app = new class('') extends AbstractApp {
+                    public function getView(): string
+                    {
+                        return <<<HTML
+                            <!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Document</title>
+                            </head>
+                            <body>
+                                <input type="" name="">
+                                <label></label>
+                                <button>Button</button>
+                            </body>
+                            </html>
+                        HTML;
+                    }
+                };
+
+                $app->querySelector('input');
+                $app->querySelector('label');
+
+                $app->querySelector('button')->click(function ($event) {
+                    $app = $event->getApp();
+                    $input = $app->querySelector('input');
+                    $label = $app->querySelector('label');
+
+                    $label->innerHTML = $input->value;
+                });
+
+                static::dumpApp($app);
+                static::openApp();
+            });
+
+            useMacro('tests');
+        });
+
+        testCase(function () {
+            setUpBeforeClassOnce(function () {
+                $app = new class('') extends AbstractApp {
+                    public function getView(): string
+                    {
+                        return <<<HTML
+                            <!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Document</title>
+                            </head>
+                            <body>
+                                <input type="" name="">
+                                <label></label>
+                                <button>Button</button>
+                            </body>
+                            </html>
+                        HTML;
+                    }
+                };
+
+                $app->querySelector('button')->click(function ($event) {
+                    $app = $event->getApp();
+                    $input = $app->querySelector('input');
+                    $label = $app->querySelector('label');
+
+                    $label->innerHTML = $input->value;
+                });
+
+                static::dumpApp($app);
+                static::openApp();
+            });
+
+            useMacro('tests');
+        });
+    });
 });

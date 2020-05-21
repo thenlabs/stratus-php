@@ -6,6 +6,7 @@
     <php>
         <env name="PYRAMIDAL_ONLY" value="1"></env>
         <env name="SELENIUM_SERVER" value="http://localhost:4444/wd/hub"></env>
+        <env name="SELENIUM_BROWSER" value="chrome"></env>
         <env name="TEST_URL" value="http://localhost:8000/index.php"></env>
     </php>
 

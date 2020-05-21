@@ -5,7 +5,7 @@ namespace ThenLabs\StratusPHP\Tests\Unit;
 
 use ThenLabs\StratusPHP\AbstractApp;
 use ThenLabs\StratusPHP\Messaging\Request;
-use ThenLabs\StratusPHP\Exception\FrozenViewException;
+use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Tests\TestCase;
 use ThenLabs\Components\ComponentInterface;
@@ -58,7 +58,7 @@ testCase('AbstractAppTest.php', function () {
         });
 
         test(function () {
-            $this->assertFalse($this->app->isFrozen());
+            $this->assertFalse($this->app->isInmutable());
         });
 
         test(function () {
@@ -168,7 +168,7 @@ testCase('AbstractAppTest.php', function () {
             });
 
             test(function () {
-                $this->assertTrue($this->app->isFrozen());
+                $this->assertTrue($this->app->isInmutable());
             });
 
             test(function () {
@@ -195,7 +195,7 @@ testCase('AbstractAppTest.php', function () {
 
             testCase(function () {
                 setUp(function () {
-                    $this->expectException(FrozenViewException::class);
+                    $this->expectException(InmutableViewException::class);
                 });
 
                 test(function () {

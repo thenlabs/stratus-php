@@ -118,11 +118,11 @@ class StratusApp {
 
             if ('boolean' === typeof(message.resend) &&
                 true === message.resend &&
-                'string' === typeof(message.code)
+                'string' === typeof(message.collectDataScript)
             ) {
                 let newXhr = this.getNewXMLHttpRequest();
                 let data = xhr.data;
-                let result = eval(`(() => {${message.code}})()`);
+                let result = eval(`(() => {${message.collectDataScript}})()`);
 
                 Object.assign(data, data, result);
 

@@ -4,16 +4,17 @@ require_once __DIR__.'/../../bootstrap.php';
 require_once __DIR__.'/App.class.php';
 
 use ThenLabs\StratusPHP\Messaging\Request;
+use function Opis\Closure\{serialize as s, unserialize as u};
 
 session_start();
 
-$app = unserialize($_SESSION['app']);
+$app = u($_SESSION['app']);
 $request = Request::createFromJson($_REQUEST['stratus_request']);
 
 $result = $app->run($request);
 
 if ($result->isSuccessful()) {
-    $_SESSION['app'] = serialize($app);
+    $_SESSION['app'] = s($app);
 }
 
 die();

@@ -28,11 +28,14 @@ class SeleniumTestCase extends TestCase
 
     public static function getDriver(): RemoteWebDriver
     {
+        $capabilities = DesiredCapabilities::chrome();
+
+        if ($_ENV['SELENIUM_BROWSER'] == 'firefox') {
+            $capabilities = DesiredCapabilities::firefox();
+        }
+
         if (! self::$driver instanceof RemoteWebDriver) {
-            self::$driver = RemoteWebDriver::create(
-                $_ENV['SELENIUM_SERVER'],
-                DesiredCapabilities::chrome()
-            );
+            self::$driver = RemoteWebDriver::create($_ENV['SELENIUM_SERVER'], $capabilities);
         }
 
         return self::$driver;

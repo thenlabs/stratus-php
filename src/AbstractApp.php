@@ -10,7 +10,7 @@ use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Event\StratusEvent;
-use ThenLabs\StratusPHP\Exception\FrozenViewException;
+use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Exception\MissingComponentDataException;
 use ThenLabs\StratusPHP\Messaging\Bus\BusInterface;
@@ -34,7 +34,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     protected $debug = false;
     protected $booted = false;
     protected $bus;
-    protected $frozenView;
+    protected $inmutableView;
     protected $token;
 
     public function __construct(string $controllerUri)
@@ -126,23 +126,19 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
             $this->addChild($element);
 
-            $jsElementClassId = $this->getJavaScriptClassId(Element::class);
-
-            $data = [
-                'classId' => $jsElementClassId,
+            $this->invokeJavaScriptFunction(Element::class, 'createNew', [
+                'classId' => $this->getJavaScriptClassId(Element::class),
                 'componentId' => $element->getId(),
                 'parent' => null,
                 'selector' => $cssSelector,
-            ];
-
-            $this->invokeJavaScriptFunction(Element::class, 'createNew', $data);
+            ]);
 
             return $element;
         }
 
-        $isFrozen = $this->isFrozen();
+        $isInmutable = $this->isInmutable();
 
-        $view = $isFrozen ? $this->frozenView : $this->render();
+        $view = $isInmutable ? $this->inmutableView : $this->render();
         $crawler = new HtmlPageCrawler($view);
         $elementCrawler = $crawler->filter($cssSelector);
 
@@ -152,8 +148,8 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $this->addChild($element);
 
-        if (! $isFrozen) {
-            $this->frozenView = $view;
+        if (! $isInmutable) {
+            $this->inmutableView = $view;
         }
 
         return $element;
@@ -200,8 +196,8 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     {
         $child = $event->getChild();
 
-        if ($this->isFrozen() && ! $child instanceof Element) {
-            throw new FrozenViewException;
+        if ($this->isInmutable() && ! $child instanceof Element) {
+            throw new InmutableViewException;
         }
     }
 
@@ -210,15 +206,15 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         return true;
     }
 
-    public function isFrozen(): bool
+    public function isInmutable(): bool
     {
-        return $this->frozenView ? true : false;
+        return $this->inmutableView ? true : false;
     }
 
     public function addFilter(callable $callback): void
     {
-        if ($this->isFrozen()) {
-            throw new FrozenViewException;
+        if ($this->isInmutable()) {
+            throw new InmutableViewException;
         }
 
         parent::addFilter($callback);
@@ -257,7 +253,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             } catch (MissingComponentDataException $exception) {
                 $this->bus->write([
                     'resend' => true,
-                    'code' => $exception->getJavaScript(),
+                    'collectDataScript' => $exception->getCollectDataScript(),
                 ]);
 
                 $this->bus->close();

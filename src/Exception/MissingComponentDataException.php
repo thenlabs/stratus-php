@@ -8,15 +8,15 @@ namespace ThenLabs\StratusPHP\Exception;
  */
 class MissingComponentDataException extends StratusException
 {
-    protected $javaScript;
+    protected $script;
 
-    public function __construct(string $javaScript)
+    public function __construct(string $script)
     {
-        $this->javaScript = $javaScript;
+        $this->script = $script;
     }
 
-    public function getJavaScript(): string
+    public function getCollectDataScript(): string
     {
-        return $this->javaScript;
+        return $this->script;
     }
 }
