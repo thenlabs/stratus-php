@@ -36,6 +36,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     protected $bus;
     protected $inmutableView;
     protected $token;
+    protected $auxRecord = [];
 
     public function __construct(string $controllerUri)
     {
@@ -110,27 +111,34 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         $this->javaScriptClasses = $javaScriptClasses;
     }
 
-    public function querySelector(string $cssSelector): Element
+    public function querySelector(string $selector): Element
     {
         foreach ($this->childs as $component) {
             if ($component instanceof Element &&
-                $component->getCssSelector() == $cssSelector
+                $component->getCssSelector() == $selector
             ) {
                 return $component;
             }
         }
 
         if ($this->booted) {
-            $element = new Element($cssSelector);
+            $element = new Element($selector);
             $element->setApp($this);
 
             $this->addChild($element);
+
+            $this->auxRecord[] = [
+                'querySelector' => [
+                    'component' => null,
+                    'selector' => $selector,
+                ]
+            ];
 
             $this->invokeJavaScriptFunction(Element::class, 'createNew', [
                 'classId' => $this->getJavaScriptClassId(Element::class),
                 'componentId' => $element->getId(),
                 'parent' => null,
-                'selector' => $cssSelector,
+                'selector' => $selector,
             ]);
 
             return $element;
@@ -140,9 +148,9 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $view = $isInmutable ? $this->inmutableView : $this->render();
         $crawler = new HtmlPageCrawler($view);
-        $elementCrawler = $crawler->filter($cssSelector);
+        $elementCrawler = $crawler->filter($selector);
 
-        $element = new Element($cssSelector);
+        $element = new Element($selector);
         $element->setCrawler($elementCrawler);
         $element->setApp($this);
 
