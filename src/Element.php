@@ -36,6 +36,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
                 this.parentElement = parentElement;
                 this.selector = selector;
                 this.element = parentElement.querySelector(selector);
+                this.criticalData = [];
             }
 
             static setProperty(componentId, property, value) {
@@ -57,6 +58,20 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
             static setStyle(componentId, property, value) {
                 const component = app.getComponent(componentId);
                 component.element.style[property] = value;
+            }
+
+            getCriticalData() {
+                let result = {};
+
+                for (let data of this.criticalData) {
+                    result[data] = this.element[data];
+                }
+
+                return result;
+            }
+
+            registerCriticalProperty(property) {
+                this.criticalData.push(property);
             }
         JAVASCRIPT;
     }
@@ -178,6 +193,9 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         if (! isset($this->properties[$name])) {
             throw new MissingComponentDataException(<<<JAVASCRIPT
                 const component = stratusAppInstance.getComponent('{$this->getId()}');
+
+                component.registerCriticalProperty('{$name}');
+
                 return {
                     componentData: {
                         '{$this->getId()}': {

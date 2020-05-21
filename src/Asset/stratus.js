@@ -76,9 +76,18 @@ class StratusApp {
 
     dispatch(eventName) {
         const xhr = this.getNewXMLHttpRequest();
+        const componentData = {};
+
+        for (let componentId in this.components) {
+            let component = this.components[componentId];
+            componentData[componentId] = component.getCriticalData();
+        }
+
+        Object.assign(componentData, componentData, this.buffer);
+
         const data = {
             token: this.token,
-            componentData: this.buffer,
+            componentData,
             eventName,
         };
 

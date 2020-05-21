@@ -197,17 +197,32 @@ testCase('IntegrationTest.php', function () {
             static::openApp();
         });
 
-        test(function () {
-            $secret = uniqid();
-            $input = static::findElement('input');
-            $button = static::findElement('button');
-            $label = static::findElement('label');
+        setUp(function () {
+            $this->input = static::findElement('input');
+            $this->button = static::findElement('button');
+            $this->label = static::findElement('label');
 
-            $input->sendKeys($secret);
-            $button->click();
+            $this->input->clear();
+        });
+
+        test(function () {
+            $secret1 = uniqid();
+
+            $this->input->sendKeys($secret1);
+            $this->button->click();
             static::waitForResponse();
 
-            $this->assertEquals($secret, $label->getText());
+            $this->assertEquals($secret1, $this->label->getText());
+        });
+
+        test(function () {
+            $secret2 = uniqid();
+
+            $this->input->sendKeys($secret2);
+            $this->button->click();
+            static::waitForResponse();
+
+            $this->assertEquals($secret2, $this->label->getText());
         });
     });
 });
