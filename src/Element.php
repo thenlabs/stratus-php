@@ -22,7 +22,7 @@ class Element implements CompositeComponentInterface, ComponentInterface, QueryS
     protected $properties = [];
     protected $crawler;
     protected $app;
-    private $nonSerializableProperties = ['crawler'];
+    private $nonSerializableProperties = ['crawler', 'app'];
 
     public function __construct(string $selector)
     {
@@ -234,7 +234,7 @@ class Element implements CompositeComponentInterface, ComponentInterface, QueryS
         $this->app->invokeJavaScriptFunction(self::class, 'setStyle', $data);
     }
 
-    public function updateData(string $key, $value)
+    public function updateData(string $key, $value): void
     {
         $this->{$key} = $value;
     }

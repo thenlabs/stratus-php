@@ -303,4 +303,13 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             'data' => $data,
         ]);
     }
+
+    public function __wakeup()
+    {
+        foreach ($this->children() as $child) {
+            if ($child instanceof ComponentInterface) {
+                $child->setApp($this);
+            }
+        }
+    }
 }

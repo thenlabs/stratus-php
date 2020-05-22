@@ -10,5 +10,9 @@ use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
  */
 interface ComponentInterface extends JavaScriptInstanceInterface
 {
-    public function updateData(string $key, $value);
+    public function updateData(string $key, $value): void;
+
+    public function setApp(AbstractApp $app): void;
+
+    public function getApp(): AbstractApp;
 }
