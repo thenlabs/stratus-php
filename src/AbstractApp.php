@@ -19,6 +19,7 @@ use ThenLabs\StratusPHP\Messaging\Bus\StreamingBus;
 use ThenLabs\StratusPHP\Messaging\Request;
 use ThenLabs\StratusPHP\Messaging\Result;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use ReflectionClass;
 
@@ -28,7 +29,7 @@ use ReflectionClass;
  */
 abstract class AbstractApp extends AbstractCompositeView implements QuerySelectorInterface
 {
-    use SleepTrait;
+    // use SleepTrait;
 
     protected $controllerUri;
     protected $javaScriptClasses = [];
@@ -37,8 +38,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     protected $bus;
     protected $inmutableView;
     protected $token;
-    private $operations = [];
-    protected $nonSerializableProperties = ['inmutableView', 'operations'];
+    protected $operations = [];
 
     public function __construct(string $controllerUri)
     {
@@ -305,6 +305,51 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             ],
             'data' => $data,
         ]);
+    }
+
+    public function __sleep()
+    {
+        $sanatizeDispatcher = function () {
+            $this->sorted = [];
+            $this->optimized = null;
+        };
+
+        if ($this->eventDispatcher instanceof EventDispatcher) {
+            $sanatizeDispatcher->call($this->eventDispatcher);
+        }
+
+        if ($this->captureEventDispatcher instanceof EventDispatcher) {
+            $sanatizeDispatcher->call($this->captureEventDispatcher);
+        }
+
+        $removeParent = function () {
+            $this->parent = null;
+        };
+
+        foreach ($this->children() as $child) {
+            $removeParent->call($child);
+
+            if ($child instanceof Element) {
+                $child->setCrawler(null);
+            }
+
+            if ($child instanceof StratusComponentInterface) {
+                $child->setApp(null);
+            }
+
+            $sanatizeDispatcher->call($child->getEventDispatcher());
+
+            if ($child instanceof CompositeComponentInterface) {
+                $sanatizeDispatcher->call($child->getCaptureEventDispatcher());
+            }
+        }
+
+        $vars = get_object_vars($this);
+        $nonSerializable = ['inmutableView', 'operations'];
+
+        $result = array_diff(array_keys($vars), $nonSerializable);
+
+        return $result;
     }
 
     public function __wakeup()

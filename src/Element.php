@@ -15,14 +15,12 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 class Element implements CompositeComponentInterface, StratusComponentInterface, QuerySelectorInterface
 {
     use CompositeComponentTrait;
-    use SleepTrait;
 
     protected $selector;
     protected $attributes = [];
     protected $properties = [];
     protected $crawler;
     protected $app;
-    private $nonSerializableProperties = ['crawler', 'app', 'parent'];
 
     public function __construct(string $selector)
     {
@@ -147,7 +145,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         return $this->crawler;
     }
 
-    public function setCrawler(HtmlPageCrawler $crawler): void
+    public function setCrawler(?HtmlPageCrawler $crawler): void
     {
         $this->crawler = $crawler;
     }
@@ -179,12 +177,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         return $element;
     }
 
-    public function setApp(AbstractApp $app): void
+    public function setApp(?AbstractApp $app): void
     {
         $this->app = $app;
     }
 
-    public function getApp(): AbstractApp
+    public function getApp(): ?AbstractApp
     {
         return $this->app;
     }

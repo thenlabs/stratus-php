@@ -12,7 +12,7 @@ interface StratusComponentInterface extends JavaScriptInstanceInterface
 {
     public function updateData(string $key, $value): void;
 
-    public function setApp(AbstractApp $app): void;
+    public function setApp(?AbstractApp $app): void;
 
-    public function getApp(): AbstractApp;
+    public function getApp(): ?AbstractApp;
 }
