@@ -116,7 +116,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     {
         foreach ($this->childs as $component) {
             if ($component instanceof Element &&
-                $component->getCssSelector() == $selector
+                $component->getSelector() == $selector
             ) {
                 return $component;
             }

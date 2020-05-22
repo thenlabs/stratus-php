@@ -17,16 +17,16 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     use CompositeComponentTrait;
     use SleepTrait;
 
-    protected $cssSelector;
+    protected $selector;
     protected $attributes = [];
     protected $properties = [];
     protected $crawler;
     protected $app;
     private $nonSerializableProperties = ['crawler'];
 
-    public function __construct(string $cssSelector)
+    public function __construct(string $selector)
     {
-        $this->cssSelector = $cssSelector;
+        $this->selector = $selector;
     }
 
     public static function getJavaScriptClassMembers(): string
@@ -109,7 +109,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
 
         return <<<JAVASCRIPT
             const parentElement = {$jsParentElement};
-            const component = new ComponentClass('{$myId}', parentElement, '{$this->cssSelector}');
+            const component = new ComponentClass('{$myId}', parentElement, '{$this->selector}');
             app.addComponent(component);
             {$jsAttributes}
             {$jsEvents}
@@ -152,23 +152,23 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         $this->crawler = $crawler;
     }
 
-    public function getCssSelector(): string
+    public function getSelector(): string
     {
-        return $this->cssSelector;
+        return $this->selector;
     }
 
-    public function querySelector(string $cssSelector): Element
+    public function querySelector(string $selector): Element
     {
         foreach ($this->childs as $component) {
             if ($component instanceof Element &&
-                $component->getCssSelector() == $cssSelector
+                $component->getSelector() == $selector
             ) {
                 return $component;
             }
         }
 
-        $element = new Element($cssSelector);
-        $element->setCrawler($this->crawler->filter($cssSelector));
+        $element = new Element($selector);
+        $element->setCrawler($this->crawler->filter($selector));
 
         if ($this->app instanceof AbstractApp) {
             $element->setApp($this->app);
