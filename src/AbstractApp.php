@@ -149,9 +149,9 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             return $element;
         }
 
-        $isInmutable = $this->isInmutable();
+        $hasInmutableView = $this->hasInmutableView();
 
-        $view = $isInmutable ? $this->inmutableView : $this->render();
+        $view = $hasInmutableView ? $this->inmutableView : $this->render();
         $crawler = new HtmlPageCrawler($view);
         $elementCrawler = $crawler->filter($selector);
 
@@ -161,7 +161,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $this->addChild($element);
 
-        if (! $isInmutable) {
+        if (! $hasInmutableView) {
             $this->inmutableView = $view;
         }
 
@@ -209,7 +209,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     {
         $child = $event->getChild();
 
-        if ($this->isInmutable() && ! $child instanceof Element) {
+        if ($this->hasInmutableView() && ! $child instanceof Element) {
             throw new InmutableViewException;
         }
     }
@@ -219,14 +219,14 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         return true;
     }
 
-    public function isInmutable(): bool
+    public function hasInmutableView(): bool
     {
         return $this->inmutableView ? true : false;
     }
 
     public function addFilter(callable $callback): void
     {
-        if ($this->isInmutable()) {
+        if ($this->hasInmutableView()) {
             throw new InmutableViewException;
         }
 

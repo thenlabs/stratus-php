@@ -58,7 +58,7 @@ testCase('AbstractAppTest.php', function () {
         });
 
         test(function () {
-            $this->assertFalse($this->app->isInmutable());
+            $this->assertFalse($this->app->hasInmutableView());
         });
 
         test(function () {
@@ -168,7 +168,7 @@ testCase('AbstractAppTest.php', function () {
             });
 
             test(function () {
-                $this->assertTrue($this->app->isInmutable());
+                $this->assertTrue($this->app->hasInmutableView());
             });
 
             test(function () {
