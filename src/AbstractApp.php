@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP;
 
 use ThenLabs\Components\ComponentInterface;
+use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\Event\BeforeInsertionEvent;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
@@ -308,10 +309,22 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
     public function __wakeup()
     {
-        foreach ($this->children() as $child) {
+        $update = function ($child, $parent) use (&$update) {
+            $child->setParent($parent);
+
+            if ($child instanceof CompositeComponentInterface) {
+                foreach ($child->getChilds() as $subchild) {
+                    $update($subchild, $child);
+                }
+            }
+
             if ($child instanceof StratusComponentInterface) {
                 $child->setApp($this);
             }
+        };
+
+        foreach ($this->getChilds() as $child) {
+            $update($child, $this);
         }
     }
 }

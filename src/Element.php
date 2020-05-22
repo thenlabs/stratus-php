@@ -22,7 +22,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     protected $properties = [];
     protected $crawler;
     protected $app;
-    private $nonSerializableProperties = ['crawler', 'app'];
+    private $nonSerializableProperties = ['crawler', 'app', 'parent'];
 
     public function __construct(string $selector)
     {
