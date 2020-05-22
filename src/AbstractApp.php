@@ -36,8 +36,8 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     protected $bus;
     protected $inmutableView;
     protected $token;
-    private $auxRecord = [];
-    protected $nonSerializableProperties = ['inmutableView', 'auxRecord'];
+    private $operations = [];
+    protected $nonSerializableProperties = ['inmutableView', 'operations'];
 
     public function __construct(string $controllerUri)
     {
@@ -112,7 +112,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         $this->javaScriptClasses = $javaScriptClasses;
     }
 
-    public function querySelector(string $selector): Element
+    public function querySelector(string $selector, bool $registerOperation = true): Element
     {
         foreach ($this->childs as $component) {
             if ($component instanceof Element &&
@@ -128,19 +128,23 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
             $this->addChild($element);
 
-            $this->auxRecord[] = [
-                'querySelector' => [
-                    'component' => null,
-                    'selector' => $selector,
-                ]
-            ];
+            if ($registerOperation) {
+                $this->operations[] = [
+                    'type' => 'querySelector',
+                    'data' => [
+                        'id' => $element->getId(),
+                        'parent' => null,
+                        'selector' => $selector,
+                    ]
+                ];
 
-            $this->invokeJavaScriptFunction(Element::class, 'createNew', [
-                'classId' => $this->getJavaScriptClassId(Element::class),
-                'componentId' => $element->getId(),
-                'parent' => null,
-                'selector' => $selector,
-            ]);
+                $this->invokeJavaScriptFunction(Element::class, 'createNew', [
+                    'classId' => $this->getJavaScriptClassId(Element::class),
+                    'componentId' => $element->getId(),
+                    'parent' => null,
+                    'selector' => $selector,
+                ]);
+            }
 
             return $element;
         }
@@ -239,11 +243,22 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             throw new InvalidTokenException;
         }
 
-        foreach ($request->getComponentData() as $componentId => $data) {
+        foreach ($request->getOperations() as $operation) {
+            if ($operation['type'] == 'querySelector') {
+                $newElement = $this->querySelector($operation['data']['selector'], false);
+                $newElement->setId($operation['data']['id']);
+            }
+        }
+
+        foreach ($request->getComponentData() as $componentId => $componentDataList) {
             $component = $this->findChildById($componentId);
 
-            foreach ($data as $property => $value) {
-                $component->{$property} = $value;
+            if ($component instanceof ComponentInterface &&
+                is_array($componentDataList)
+            ) {
+                foreach ($componentDataList as $key => $value) {
+                    $component->updateData($key, $value);
+                }
             }
         }
 
@@ -263,7 +278,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
                 $this->bus->write([
                     'resend' => true,
                     'collectDataScript' => $exception->getCollectDataScript(),
-                    'auxRecord' => $this->auxRecord,
+                    'operations' => $this->operations,
                 ]);
 
                 $this->bus->close();

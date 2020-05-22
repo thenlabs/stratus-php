@@ -12,7 +12,7 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class Element implements CompositeComponentInterface, JavaScriptInstanceInterface, QuerySelectorInterface
+class Element implements CompositeComponentInterface, ComponentInterface, QuerySelectorInterface
 {
     use CompositeComponentTrait;
     use SleepTrait;
@@ -37,7 +37,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
                 this.parentElement = parentElement;
                 this.selector = selector;
                 this.element = parentElement.querySelector(selector);
-                this.criticalData = [];
+                this.criticalDataList = [];
             }
 
             static setProperty(componentId, property, value) {
@@ -64,7 +64,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
             getCriticalData() {
                 let result = {};
 
-                for (let data of this.criticalData) {
+                for (let data of this.criticalDataList) {
                     result[data] = this.element[data];
                 }
 
@@ -72,7 +72,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
             }
 
             registerCriticalProperty(property) {
-                this.criticalData.push(property);
+                this.criticalDataList.push(property);
             }
         JAVASCRIPT;
     }
@@ -232,5 +232,15 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
         ];
 
         $this->app->invokeJavaScriptFunction(self::class, 'setStyle', $data);
+    }
+
+    public function updateData(string $key, $value)
+    {
+        $this->{$key} = $value;
+    }
+
+    public function setId(string $id): void
+    {
+        $this->id = $id;
     }
 }

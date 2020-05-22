@@ -80,7 +80,11 @@ class StratusApp {
 
         for (let componentId in this.components) {
             let component = this.components[componentId];
-            componentData[componentId] = component.getCriticalData();
+            let criticalData = component.getCriticalData();
+
+            if (Object.keys(criticalData).length) {
+                componentData[componentId] = criticalData;
+            }
         }
 
         Object.assign(componentData, componentData, this.buffer);
@@ -125,6 +129,7 @@ class StratusApp {
                 let result = eval(`(() => {${message.collectDataScript}})()`);
 
                 Object.assign(data, data, result);
+                data.operations = message.operations;
 
                 this.sendRequest(newXhr, data);
             } else {

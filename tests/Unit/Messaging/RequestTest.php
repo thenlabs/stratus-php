@@ -14,12 +14,14 @@ testCase('RequestTest.php', function () {
         $data = [
             'token' => uniqid(),
             'componentData' => range(1, mt_rand(1, 10)),
+            'operations' => range(1, mt_rand(1, 10)),
             'eventName' => uniqid(),
         ];
 
         $request = Request::createFromJson(json_encode($data));
 
         $this->assertEquals($data['token'], $request->getToken());
+        $this->assertEquals($data['operations'], $request->getOperations());
         $this->assertEquals($data['componentData'], $request->getComponentData());
         $this->assertEquals($data['eventName'], $request->getEventName());
     });

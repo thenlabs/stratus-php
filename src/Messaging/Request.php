@@ -11,6 +11,7 @@ class Request
     protected $token;
     protected $componentData;
     protected $eventName;
+    protected $operations = [];
 
     public function getToken(): string
     {
@@ -32,6 +33,16 @@ class Request
         $this->componentData = $componentData;
     }
 
+    public function getOperations(): ?array
+    {
+        return $this->operations;
+    }
+
+    public function setOperations(?array $operations): void
+    {
+        $this->operations = $operations;
+    }
+
     public function getEventName(): string
     {
         return $this->eventName;
@@ -49,6 +60,7 @@ class Request
         $request = new self;
         $request->setToken($data['token']);
         $request->setComponentData($data['componentData']);
+        $request->setOperations($data['operations']);
         $request->setEventName($data['eventName']);
 
         return $request;
