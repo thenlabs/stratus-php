@@ -12,7 +12,7 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class Element implements CompositeComponentInterface, ComponentInterface, QuerySelectorInterface
+class Element implements CompositeComponentInterface, StratusComponentInterface, QuerySelectorInterface
 {
     use CompositeComponentTrait;
     use SleepTrait;

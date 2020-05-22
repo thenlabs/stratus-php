@@ -8,7 +8,7 @@ use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-interface ComponentInterface extends JavaScriptInstanceInterface
+interface StratusComponentInterface extends JavaScriptInstanceInterface
 {
     public function updateData(string $key, $value): void;
 

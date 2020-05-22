@@ -307,7 +307,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     public function __wakeup()
     {
         foreach ($this->children() as $child) {
-            if ($child instanceof ComponentInterface) {
+            if ($child instanceof StratusComponentInterface) {
                 $child->setApp($this);
             }
         }
