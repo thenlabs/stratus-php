@@ -36,7 +36,8 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     protected $bus;
     protected $inmutableView;
     protected $token;
-    protected $auxRecord = [];
+    private $auxRecord = [];
+    protected $nonSerializableProperties = ['inmutableView', 'auxRecord'];
 
     public function __construct(string $controllerUri)
     {
@@ -262,6 +263,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
                 $this->bus->write([
                     'resend' => true,
                     'collectDataScript' => $exception->getCollectDataScript(),
+                    'auxRecord' => $this->auxRecord,
                 ]);
 
                 $this->bus->close();

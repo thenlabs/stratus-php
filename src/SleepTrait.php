@@ -12,9 +12,6 @@ trait SleepTrait
 {
     public function __sleep()
     {
-        $vars = get_object_vars($this);
-        $result = array_keys($vars);
-
         $sanatizeDispatcher = function () {
             $this->sorted = [];
             $this->optimized = null;
@@ -27,6 +24,9 @@ trait SleepTrait
         if ($this->captureEventDispatcher instanceof EventDispatcher) {
             $sanatizeDispatcher->call($this->captureEventDispatcher);
         }
+
+        $vars = get_object_vars($this);
+        $result = array_diff(array_keys($vars), $this->nonSerializableProperties);
 
         return $result;
     }

@@ -22,6 +22,7 @@ class Element implements CompositeComponentInterface, JavaScriptInstanceInterfac
     protected $properties = [];
     protected $crawler;
     protected $app;
+    private $nonSerializableProperties = ['crawler'];
 
     public function __construct(string $cssSelector)
     {
