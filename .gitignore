@@ -5,3 +5,4 @@ vendor/
 !.php_cs.dist
 tests/public/app.php
 tests/public/App.class.php
+demos/

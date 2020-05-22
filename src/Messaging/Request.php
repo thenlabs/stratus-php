@@ -60,8 +60,11 @@ class Request
         $request = new self;
         $request->setToken($data['token']);
         $request->setComponentData($data['componentData']);
-        $request->setOperations($data['operations']);
         $request->setEventName($data['eventName']);
+
+        if (isset($data['operations'])) {
+            $request->setOperations($data['operations']);
+        }
 
         return $request;
     }

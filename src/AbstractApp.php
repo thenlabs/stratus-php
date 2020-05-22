@@ -49,6 +49,8 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
+
+        $this->registerJavaScriptClass(Element::class);
     }
 
     public function render(array $data = [], bool $dispatchRenderEvent = true): string
