@@ -29,8 +29,6 @@ use ReflectionClass;
  */
 abstract class AbstractApp extends AbstractCompositeView implements QuerySelectorInterface
 {
-    // use SleepTrait;
-
     protected $controllerUri;
     protected $javaScriptClasses = [];
     protected $debug = false;
