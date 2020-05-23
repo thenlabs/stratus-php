@@ -4,7 +4,8 @@ require_once __DIR__.'/../../bootstrap.php';
 require_once __DIR__.'/App.class.php';
 
 use ThenLabs\StratusPHP\Messaging\Request;
-use function Opis\Closure\{serialize as s, unserialize as u};
+use function Opis\Closure\serialize as s;
+use function Opis\Closure\unserialize as u;
 
 session_start();
 

@@ -4,11 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Functionals;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
-use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
-use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\StratusPHP\AbstractApp;
-use ThenLabs\ComposedViews\AbstractCompositeView;
-use ThenLabs\ClassBuilder\ClassBuilder;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);

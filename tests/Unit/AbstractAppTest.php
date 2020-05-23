@@ -199,7 +199,8 @@ testCase('AbstractAppTest.php', function () {
                 });
 
                 test(function () {
-                    $this->app->addFilter(function () {});
+                    $this->app->addFilter(function () {
+                    });
                 });
 
                 test(function () {

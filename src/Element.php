@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP;
 
-use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\StratusPHP\Exception\MissingComponentDataException;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
