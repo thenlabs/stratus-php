@@ -67,10 +67,6 @@ class StratusApp {
             stratusAppInstance.httpRequests.splice(
                 stratusAppInstance.httpRequests.indexOf(xhr), 1
             );
-
-            if (xhr.status === 200) {
-                stratusAppInstance.processMessage(xhr.responseText, xhr);
-            }
         }
     }
 

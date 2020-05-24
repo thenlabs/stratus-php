@@ -266,6 +266,8 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         }
 
         $eventInfo = explode('.', $request->getEventName());
+        $result = new Result;
+
         if (count($eventInfo) == 2) {
             $componentId = $eventInfo[0];
             $eventName = $eventInfo[1];
@@ -278,6 +280,8 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             try {
                 $component->dispatchEvent($eventName, $event);
             } catch (MissingComponentDataException $exception) {
+                $result->setSuccessful(false);
+
                 $this->bus->write([
                     'resend' => true,
                     'collectDataScript' => $exception->getCollectDataScript(),
@@ -288,7 +292,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             }
         }
 
-        return new Result;
+        return $result;
     }
 
     public function getBus(): BusInterface
