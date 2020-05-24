@@ -19,6 +19,7 @@ use ThenLabs\StratusPHP\Messaging\Bus\StreamingBus;
 use ThenLabs\StratusPHP\Messaging\Request;
 use ThenLabs\StratusPHP\Messaging\Result;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
+use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use ReflectionClass;
@@ -50,6 +51,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
 
         $this->registerJavaScriptClass(Element::class);
+        $this->registerJavaScriptClass(JavaScriptUtils::class);
     }
 
     public function render(array $data = [], bool $dispatchRenderEvent = true): string
@@ -369,5 +371,10 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         foreach ($this->getChilds() as $child) {
             $update($child, $this);
         }
+    }
+
+    public function showAlert(string $text): void
+    {
+        $this->invokeJavaScriptFunction(JavaScriptUtils::class, 'alert', compact('text'));
     }
 }
