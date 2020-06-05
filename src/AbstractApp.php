@@ -152,25 +152,25 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             }
 
             return $element;
+        } else {
+            $hasInmutableView = $this->hasInmutableView();
+
+            $view = $hasInmutableView ? $this->inmutableView : $this->render();
+            $crawler = new HtmlPageCrawler($view);
+            $elementCrawler = $crawler->filter($selector);
+
+            $element = new Element($selector);
+            $element->setCrawler($elementCrawler);
+            $element->setApp($this);
+
+            $this->addChild($element);
+
+            if (! $hasInmutableView) {
+                $this->inmutableView = $view;
+            }
+
+            return $element;
         }
-
-        $hasInmutableView = $this->hasInmutableView();
-
-        $view = $hasInmutableView ? $this->inmutableView : $this->render();
-        $crawler = new HtmlPageCrawler($view);
-        $elementCrawler = $crawler->filter($selector);
-
-        $element = new Element($selector);
-        $element->setCrawler($elementCrawler);
-        $element->setApp($this);
-
-        $this->addChild($element);
-
-        if (! $hasInmutableView) {
-            $this->inmutableView = $view;
-        }
-
-        return $element;
     }
 
     protected function updateJavaScriptClasses(): void
