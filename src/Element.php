@@ -43,11 +43,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 this.criticalDataList = [];
             }
 
-            static setProperty(componentId, property, value) {
-                const component = app.getComponent(componentId);
-                component.element[property] = value;
-            }
-
             static createNew(classId, componentId, parent, selector) {
                 const ComponentClass = stratusAppInstance.classes[classId];
                 const component = new ComponentClass(
@@ -59,9 +54,16 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 stratusAppInstance.addComponent(component);
             }
 
+            static setProperty(componentId, property, value) {
+                app.getComponent(componentId).element[property] = value;
+            }
+
             static setStyle(componentId, property, value) {
-                const component = app.getComponent(componentId);
-                component.element.style[property] = value;
+                app.getComponent(componentId).element.style[property] = value;
+            }
+
+            static setAttribute(componentId, attribute, value) {
+                app.getComponent(componentId).element.setAttribute(attribute, value);
             }
 
             getCriticalData() {
@@ -126,8 +128,18 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function setAttribute(string $attribute, $value): void
     {
-        $this->attributes[$attribute] = $value;
-        $this->crawler->setAttribute($attribute, $value);
+        if ($this->app->isBooted()) {
+            $data = [
+                'componentId' => $this->getId(),
+                'attribute' => $attribute,
+                'value' => $value,
+            ];
+
+            $this->app->invokeJavaScriptFunction(self::class, 'setAttribute', $data);
+        } else {
+            $this->attributes[$attribute] = $value;
+            $this->crawler->setAttribute($attribute, $value);
+        }
     }
 
     public function getAttribute(string $attribute)

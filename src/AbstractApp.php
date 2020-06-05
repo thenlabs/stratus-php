@@ -274,10 +274,11 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             $componentId = $eventInfo[0];
             $eventName = $eventInfo[1];
 
+            $component = $this->findChildById($componentId);
+
             $event = new StratusEvent;
             $event->setApp($this);
-
-            $component = $this->findChildById($componentId);
+            $event->setSource($component);
 
             try {
                 $component->dispatchEvent($eventName, $event);

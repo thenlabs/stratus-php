@@ -368,4 +368,47 @@ testCase('IntegrationTest.php', function () {
             useMacro('tests');
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $attribute = uniqid('attr-');
+            $value = uniqid();
+
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <button id="button">Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $app->querySelector('#button')->click(function ($event) use ($attribute, $value) {
+                $event->getSource()->setAttribute($attribute, $value);
+            });
+
+            static::dumpApp($app);
+
+            static::addVars(compact('attribute', 'value'));
+
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals($this->value, $button->getAttribute($this->attribute));
+        });
+    });
 });
