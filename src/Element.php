@@ -27,6 +27,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->selector = $selector;
     }
 
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
     public static function getJavaScriptClassMembers(): string
     {
         return <<<JAVASCRIPT
@@ -140,6 +145,17 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->crawler->addClass($cssClass);
     }
 
+    public function css(string $property, string $value): void
+    {
+        $data = [
+            'componentId' => $this->getId(),
+            'property' => $property,
+            'value' => $value,
+        ];
+
+        $this->app->invokeJavaScriptFunction(self::class, 'setStyle', $data);
+    }
+
     public function getCrawler(): ?HtmlPageCrawler
     {
         return $this->crawler;
@@ -221,24 +237,8 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->properties[$name] = $value;
     }
 
-    public function css(string $property, string $value): void
-    {
-        $data = [
-            'componentId' => $this->getId(),
-            'property' => $property,
-            'value' => $value,
-        ];
-
-        $this->app->invokeJavaScriptFunction(self::class, 'setStyle', $data);
-    }
-
     public function updateData(string $key, $value): void
     {
         $this->{$key} = $value;
-    }
-
-    public function setId(string $id): void
-    {
-        $this->id = $id;
     }
 }
