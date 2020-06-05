@@ -137,14 +137,18 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
             $this->app->invokeJavaScriptFunction(self::class, 'setAttribute', $data);
         } else {
-            $this->attributes[$attribute] = $value;
             $this->crawler->setAttribute($attribute, $value);
         }
+
+        $this->attributes[$attribute] = $value;
     }
 
     public function getAttribute(string $attribute)
     {
-        return $this->crawler->getAttribute($attribute);
+        return $this->app->isBooted() ?
+            $this->attributes[$attribute] :
+            $this->crawler->getAttribute($attribute)
+        ;
     }
 
     public function hasClass(string $cssClass): bool

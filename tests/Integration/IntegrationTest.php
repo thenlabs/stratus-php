@@ -385,6 +385,7 @@ testCase('IntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
+                            <label></label>
                             <button id="button">Button</button>
                         </body>
                         </html>
@@ -393,7 +394,12 @@ testCase('IntegrationTest.php', function () {
             };
 
             $app->querySelector('#button')->click(function ($event) use ($attribute, $value) {
-                $event->getSource()->setAttribute($attribute, $value);
+                $app = $event->getApp();
+                $button = $event->getSource();
+                $label = $app->querySelector('label');
+
+                $button->setAttribute($attribute, $value);
+                $label->innerHTML = $button->getAttribute($attribute);
             });
 
             static::dumpApp($app);
@@ -405,10 +411,13 @@ testCase('IntegrationTest.php', function () {
 
         test(function () {
             $button = static::findElement('button');
+            $label = static::findElement('label');
+
             $button->click();
             static::waitForResponse();
 
             $this->assertEquals($this->value, $button->getAttribute($this->attribute));
+            $this->assertEquals($this->value, $label->getText());
         });
     });
 });
