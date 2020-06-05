@@ -30,6 +30,8 @@ use ReflectionClass;
  */
 abstract class AbstractApp extends AbstractCompositeView implements QuerySelectorInterface
 {
+    use QuerySelectorAllImplementationPendingTrait;
+
     protected $controllerUri;
     protected $javaScriptClasses = [];
     protected $debug = false;

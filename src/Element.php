@@ -14,6 +14,7 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 class Element implements CompositeComponentInterface, StratusComponentInterface, QuerySelectorInterface
 {
     use CompositeComponentTrait;
+    use QuerySelectorAllImplementationPendingTrait;
 
     protected $selector;
     protected $attributes = [];
