@@ -13,7 +13,7 @@ use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Event\StratusEvent;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
-use ThenLabs\StratusPHP\Exception\MissingComponentDataException;
+use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\StratusPHP\Messaging\Bus\BusInterface;
 use ThenLabs\StratusPHP\Messaging\Bus\StreamingBus;
 use ThenLabs\StratusPHP\Messaging\Request;
@@ -279,7 +279,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
             try {
                 $component->dispatchEvent($eventName, $event);
-            } catch (MissingComponentDataException $exception) {
+            } catch (MissingDataException $exception) {
                 $result->setSuccessful(false);
 
                 $this->bus->write([

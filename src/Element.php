@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP;
 
-use ThenLabs\StratusPHP\Exception\MissingComponentDataException;
+use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
@@ -189,7 +189,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     public function __get($name)
     {
         if (! isset($this->properties[$name])) {
-            throw new MissingComponentDataException(<<<JAVASCRIPT
+            throw new MissingDataException(<<<JAVASCRIPT
                 const component = stratusAppInstance.getComponent('{$this->getId()}');
 
                 component.registerCriticalProperty('{$name}');

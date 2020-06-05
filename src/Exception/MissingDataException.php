@@ -6,7 +6,7 @@ namespace ThenLabs\StratusPHP\Exception;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class MissingComponentDataException extends StratusException
+class MissingDataException extends StratusException
 {
     protected $script;
 
