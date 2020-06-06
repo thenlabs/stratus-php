@@ -132,7 +132,7 @@ testCase('IntegrationTest.php', function () {
                     $label = $event->getApp()->querySelector('label');
 
                     $label->innerHTML = uniqid();
-                    $label->css('color', 'red');
+                    $label->setStyle('color', 'red');
                 }
             };
 

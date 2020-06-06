@@ -167,7 +167,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->crawler->addClass($cssClass);
     }
 
-    public function css(string $property, string $value): void
+    public function setStyle(string $property, string $value): void
     {
         $this->setPropertyOnFront("style.{$property}", $value);
     }
