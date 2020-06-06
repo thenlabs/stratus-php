@@ -172,6 +172,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->setPropertyOnFront("style.{$property}", $value);
     }
 
+    public function getStyle(string $property): string
+    {
+        return $this->style[$property];
+    }
+
     public function getCrawler(): ?HtmlPageCrawler
     {
         return $this->crawler;
@@ -249,7 +254,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function updateData(string $key, $value): void
     {
-        $this->{$key} = $value;
+        $this->properties[$key] = $value;
     }
 
     private function setPropertyOnFront(string $property, $value): void

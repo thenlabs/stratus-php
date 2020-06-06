@@ -166,6 +166,75 @@ testCase('IntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
+                            <label>MY LABEL</label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+
+                public function onButtonClick($event): void
+                {
+                    $label = $event->getApp()->querySelector('label');
+
+                    $label->innerHTML = uniqid();
+                    $label->setStyle('color', 'red');
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $label = $app->querySelector('label');
+
+            $button->click(function () use ($label) {
+                if ($label->getStyle('color') == 'red') {
+                    $label->setStyle('color', 'blue');
+                } else {
+                    $label->setStyle('color', 'red');
+                }
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        setUp(function () {
+            $this->button = static::findElement('button');
+        });
+
+        test(function () {
+            $this->button->click();
+            static::waitForResponse();
+
+            $this->assertEquals(
+                'red',
+                $this->executeScript('return document.querySelector("label").style.color')
+            );
+        });
+
+        test(function () {
+            $this->button->click();
+            static::waitForResponse();
+
+            $this->assertEquals(
+                'blue',
+                $this->executeScript('return document.querySelector("label").style.color')
+            );
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
                             <input type="" name="">
                             <label></label>
                             <button>Button</button>
