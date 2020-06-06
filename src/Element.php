@@ -54,11 +54,8 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
             }
 
             static setProperty(componentId, property, value) {
-                app.getComponent(componentId).element[property] = value;
-            }
-
-            static setStyle(componentId, property, value) {
-                app.getComponent(componentId).element.style[property] = value;
+                const element = app.getComponent(componentId).element;
+                eval(`element.\${property} = \${value}`);
             }
 
             static setAttribute(componentId, attribute, value) {
@@ -174,11 +171,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     {
         $data = [
             'componentId' => $this->getId(),
-            'property' => $property,
-            'value' => $value,
+            'property' => "style.{$property}",
+            'value' => var_export($value, true),
         ];
 
-        $this->app->invokeJavaScriptFunction(self::class, 'setStyle', $data);
+        $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);
     }
 
     public function getCrawler(): ?HtmlPageCrawler
@@ -254,7 +251,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $data = [
             'componentId' => $this->getId(),
             'property' => $name,
-            'value' => $value,
+            'value' => var_export($value, true),
         ];
 
         $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);
