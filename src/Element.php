@@ -169,13 +169,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function css(string $property, string $value): void
     {
-        $data = [
-            'componentId' => $this->getId(),
-            'property' => "style.{$property}",
-            'value' => var_export($value, true),
-        ];
-
-        $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);
+        $this->setPropertyOnFront("style.{$property}", $value);
     }
 
     public function getCrawler(): ?HtmlPageCrawler
@@ -248,13 +242,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function __set($name, $value)
     {
-        $data = [
-            'componentId' => $this->getId(),
-            'property' => $name,
-            'value' => var_export($value, true),
-        ];
-
-        $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);
+        $this->setPropertyOnFront($name, $value);
 
         $this->properties[$name] = $value;
     }
@@ -262,5 +250,16 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     public function updateData(string $key, $value): void
     {
         $this->{$key} = $value;
+    }
+
+    private function setPropertyOnFront(string $property, $value): void
+    {
+        $data = [
+            'componentId' => $this->getId(),
+            'property' => $property,
+            'value' => var_export($value, true),
+        ];
+
+        $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);
     }
 }
