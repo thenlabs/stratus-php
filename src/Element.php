@@ -17,7 +17,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     use QuerySelectorAllImplementationPendingTrait;
 
     protected $selector;
-    protected $attributes = [];
     protected $properties = [];
     protected $crawler;
     protected $app;
@@ -89,13 +88,19 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $jsAttributes = '';
         $jsEvents = '';
 
-        foreach ($this->attributes as $attribute => $value) {
-            $jsAttribute = var_export($attribute, true);
-            $jsValue = var_export($value, true);
+        $node = $this->crawler->getNode(0);
+        if ($node->hasAttributes()) {
+            foreach ($node->attributes as $attr) {
+                $attribute = $attr->nodeName;
+                $value = $attr->nodeValue;
 
-            $jsAttributes .= <<<JAVASCRIPT
-                component.element.setAttribute({$jsAttribute}, {$jsValue});\n
-            JAVASCRIPT;
+                $jsAttribute = var_export($attribute, true);
+                $jsValue = var_export($value, true);
+
+                $jsAttributes .= <<<JAVASCRIPT
+                    component.element.setAttribute({$jsAttribute}, {$jsValue});\n
+                JAVASCRIPT;
+            }
         }
 
         foreach ($this->eventDispatcher->getListeners() as $eventName => $listeners) {
@@ -136,11 +141,15 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
             ];
 
             $this->app->invokeJavaScriptFunction(self::class, 'setAttribute', $data);
+
+            if (! isset($this->properties['attributes'])) {
+                $this->properties['attributes'] = [];
+            }
+
+            $this->properties['attributes'][$attribute] = $value;
         } else {
             $this->crawler->setAttribute($attribute, $value);
         }
-
-        $this->attributes[$attribute] = $value;
     }
 
     public function getAttribute(string $attribute)
