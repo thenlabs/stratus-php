@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP\Tests\Unit\Messaging;
+namespace ThenLabs\StratusPHP\Tests\Unit;
 
-use ThenLabs\StratusPHP\Messaging\Request;
+use ThenLabs\StratusPHP\StratusRequest;
 use ThenLabs\StratusPHP\Tests\TestCase;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(TestCase::class);
 
-testCase('RequestTest.php', function () {
+testCase('StratusRequestTest.php', function () {
     test(function () {
         $data = [
             'token' => uniqid(),
@@ -18,7 +18,7 @@ testCase('RequestTest.php', function () {
             'eventName' => uniqid(),
         ];
 
-        $request = Request::createFromJson(json_encode($data));
+        $request = StratusRequest::createFromJson(json_encode($data));
 
         $this->assertEquals($data['token'], $request->getToken());
         $this->assertEquals($data['operations'], $request->getOperations());

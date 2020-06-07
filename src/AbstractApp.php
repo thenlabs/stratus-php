@@ -14,10 +14,10 @@ use ThenLabs\StratusPHP\Event\StratusEvent;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
-use ThenLabs\StratusPHP\Messaging\Bus\BusInterface;
-use ThenLabs\StratusPHP\Messaging\Bus\StreamingBus;
-use ThenLabs\StratusPHP\Messaging\Request;
-use ThenLabs\StratusPHP\Messaging\Result;
+use ThenLabs\StratusPHP\Bus\BusInterface;
+use ThenLabs\StratusPHP\Bus\StreamingBus;
+use ThenLabs\StratusPHP\StratusRequest;
+use ThenLabs\StratusPHP\StratusResponse;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -238,7 +238,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         parent::addFilter($callback);
     }
 
-    public function run(Request $request): Result
+    public function run(StratusRequest $request): StratusResponse
     {
         if (! $this->booted) {
             $this->booted = true;
@@ -268,7 +268,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         }
 
         $eventInfo = explode('.', $request->getEventName());
-        $result = new Result;
+        $response = new StratusResponse;
 
         if (count($eventInfo) == 2) {
             $componentId = $eventInfo[0];
@@ -283,7 +283,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             try {
                 $component->dispatchEvent($eventName, $event);
             } catch (MissingDataException $exception) {
-                $result->setSuccessful(false);
+                $response->setSuccessful(false);
 
                 $this->bus->write([
                     'resend' => true,
@@ -295,7 +295,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             }
         }
 
-        return $result;
+        return $response;
     }
 
     public function getBus(): BusInterface
