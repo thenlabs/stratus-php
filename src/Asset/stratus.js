@@ -71,6 +71,21 @@ class StratusApp {
         }
     }
 
+    _stringifyReplacer(key, value) {
+        let result = value;
+
+        if (value instanceof NamedNodeMap) {
+            result = {};
+
+            for (let attr of value) {
+                let attrName = attr.nodeName;
+                result[attrName] = attr.ownerElement.getAttribute(attrName);
+            }
+        }
+
+        return result;
+    }
+
     dispatch(eventName) {
         const xhr = this.getNewXMLHttpRequest();
         const componentData = {};
@@ -98,7 +113,7 @@ class StratusApp {
 
     sendRequest(xhr, data) {
         xhr.data = data;
-        xhr.send('stratus_request=' + JSON.stringify(data));
+        xhr.send('stratus_request=' + JSON.stringify(data, this._stringifyReplacer));
         this.httpRequests.push(xhr);
     }
 

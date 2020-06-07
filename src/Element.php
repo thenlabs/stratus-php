@@ -157,6 +157,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         ;
     }
 
+    public function hasAttribute(string $attribute): bool
+    {
+        return isset($this->attributes[$attribute]);
+    }
+
     public function hasClass(string $cssClass): bool
     {
         if ($this->app->isBooted()) {

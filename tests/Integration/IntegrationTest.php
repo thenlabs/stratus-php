@@ -534,4 +534,94 @@ testCase('IntegrationTest.php', function () {
             $this->assertNotEmpty($label->getText());
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <label class="label"></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $label = $app->querySelector('label');
+
+            $button->click(function () use ($label) {
+                if ($label->hasAttribute('class')) {
+                    $label->innerHTML = uniqid();
+                }
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $label = static::findElement('label');
+
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertNotEmpty($label->getText());
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <label></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $label = $app->querySelector('label');
+
+            $button->click(function () use ($label) {
+                if (! $label->hasAttribute('class')) {
+                    $label->innerHTML = uniqid();
+                }
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $label = static::findElement('label');
+
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertNotEmpty($label->getText());
+        });
+    });
 });
