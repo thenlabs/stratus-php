@@ -159,7 +159,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function hasClass(string $cssClass): bool
     {
-        return $this->crawler->hasClass($cssClass);
+        if ($this->app->isBooted()) {
+            return in_array($cssClass, $this->classList);
+        } else {
+            return $this->crawler->hasClass($cssClass);
+        }
     }
 
     public function addClass(string $cssClass): void
