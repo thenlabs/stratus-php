@@ -64,6 +64,8 @@ class StratusInitScript extends Script
             }
         }
 
+        $jsSetDebug = $this->app->isDebug() ? "app.debug = true;\n" : '';
+
         return <<<JAVASCRIPT
             "use strict";
 
@@ -73,6 +75,8 @@ class StratusInitScript extends Script
             );
 
             (app => {
+                {$jsSetDebug}
+
                 {$jsClasses}
 
                 {$jsInstances}

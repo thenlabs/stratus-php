@@ -113,6 +113,7 @@ class SeleniumTestCase extends TestCase
             require_once 'App.class.php';
 
             \$app = new App('/controller.php');
+            \$app->setDebug(true);
             \$app->setJavaScriptClasses({$javaScriptClassesDef});
 
             {$rest}

@@ -8,6 +8,7 @@ class StratusApp {
         this.classes = {};
         this.components = {};
         this.buffer = {};
+        this.debug = false;
         this.rootElement = document;
         this.httpRequests = [];
     }
@@ -115,6 +116,10 @@ class StratusApp {
             }
 
             let message = JSON.parse(line);
+
+            if (this.debug) {
+                console.log('Message:', message);
+            }
 
             if ('boolean' === typeof(message.resend) &&
                 true === message.resend &&
