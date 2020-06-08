@@ -5,6 +5,7 @@ namespace ThenLabs\StratusPHP\Tests\Functionals;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\AbstractApp;
+use Facebook\WebDriver\Remote\RemoteWebElement;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
@@ -622,6 +623,47 @@ testCase('IntegrationTest.php', function () {
             static::waitForResponse();
 
             $this->assertNotEmpty($label->getText());
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <label></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $label = $app->querySelector('label');
+
+            $button->click(function () use ($label) {
+                $label->addClass('my-class');
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertInstanceOf(RemoteWebElement::class, static::findElement('label.my-class'));
         });
     });
 });

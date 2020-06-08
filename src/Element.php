@@ -62,6 +62,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 app.getComponent(componentId).element.setAttribute(attribute, value);
             }
 
+            static addClass(componentId, className) {
+                app.getComponent(componentId).element.classList.add(className);
+            }
+
             getCriticalData() {
                 let result = {};
 
@@ -173,7 +177,14 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function addClass(string $cssClass): void
     {
-        $this->crawler->addClass($cssClass);
+        if ($this->app->isBooted()) {
+            $this->app->invokeJavaScriptFunction(self::class, 'addClass', [
+                'componentId' => $this->getId(),
+                'cssClass' => $cssClass,
+            ]);
+        } else {
+            $this->crawler->addClass($cssClass);
+        }
     }
 
     public function setStyle(string $property, string $value): void
