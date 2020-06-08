@@ -62,6 +62,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 app.getComponent(componentId).element.setAttribute(attribute, value);
             }
 
+            static removeAttribute(componentId, attribute) {
+                app.getComponent(componentId).element.removeAttribute(attribute);
+            }
+
             static addClass(componentId, className) {
                 app.getComponent(componentId).element.classList.add(className);
             }
@@ -168,6 +172,16 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     public function hasAttribute(string $attribute): bool
     {
         return isset($this->attributes[$attribute]);
+    }
+
+    public function removeAttribute(string $attribute): void
+    {
+        if ($this->app->isBooted()) {
+            $this->app->invokeJavaScriptFunction(self::class, 'removeAttribute', [
+                'componentId' => $this->getId(),
+                'attribute' => $attribute,
+            ]);
+        }
     }
 
     public function hasClass(string $cssClass): bool
