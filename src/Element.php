@@ -66,6 +66,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 app.getComponent(componentId).element.classList.add(className);
             }
 
+            static removeClass(componentId, className) {
+                app.getComponent(componentId).element.classList.remove(className);
+            }
+
             getCriticalData() {
                 let result = {};
 
@@ -185,6 +189,18 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         } else {
             $this->crawler->addClass($cssClass);
         }
+    }
+
+    public function removeClass(string $cssClass): void
+    {
+        if ($this->app->isBooted()) {
+            $this->app->invokeJavaScriptFunction(self::class, 'removeClass', [
+                'componentId' => $this->getId(),
+                'cssClass' => $cssClass,
+            ]);
+        }/* else {
+            $this->crawler->addClass($cssClass);
+        }*/
     }
 
     public function setStyle(string $property, string $value): void

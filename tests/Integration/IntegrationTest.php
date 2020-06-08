@@ -666,4 +666,45 @@ testCase('IntegrationTest.php', function () {
             $this->assertInstanceOf(RemoteWebElement::class, static::findElement('label.my-class'));
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <label class="label"></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $label = $app->querySelector('label');
+
+            $button->click(function () use ($label) {
+                $label->removeClass('label');
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertCount(0, static::findElements('label.label'));
+        });
+    });
 });
