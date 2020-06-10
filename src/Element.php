@@ -176,12 +176,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function removeAttribute(string $attribute): void
     {
-        if ($this->app->isBooted()) {
-            $this->app->invokeJavaScriptFunction(self::class, 'removeAttribute', [
-                'componentId' => $this->getId(),
-                'attribute' => $attribute,
-            ]);
-        }
+        $this->verifyAppBooted(__METHOD__);
+
+        $this->app->invokeJavaScriptFunction(self::class, 'removeAttribute', [
+            'componentId' => $this->getId(),
+            'attribute' => $attribute,
+        ]);
     }
 
     public function hasClass(string $cssClass): bool
