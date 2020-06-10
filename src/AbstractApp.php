@@ -338,6 +338,10 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
             if ($child instanceof Element) {
                 $child->setCrawler(null);
+
+                (function () {
+                    $this->criticalProperties = [];
+                })->call($child);
             }
 
             if ($child instanceof StratusComponentInterface) {

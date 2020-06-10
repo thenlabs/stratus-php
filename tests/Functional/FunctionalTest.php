@@ -341,4 +341,41 @@ testCase('FunctionalTest.php', function () {
             $this->assertEquals(1, static::executeScript($script));
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title></title>
+                        </head>
+                        <body class="body" attr-1="">
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $body = $app->querySelector('body');
+            $body->setId('body');
+
+            $body->registerCriticalProperty('attributes');
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $criticalProperties = static::executeScript(<<<JAVASCRIPT
+                return stratusAppInstance.getComponent('body').criticalProperties;
+            JAVASCRIPT);
+
+            $this->assertContains('attributes', $criticalProperties);
+        });
+    });
 });

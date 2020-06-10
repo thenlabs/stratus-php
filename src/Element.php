@@ -19,6 +19,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     protected $selector;
     protected $properties = [];
+    protected $criticalProperties = [];
     protected $crawler;
     protected $app;
 
@@ -95,23 +96,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     {
         $myId = $this->getId();
 
-        $jsAttributes = '';
         $jsEvents = '';
-
-        $node = $this->crawler->getNode(0);
-        if ($node->hasAttributes()) {
-            foreach ($node->attributes as $attr) {
-                $attribute = $attr->nodeName;
-                $value = $attr->nodeValue;
-
-                $jsAttribute = var_export($attribute, true);
-                $jsValue = var_export($value, true);
-
-                $jsAttributes .= <<<JAVASCRIPT
-                    component.element.setAttribute({$jsAttribute}, {$jsValue});\n
-                JAVASCRIPT;
-            }
-        }
 
         foreach ($this->eventDispatcher->getListeners() as $eventName => $listeners) {
             $jsEvents .= <<<JAVASCRIPT
@@ -127,11 +112,16 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
             "app.getComponent('{$parent->getId()}').element"
         ;
 
+        $jsRegisterCriticalProperties = '';
+        foreach ($this->criticalProperties as $property) {
+            $jsRegisterCriticalProperties .= "component.registerCriticalProperty('{$property}');\n";
+        }
+
         return <<<JAVASCRIPT
             const parentElement = {$jsParentElement};
             const component = new ComponentClass('{$myId}', parentElement, '{$this->selector}');
             app.addComponent(component);
-            {$jsAttributes}
+            {$jsRegisterCriticalProperties}
             {$jsEvents}
         JAVASCRIPT;
     }
@@ -321,5 +311,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         if (! $this->app->isBooted()) {
             throw new InvokationBeforeBootException($method);
         }
+    }
+
+    public function registerCriticalProperty(string $property): void
+    {
+        $this->criticalProperties[] = $property;
     }
 }
