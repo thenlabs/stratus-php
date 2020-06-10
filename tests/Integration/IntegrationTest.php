@@ -437,6 +437,43 @@ testCase('IntegrationTest.php', function () {
 
             useMacro('tests');
         });
+
+        testCase(function () {
+            setUpBeforeClassOnce(function () {
+                $app = new class('') extends AbstractApp {
+                    public function getView(): string
+                    {
+                        return <<<HTML
+                            <!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Document</title>
+                            </head>
+                            <body>
+                                <input type="" name="">
+                                <label></label>
+                                <button>Button</button>
+                            </body>
+                            </html>
+                        HTML;
+                    }
+                };
+
+                $button = $app->querySelector('button');
+                $input = $app->querySelector('input');
+                $label = $app->querySelector('label');
+
+                $button->addEventListener('click', function () use ($input, $label) {
+                    $label->innerHTML = $input->value;
+                });
+
+                static::dumpApp($app);
+                static::openApp();
+            });
+
+            useMacro('tests');
+        });
     });
 
     testCase(function () {
