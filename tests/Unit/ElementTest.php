@@ -60,5 +60,13 @@ testCase('ElementTest.php', function () {
         test(function () {
             $this->element->removeClass(uniqid());
         });
+
+        test(function () {
+            $this->element->setStyle(uniqid(), uniqid());
+        });
+
+        test(function () {
+            $this->element->getStyle(uniqid());
+        });
     });
 });

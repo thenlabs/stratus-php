@@ -213,11 +213,15 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function setStyle(string $property, string $value): void
     {
+        $this->verifyAppBooted(__METHOD__);
+
         $this->setPropertyOnFront("style.{$property}", $value);
     }
 
     public function getStyle(string $property): string
     {
+        $this->verifyAppBooted(__METHOD__);
+
         return $this->style[$property];
     }
 
