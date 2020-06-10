@@ -203,14 +203,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function removeClass(string $cssClass): void
     {
-        if ($this->app->isBooted()) {
-            $this->app->invokeJavaScriptFunction(self::class, 'removeClass', [
-                'componentId' => $this->getId(),
-                'cssClass' => $cssClass,
-            ]);
-        }/* else {
-            $this->crawler->addClass($cssClass);
-        }*/
+        $this->verifyAppBooted(__METHOD__);
+
+        $this->app->invokeJavaScriptFunction(self::class, 'removeClass', [
+            'componentId' => $this->getId(),
+            'cssClass' => $cssClass,
+        ]);
     }
 
     public function setStyle(string $property, string $value): void
