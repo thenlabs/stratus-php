@@ -16,8 +16,6 @@ use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\StratusPHP\Bus\BusInterface;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
-use ThenLabs\StratusPHP\StratusRequest;
-use ThenLabs\StratusPHP\StratusResponse;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use Symfony\Component\EventDispatcher\EventDispatcher;
