@@ -40,7 +40,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 this.parentElement = parentElement;
                 this.selector = selector;
                 this.element = parentElement.querySelector(selector);
-                this.criticalDataList = [];
+                this.criticalProperties = [];
             }
 
             static createNew(classId, componentId, parent, selector) {
@@ -78,7 +78,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
             getCriticalData() {
                 let result = {};
 
-                for (let data of this.criticalDataList) {
+                for (let data of this.criticalProperties) {
                     result[data] = this.element[data];
                 }
 
@@ -86,7 +86,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
             }
 
             registerCriticalProperty(property) {
-                this.criticalDataList.push(property);
+                this.criticalProperties.push(property);
             }
         JAVASCRIPT;
     }
