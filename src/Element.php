@@ -320,6 +320,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function addEventListener(string $eventName, callable $listener): void
     {
-        $this->on($eventName, $listener);
+        if ($listener instanceof StratusEventListener) {
+            $this->on($eventName, [$listener, 'onBack']);
+        } else {
+            $this->on($eventName, $listener);
+        }
     }
 }

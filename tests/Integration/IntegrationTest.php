@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP\Tests\Functionals;
+namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\StratusEventListener;
+use ThenLabs\StratusPHP\Event\StratusEvent;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 
 setTestCaseNamespace(__NAMESPACE__);
@@ -783,6 +785,53 @@ testCase('IntegrationTest.php', function () {
             static::waitForResponse();
 
             $this->assertCount(0, static::findElements('label[class]'));
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input type="" name="">
+                            <label class="label"></label>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $input = $app->querySelector('input');
+            $input->addEventListener('keypress', new class(['key', 'keyCode']) extends StratusEventListener {
+                public function onBack(StratusEvent $event): void
+                {
+                    $input = $event->getSource();
+                    $label = $event->getApp()->querySelector('label');
+
+                    $label->innerHTML = "key: {$key} keyCode: {$keyCode}";
+                }
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $input = static::findElement('input');
+            $input->sendKeys('a');
+            static::waitForResponse();
+
+            $label = static::findElement('label');
+
+            $this->assertEquals('key: a keyCode: 97', $label->getText());
         });
     });
 });
