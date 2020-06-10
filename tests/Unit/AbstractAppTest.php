@@ -148,15 +148,6 @@ testCase('AbstractAppTest.php', function () {
             });
 
             test(function () {
-                $this->assertTrue($this->buttonElement->hasClass('btn-class-1'));
-                $this->assertTrue($this->buttonElement->hasClass('btn-class-2'));
-            });
-
-            test(function () {
-                $this->assertFalse($this->buttonElement->hasClass(uniqid()));
-            });
-
-            test(function () {
                 $this->assertSame($this->buttonElement, $this->app->querySelector('button'));
             });
 
@@ -166,17 +157,6 @@ testCase('AbstractAppTest.php', function () {
 
             test(function () {
                 $this->assertSame($this->app, $this->buttonElement->getApp());
-            });
-
-            testCase(function () {
-                setUp(function () {
-                    $this->newClass = uniqid('class-');
-                    $this->buttonElement->addClass($this->newClass);
-                });
-
-                test(function () {
-                    $this->assertTrue($this->buttonElement->hasClass($this->newClass));
-                });
             });
 
             testCase(function () {

@@ -48,5 +48,9 @@ testCase('ElementTest.php', function () {
         test(function () {
             $this->element->removeAttribute(uniqid());
         });
+
+        test(function () {
+            $this->element->hasClass(uniqid());
+        });
     });
 });
