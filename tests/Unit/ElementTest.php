@@ -40,5 +40,9 @@ testCase('ElementTest.php', function () {
         test(function () {
             $this->element->getAttribute(uniqid());
         });
+
+        test(function () {
+            $this->element->hasAttribute(uniqid());
+        });
     });
 });

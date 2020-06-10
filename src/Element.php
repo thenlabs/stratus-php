@@ -169,6 +169,8 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function hasAttribute(string $attribute): bool
     {
+        $this->verifyAppBooted(__METHOD__);
+
         return isset($this->attributes[$attribute]);
     }
 
