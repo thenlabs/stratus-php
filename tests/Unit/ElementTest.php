@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Tests\Unit;
 
+use ThenLabs\StratusPHP\AbstractApp;
 use ThenLabs\StratusPHP\Element;
+use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Tests\TestCase;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 
@@ -22,5 +24,17 @@ testCase('ElementTest.php', function () {
             $element->querySelector($cssSelector),
             $element->querySelector($cssSelector)
         );
+    });
+
+    testCase(function () {
+        setUp(function () {
+            $this->expectException(InvokationBeforeBootException::class);
+            $this->element = new Element(uniqid());
+            $this->element->setApp($this->createMock(AbstractApp::class));
+        });
+
+        test(function () {
+            $this->element->setAttribute(uniqid(), uniqid());
+        });
     });
 });

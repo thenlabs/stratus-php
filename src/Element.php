@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP;
 
+use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
@@ -142,23 +143,21 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function setAttribute(string $attribute, $value): void
     {
-        if ($this->app->isBooted()) {
-            $data = [
-                'componentId' => $this->getId(),
-                'attribute' => $attribute,
-                'value' => $value,
-            ];
+        $this->verifyAppBooted(__METHOD__);
 
-            $this->app->invokeJavaScriptFunction(self::class, 'setAttribute', $data);
+        $data = [
+            'componentId' => $this->getId(),
+            'attribute' => $attribute,
+            'value' => $value,
+        ];
 
-            if (! isset($this->properties['attributes'])) {
-                $this->properties['attributes'] = [];
-            }
+        $this->app->invokeJavaScriptFunction(self::class, 'setAttribute', $data);
 
-            $this->properties['attributes'][$attribute] = $value;
-        } else {
-            $this->crawler->setAttribute($attribute, $value);
+        if (! isset($this->properties['attributes'])) {
+            $this->properties['attributes'] = [];
         }
+
+        $this->properties['attributes'][$attribute] = $value;
     }
 
     public function getAttribute(string $attribute)
@@ -316,5 +315,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         ];
 
         $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);
+    }
+
+    private function verifyAppBooted(string $method): void
+    {
+        if (! $this->app->isBooted()) {
+            throw new InvokationBeforeBootException($method);
+        }
     }
 }
