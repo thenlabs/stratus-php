@@ -162,10 +162,9 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function getAttribute(string $attribute)
     {
-        return $this->app->isBooted() ?
-            $this->attributes[$attribute] :
-            $this->crawler->getAttribute($attribute)
-        ;
+        $this->verifyAppBooted(__METHOD__);
+
+        return $this->attributes[$attribute];
     }
 
     public function hasAttribute(string $attribute): bool

@@ -36,5 +36,9 @@ testCase('ElementTest.php', function () {
         test(function () {
             $this->element->setAttribute(uniqid(), uniqid());
         });
+
+        test(function () {
+            $this->element->getAttribute(uniqid());
+        });
     });
 });
