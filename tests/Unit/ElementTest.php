@@ -52,5 +52,9 @@ testCase('ElementTest.php', function () {
         test(function () {
             $this->element->hasClass(uniqid());
         });
+
+        test(function () {
+            $this->element->addClass(uniqid());
+        });
     });
 });
