@@ -12,6 +12,7 @@ use ThenLabs\StratusPHP\AbstractApp;
 class StratusEvent extends Event
 {
     protected $app;
+    protected $eventData = [];
 
     public function getApp(): AbstractApp
     {
@@ -21,5 +22,15 @@ class StratusEvent extends Event
     public function setApp(AbstractApp $app): void
     {
         $this->app = $app;
+    }
+
+    public function getEventData(): array
+    {
+        return $this->eventData;
+    }
+
+    public function setEventData(array $eventData): void
+    {
+        $this->eventData = $eventData;
     }
 }

@@ -11,6 +11,7 @@ use ThenLabs\StratusPHP\Event\StratusEvent;
 class StratusEventListener
 {
     protected $requiredEventData = [];
+    protected $backListener;
 
     public function __construct(array $requiredEventData = [])
     {
@@ -22,12 +23,13 @@ class StratusEventListener
         return $this->requiredEventData;
     }
 
-    public function onBack(StratusEvent $event): void
+    public function setBackListener(callable $backListener): void
     {
+        $this->backListener = $backListener;
     }
 
-    public function __invoke()
+    public function __invoke(...$args)
     {
-        call_user_func([$this, 'onBack']);
+        call_user_func_array($this->backListener, $args);
     }
 }

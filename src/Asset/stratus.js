@@ -86,7 +86,7 @@ class StratusApp {
         return result;
     }
 
-    dispatch(eventName) {
+    dispatch(eventName, eventData = {}) {
         const xhr = this.getNewXMLHttpRequest();
         const componentData = {};
 
@@ -105,6 +105,7 @@ class StratusApp {
             token: this.token,
             componentData,
             eventName,
+            eventData,
         };
 
         this.sendRequest(xhr, data);

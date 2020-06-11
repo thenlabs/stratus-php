@@ -11,6 +11,7 @@ class StratusRequest
     protected $token;
     protected $componentData;
     protected $eventName;
+    protected $eventData = [];
     protected $operations = [];
 
     public function getToken(): string
@@ -53,6 +54,16 @@ class StratusRequest
         $this->eventName = $eventName;
     }
 
+    public function getEventData(): array
+    {
+        return $this->eventData;
+    }
+
+    public function setEventData(array $eventData): void
+    {
+        $this->eventData = $eventData;
+    }
+
     public static function createFromJson(string $json): self
     {
         $data = json_decode($json, true);
@@ -61,6 +72,7 @@ class StratusRequest
         $request->setToken($data['token']);
         $request->setComponentData($data['componentData']);
         $request->setEventName($data['eventName']);
+        $request->setEventData($data['eventData']);
 
         if (isset($data['operations'])) {
             $request->setOperations($data['operations']);

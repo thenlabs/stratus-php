@@ -99,11 +99,23 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $jsEvents = '';
 
         foreach ($this->eventDispatcher->getListeners() as $eventName => $listeners) {
-            $jsEvents .= <<<JAVASCRIPT
-                component.element.addEventListener('{$eventName}', () => {
-                    app.dispatch('{$myId}.{$eventName}');
-                });
-            JAVASCRIPT;
+            foreach ($listeners as $listener) {
+                $jsEventData = '';
+
+                if ($listener instanceof StratusEventListener) {
+                    foreach ($listener->getRequiredEventData() as $key) {
+                        $jsEventData .= "eventData['{$key}'] = event['{$key}'];\n";
+                    }
+                }
+
+                $jsEvents .= <<<JAVASCRIPT
+                    component.element.addEventListener('{$eventName}', event => {
+                        let eventData = {};
+                        {$jsEventData}
+                        app.dispatch('{$myId}.{$eventName}', eventData);
+                    });
+                JAVASCRIPT;
+            }
         }
 
         $parent = $this->getParent();
@@ -320,10 +332,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function addEventListener(string $eventName, callable $listener): void
     {
-        if ($listener instanceof StratusEventListener) {
-            $this->on($eventName, [$listener, 'onBack']);
-        } else {
-            $this->on($eventName, $listener);
-        }
+        $this->on($eventName, $listener);
     }
 }

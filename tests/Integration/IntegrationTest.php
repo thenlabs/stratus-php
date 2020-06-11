@@ -810,15 +810,16 @@ testCase('IntegrationTest.php', function () {
             };
 
             $input = $app->querySelector('input');
-            $input->addEventListener('keypress', new class(['key', 'keyCode']) extends StratusEventListener {
-                public function onBack(StratusEvent $event): void
-                {
-                    $input = $event->getSource();
-                    $label = $event->getApp()->querySelector('label');
+            $label = $app->querySelector('label');
 
-                    $label->innerHTML = "key: {$key} keyCode: {$keyCode}";
-                }
+            $listener = new StratusEventListener(['key', 'keyCode']);
+            $listener->setBackListener(function (StratusEvent $event) use ($label): void {
+                $eventData = $event->getEventData();
+                extract($eventData);
+                $label->innerHTML = "key: {$key} keyCode: {$keyCode}";
             });
+
+            $input->addEventListener('keypress', $listener);
 
             static::dumpApp($app);
             static::openApp();
