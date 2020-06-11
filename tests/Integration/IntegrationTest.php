@@ -789,6 +789,29 @@ testCase('IntegrationTest.php', function () {
     });
 
     testCase(function () {
+        createMacro('tests', function () {
+            setUp(function () {
+                $this->input = static::findElement('input');
+                $this->label = static::findElement('label');
+
+                $this->input->clear();
+            });
+
+            test(function () {
+                $this->input->sendKeys('a');
+                static::waitForResponse();
+
+                $this->assertEquals('key: a keyCode: 97', $this->label->getText());
+            });
+
+            test(function () {
+                $this->input->sendKeys('b');
+                static::waitForResponse();
+
+                $this->assertEquals('key: b keyCode: 98', $this->label->getText());
+            });
+        });
+
         setUpBeforeClassOnce(function () {
             $app = new class('') extends AbstractApp {
                 public function getView(): string
@@ -825,14 +848,6 @@ testCase('IntegrationTest.php', function () {
             static::openApp();
         });
 
-        test(function () {
-            $input = static::findElement('input');
-            $input->sendKeys('a');
-            static::waitForResponse();
-
-            $label = static::findElement('label');
-
-            $this->assertEquals('key: a keyCode: 97', $label->getText());
-        });
+        useMacro('tests');
     });
 });
