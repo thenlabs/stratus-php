@@ -812,42 +812,44 @@ testCase('IntegrationTest.php', function () {
             });
         });
 
-        setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
-                public function getView(): string
-                {
-                    return <<<HTML
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>Document</title>
-                        </head>
-                        <body>
-                            <input type="" name="">
-                            <label class="label"></label>
-                        </body>
-                        </html>
-                    HTML;
-                }
-            };
+        testCase(function () {
+            setUpBeforeClassOnce(function () {
+                $app = new class('') extends AbstractApp {
+                    public function getView(): string
+                    {
+                        return <<<HTML
+                            <!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Document</title>
+                            </head>
+                            <body>
+                                <input type="" name="">
+                                <label class="label"></label>
+                            </body>
+                            </html>
+                        HTML;
+                    }
+                };
 
-            $input = $app->querySelector('input');
-            $label = $app->querySelector('label');
+                $input = $app->querySelector('input');
+                $label = $app->querySelector('label');
 
-            $listener = new StratusEventListener(['key', 'keyCode']);
-            $listener->setBackListener(function (StratusEvent $event) use ($label): void {
-                $eventData = $event->getEventData();
-                extract($eventData);
-                $label->innerHTML = "key: {$key} keyCode: {$keyCode}";
+                $listener = new StratusEventListener(['key', 'keyCode']);
+                $listener->setBackListener(function (StratusEvent $event) use ($label): void {
+                    $eventData = $event->getEventData();
+                    extract($eventData);
+                    $label->innerHTML = "key: {$key} keyCode: {$keyCode}";
+                });
+
+                $input->addEventListener('keypress', $listener);
+
+                static::dumpApp($app);
+                static::openApp();
             });
 
-            $input->addEventListener('keypress', $listener);
-
-            static::dumpApp($app);
-            static::openApp();
+            useMacro('tests');
         });
-
-        useMacro('tests');
     });
 });
