@@ -295,6 +295,60 @@ testCase('IntegrationTest.php', function () {
     });
 
     testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input type="" name="">
+                            <label></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $input = $app->querySelector('input');
+            $label = $app->querySelector('label');
+
+            $input->registerCriticalProperty('value');
+
+            $listener = new StratusEventListener;
+            $listener->setBackListener(function () use ($input, $label) {
+                $label->innerHTML = $input->value;
+            });
+
+            $button->click($listener);
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $secret1 = uniqid();
+
+            $button = static::findElement('button');
+            $label = static::findElement('label');
+            $input = static::findElement('input');
+
+            $input->sendKeys($secret1);
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals($secret1, $label->getText());
+        });
+    });
+
+    testCase(function () {
         createMacro('tests', function () {
             setUp(function () {
                 $this->input = static::findElement('input');
