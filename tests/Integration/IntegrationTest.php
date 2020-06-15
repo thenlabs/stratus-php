@@ -836,7 +836,8 @@ testCase('IntegrationTest.php', function () {
                 $input = $app->querySelector('input');
                 $label = $app->querySelector('label');
 
-                $listener = new StratusEventListener(['key', 'keyCode']);
+                $listener = new StratusEventListener;
+                $listener->setRequiredEventData(['key', 'keyCode']);
                 $listener->setBackListener(function (StratusEvent $event) use ($label): void {
                     $eventData = $event->getEventData();
                     extract($eventData);

@@ -13,7 +13,7 @@ class StratusEventListener
     protected $requiredEventData = [];
     protected $backListener;
 
-    public function __construct(array $requiredEventData = [])
+    public function setRequiredEventData(array $requiredEventData): void
     {
         $this->requiredEventData = $requiredEventData;
     }
