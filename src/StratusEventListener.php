@@ -14,6 +14,13 @@ class StratusEventListener
     protected $frontListener;
     protected $backListener;
 
+    public function __construct(array $properties = [])
+    {
+        foreach ($properties as $property => $value) {
+            $this->{$property} = $value;
+        }
+    }
+
     public function setFetchData(array $fetchData): void
     {
         $this->fetchData = $fetchData;

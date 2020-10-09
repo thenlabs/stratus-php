@@ -8,6 +8,10 @@ use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
+use TypeError;
+use ReflectionClass;
+use ReflectionFunction;
+use Closure;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -340,8 +344,19 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->criticalProperties[] = $property;
     }
 
-    public function addEventListener(string $eventName, callable $listener): void
+    public function addEventListener(string $eventName, $listener): void
     {
-        $this->on($eventName, $listener);
+        if (is_callable($listener)) {
+            $this->on($eventName, $listener);
+            return;
+        }
+
+        if (is_array($listener)) {
+            $stratusEventListener = new StratusEventListener($listener);
+            $this->on($eventName, $stratusEventListener);
+            return;
+        }
+
+        throw new TypeError('Invalid listener.');
     }
 }

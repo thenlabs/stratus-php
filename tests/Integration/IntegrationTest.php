@@ -1002,4 +1002,62 @@ testCase('IntegrationTest.php', function () {
             $this->assertEmpty($label->getText());
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input type="text" name="">
+                            <label></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $label = $app->querySelector('label');
+            $input = $app->querySelector('input');
+
+            $input->addEventListener('keypress', [
+                'fetchData' => ['key', 'keyCode'],
+
+                'frontListener' => <<<JAVASCRIPT
+                    let label = document.querySelector('label');
+                    label.innerHTML = `key: \${event.key} `;
+                JAVASCRIPT,
+
+                'backListener' => function (StratusEvent $event) use ($label): void {
+                    $app = $event->getApp();
+                    $label = $app->querySelector('label');
+
+                    $eventData = $event->getEventData();
+
+                    $label->innerHTML .= " keyCode: {$eventData['keyCode']}";
+                },
+            ]);
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $input = static::findElement('input');
+            $input->sendKeys('a');
+            static::waitForResponse();
+
+            $label = static::findElement('label');
+
+            $this->assertEquals('key: a keyCode: 97', $label->getText());
+        });
+    });
 });
