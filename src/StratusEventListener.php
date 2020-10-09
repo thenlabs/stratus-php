@@ -11,6 +11,7 @@ use ThenLabs\StratusPHP\Event\StratusEvent;
 class StratusEventListener
 {
     protected $fetchData = [];
+    protected $frontListener;
     protected $backListener;
 
     public function setFetchData(array $fetchData): void
@@ -26,6 +27,16 @@ class StratusEventListener
     public function setBackListener(callable $backListener): void
     {
         $this->backListener = $backListener;
+    }
+
+    public function setFrontListener(string $frontListener): void
+    {
+        $this->frontListener = $frontListener;
+    }
+
+    public function getFrontListener(): ?string
+    {
+        return $this->frontListener;
     }
 
     public function __invoke(...$args)

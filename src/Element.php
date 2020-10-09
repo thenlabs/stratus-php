@@ -106,6 +106,14 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                     foreach ($listener->getFetchData() as $key) {
                         $jsEventData .= "eventData['{$key}'] = event['{$key}'];\n";
                     }
+
+                    if ($frontListener = $listener->getFrontListener()) {
+                        $jsEvents .= <<<JAVASCRIPT
+                            component.element.addEventListener('{$eventName}', event => {
+                                {$frontListener}
+                            });
+                        JAVASCRIPT;
+                    }
                 }
 
                 $jsEvents .= <<<JAVASCRIPT

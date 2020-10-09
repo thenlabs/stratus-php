@@ -907,4 +907,48 @@ testCase('IntegrationTest.php', function () {
             useMacro('tests');
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <label class="label"></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+
+            $listener = new StratusEventListener;
+            $listener->setFrontListener(<<<JAVASCRIPT
+                let label = document.querySelector('label');
+                label.remove();
+            JAVASCRIPT);
+
+            $button->addEventListener('click', $listener);
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertCount(0, static::findElements('label'));
+        });
+    });
 });
