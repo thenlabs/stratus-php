@@ -80,6 +80,8 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
             static remove(componentId) {
                 app.getComponent(componentId).element.remove();
+
+                delete app.components[componentId];
             }
 
             getCriticalData() {

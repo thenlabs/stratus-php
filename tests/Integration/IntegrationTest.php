@@ -1083,7 +1083,9 @@ testCase('IntegrationTest.php', function () {
             };
 
             $button = $app->querySelector('button');
+
             $input = $app->querySelector('input');
+            $input->setId('input');
 
             $button->click(function () use ($input) {
                 $input->remove();
@@ -1099,6 +1101,9 @@ testCase('IntegrationTest.php', function () {
             static::waitForResponse();
 
             $this->assertCount(0, static::findElements('input'));
+            $this->assertTrue(
+                $this->executeScript("return stratusAppInstance.getComponent('input') == null")
+            );
         });
     });
 });
