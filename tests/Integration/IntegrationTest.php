@@ -1060,4 +1060,47 @@ testCase('IntegrationTest.php', function () {
             $this->assertEquals('key: a keyCode: 97', $label->getText());
         });
     });
+
+    // testCase(function () {
+    //     setUpBeforeClassOnce(function () {
+    //         $app = new class('') extends AbstractApp {
+    //             public function getView(): string
+    //             {
+    //                 return <<<HTML
+    //                     <!DOCTYPE html>
+    //                     <html lang="en">
+    //                     <head>
+    //                         <meta charset="UTF-8">
+    //                         <title>Document</title>
+    //                     </head>
+    //                     <body>
+    //                         <input type="text" name="">
+    //                         <button>Button</button>
+    //                     </body>
+    //                     </html>
+    //                 HTML;
+    //             }
+    //         };
+
+    //         $button = $app->querySelector('button');
+    //         $input = $app->querySelector('input');
+
+    //         $button->click(function () {
+
+    //         });
+
+    //         static::dumpApp($app);
+    //         static::openApp();
+    //     });
+
+    //     test(function () {
+    //         $input = static::findElement('input');
+    //         $input->sendKeys('a');
+    //         static::waitForResponse();
+
+    //         $label = static::findElement('label');
+
+    //         $this->assertEquals('key: a keyCode: 97', $label->getText());
+    //     });
+    // });
 });

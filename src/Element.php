@@ -149,9 +149,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         JAVASCRIPT;
     }
 
-    public function click(callable $listener): void
+    public function __call(string $methodName, array $arguments): void
     {
-        $this->on('click', $listener);
+        $listener = $arguments[0];
+
+        $this->on($methodName, $listener);
     }
 
     public function setAttribute(string $attribute, $value): void
