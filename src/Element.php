@@ -9,9 +9,6 @@ use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use TypeError;
-use ReflectionClass;
-use ReflectionFunction;
-use Closure;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
