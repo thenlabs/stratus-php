@@ -951,4 +951,55 @@ testCase('IntegrationTest.php', function () {
             $this->assertCount(0, static::findElements('label'));
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <label class="label"></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $label = $app->querySelector('label');
+            $button = $app->querySelector('button');
+
+            $listener = new StratusEventListener;
+
+            $listener->setFrontListener(<<<JAVASCRIPT
+                event.backListener = false;
+            JAVASCRIPT);
+
+            $listener->setBackListener(function () use ($label) {
+                $label->innerHTML = uniqid();
+            });
+
+            $button->addEventListener('click', $listener);
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $label = static::findElement('label');
+
+            $this->assertEmpty($label->getText());
+        });
+    });
 });
