@@ -1061,46 +1061,44 @@ testCase('IntegrationTest.php', function () {
         });
     });
 
-    // testCase(function () {
-    //     setUpBeforeClassOnce(function () {
-    //         $app = new class('') extends AbstractApp {
-    //             public function getView(): string
-    //             {
-    //                 return <<<HTML
-    //                     <!DOCTYPE html>
-    //                     <html lang="en">
-    //                     <head>
-    //                         <meta charset="UTF-8">
-    //                         <title>Document</title>
-    //                     </head>
-    //                     <body>
-    //                         <input type="text" name="">
-    //                         <button>Button</button>
-    //                     </body>
-    //                     </html>
-    //                 HTML;
-    //             }
-    //         };
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input type="text" name="">
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
 
-    //         $button = $app->querySelector('button');
-    //         $input = $app->querySelector('input');
+            $button = $app->querySelector('button');
+            $input = $app->querySelector('input');
 
-    //         $button->click(function () {
+            $button->click(function () use ($input) {
+                $input->remove();
+            });
 
-    //         });
+            static::dumpApp($app);
+            static::openApp();
+        });
 
-    //         static::dumpApp($app);
-    //         static::openApp();
-    //     });
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
 
-    //     test(function () {
-    //         $input = static::findElement('input');
-    //         $input->sendKeys('a');
-    //         static::waitForResponse();
-
-    //         $label = static::findElement('label');
-
-    //         $this->assertEquals('key: a keyCode: 97', $label->getText());
-    //     });
-    // });
+            $this->assertCount(0, static::findElements('input'));
+        });
+    });
 });

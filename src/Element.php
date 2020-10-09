@@ -9,6 +9,7 @@ use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use TypeError;
+use BadMethodCallException;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -75,6 +76,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
             static removeClass(componentId, className) {
                 app.getComponent(componentId).element.classList.remove(className);
+            }
+
+            static remove(componentId) {
+                app.getComponent(componentId).element.remove();
             }
 
             getCriticalData() {
@@ -152,6 +157,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     public function __call(string $methodName, array $arguments): void
     {
         $listener = $arguments[0];
+
+        if (! is_callable($listener)) {
+            throw new BadMethodCallException;
+        }
 
         $this->on($methodName, $listener);
     }
@@ -357,5 +366,14 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         }
 
         throw new TypeError('Invalid listener.');
+    }
+
+    public function remove(): void
+    {
+        $this->setParent(null);
+
+        $this->app->invokeJavaScriptFunction(self::class, 'remove', [
+            'componentId' => $this->getId(),
+        ]);
     }
 }
