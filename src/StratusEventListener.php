@@ -10,17 +10,17 @@ use ThenLabs\StratusPHP\Event\StratusEvent;
  */
 class StratusEventListener
 {
-    protected $requiredEventData = [];
+    protected $fetchData = [];
     protected $backListener;
 
-    public function setRequiredEventData(array $requiredEventData): void
+    public function setFetchData(array $fetchData): void
     {
-        $this->requiredEventData = $requiredEventData;
+        $this->fetchData = $fetchData;
     }
 
-    public function getRequiredEventData(): array
+    public function getFetchData(): array
     {
-        return $this->requiredEventData;
+        return $this->fetchData;
     }
 
     public function setBackListener(callable $backListener): void

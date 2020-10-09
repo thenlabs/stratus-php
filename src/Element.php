@@ -103,7 +103,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 $jsEventData = '';
 
                 if ($listener instanceof StratusEventListener) {
-                    foreach ($listener->getRequiredEventData() as $key) {
+                    foreach ($listener->getFetchData() as $key) {
                         $jsEventData .= "eventData['{$key}'] = event['{$key}'];\n";
                     }
                 }
