@@ -17,6 +17,7 @@ testCase('StratusRequestTest.php', function () {
             'eventData' => range(1, mt_rand(1, 10)),
             'operations' => range(1, mt_rand(1, 10)),
             'eventName' => uniqid(),
+            'capture' => boolval(mt_rand(0, 1)),
         ];
 
         $request = StratusRequest::createFromJson(json_encode($data));
@@ -25,6 +26,6 @@ testCase('StratusRequestTest.php', function () {
         $this->assertEquals($data['operations'], $request->getOperations());
         $this->assertEquals($data['componentData'], $request->getComponentData());
         $this->assertEquals($data['eventName'], $request->getEventName());
-        $this->assertEquals($data['eventData'], $request->getEventData());
+        $this->assertEquals($data['capture'], $request->isCapture());
     });
 });
