@@ -13,6 +13,7 @@ class StratusRequest
     protected $eventName;
     protected $eventData = [];
     protected $operations = [];
+    protected $capture = false;
 
     public function getToken(): string
     {
@@ -64,6 +65,16 @@ class StratusRequest
         $this->eventData = $eventData;
     }
 
+    public function setCapture(bool $capture): void
+    {
+        $this->capture = $capture;
+    }
+
+    public function isCapture(): bool
+    {
+        return $this->capture;
+    }
+
     public static function createFromJson(string $json): self
     {
         $data = json_decode($json, true);
@@ -73,6 +84,7 @@ class StratusRequest
         $request->setComponentData($data['componentData']);
         $request->setEventName($data['eventName']);
         $request->setEventData($data['eventData']);
+        $request->setCapture($data['capture']);
 
         if (isset($data['operations'])) {
             $request->setOperations($data['operations']);

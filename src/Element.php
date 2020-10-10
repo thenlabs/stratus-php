@@ -106,7 +106,43 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
         $jsEvents = '';
 
-        foreach ($this->eventDispatcher->getListeners() as $eventName => $listeners) {
+        foreach ($this->getCaptureEventDispatcher()->getListeners() as $eventName => $listeners) {
+            foreach ($listeners as $listener) {
+                $jsEventData = '';
+                $frontListenerSrc = '';
+
+                if ($listener instanceof StratusEventListener) {
+                    foreach ($listener->getFetchData() as $key) {
+                        $jsEventData .= "eventData['{$key}'] = event['{$key}'];\n";
+                    }
+
+                    $frontListenerSrc = $listener->getFrontListener();
+                }
+
+                $jsEvents .= <<<JAVASCRIPT
+                    component.element.addEventListener('{$eventName}', event => {
+                        event.backListener = true;
+
+                        let eventData = {
+                            target: {
+                                attributes: event.target.attributes,
+                                innerHTML: event.target.innerHTML,
+                            }
+                        };
+
+                        {$jsEventData}
+
+                        {$frontListenerSrc}
+
+                        if (event.backListener) {
+                            app.dispatch('{$myId}.{$eventName}', eventData, true);
+                        }
+                    }, true);
+                JAVASCRIPT;
+            }
+        }
+
+        foreach ($this->getEventDispatcher()->getListeners() as $eventName => $listeners) {
             foreach ($listeners as $listener) {
                 $jsEventData = '';
                 $frontListenerSrc = '';
@@ -354,16 +390,16 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->criticalProperties[] = $property;
     }
 
-    public function addEventListener(string $eventName, $listener): void
+    public function addEventListener(string $eventName, $listener, bool $capture = false): void
     {
         if (is_callable($listener)) {
-            $this->on($eventName, $listener);
+            $this->on($eventName, $listener, $capture);
             return;
         }
 
         if (is_array($listener)) {
             $stratusEventListener = new StratusEventListener($listener);
-            $this->on($eventName, $stratusEventListener);
+            $this->on($eventName, $stratusEventListener, $capture);
             return;
         }
 
@@ -377,5 +413,15 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->app->invokeJavaScriptFunction(self::class, 'remove', [
             'componentId' => $this->getId(),
         ]);
+    }
+
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    public function setProperties(array $properties): void
+    {
+        $this->properties = $properties;
     }
 }

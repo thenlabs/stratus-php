@@ -1106,4 +1106,54 @@ testCase('IntegrationTest.php', function () {
             );
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends AbstractApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <button id="button1">1</button>
+                            <button id="button2">2</button>
+                            <button id="button3">3</button>
+                            <label></label>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $label = $app->querySelector('label');
+            $label->setId('label');
+
+            $body = $app->querySelector('body');
+            $body->setId('body');
+
+            $body->addEventListener('click', function ($event) use ($label) {
+                $button = $event->getTarget();
+                $label->innerHTML = $button->innerHTML;
+            }, true);
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $number = mt_rand(1, 3);
+            $button = static::findElement("#button{$number}");
+            $button->click();
+            static::waitForResponse();
+
+            $label = static::findElement('label');
+
+            $this->assertEquals($number, $label->getText());
+        });
+    });
 });
