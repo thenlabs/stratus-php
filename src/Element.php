@@ -194,13 +194,25 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function __call(string $methodName, array $arguments): void
     {
-        $listener = $arguments[0];
+        $matches = [];
+        preg_match('/on([a-zA-Z][a-zA-Z0-9]+)/', $methodName, $matches);
 
-        if (! is_callable($listener)) {
-            throw new BadMethodCallException;
+        $exceptionMessage = "Bad method call for '{$methodName}'.";
+
+        if (! empty($matches)) {
+            $listener = $arguments[0];
+
+            if (! is_callable($listener)) {
+                throw new BadMethodCallException($exceptionMessage);
+            }
+
+            $eventName = strtolower($matches[1]);
+
+            $this->on($eventName, $listener);
+            return;
         }
 
-        $this->on($methodName, $listener);
+        throw new BadMethodCallException($exceptionMessage);
     }
 
     public function setAttribute(string $attribute, $value): void

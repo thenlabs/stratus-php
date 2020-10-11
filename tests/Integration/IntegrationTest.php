@@ -55,7 +55,7 @@ testCase('IntegrationTest.php', function () {
                     }
                 };
 
-                $app->querySelector('button')->click([$app, 'listener']);
+                $app->querySelector('button')->onClick([$app, 'listener']);
 
                 static::dumpApp($app);
                 static::openApp();
@@ -100,7 +100,7 @@ testCase('IntegrationTest.php', function () {
                     }
                 };
 
-                $app->querySelector('button')->click([$app, 'onButtonClick']);
+                $app->querySelector('button')->onClick([$app, 'onButtonClick']);
 
                 static::dumpApp($app);
                 static::openApp();
@@ -139,7 +139,7 @@ testCase('IntegrationTest.php', function () {
                 }
             };
 
-            $app->querySelector('button')->click([$app, 'onButtonClick']);
+            $app->querySelector('button')->onClick([$app, 'onButtonClick']);
 
             static::dumpApp($app);
             static::openApp();
@@ -188,7 +188,7 @@ testCase('IntegrationTest.php', function () {
             $button = $app->querySelector('button');
             $label = $app->querySelector('label');
 
-            $button->click(function () use ($label) {
+            $button->onClick(function () use ($label) {
                 if ($label->getStyle('color') == 'red') {
                     $label->setStyle('color', 'blue');
                 } else {
@@ -259,7 +259,7 @@ testCase('IntegrationTest.php', function () {
             $app->querySelector('input');
             $app->querySelector('label');
 
-            $app->querySelector('button')->click([$app, 'listener']);
+            $app->querySelector('button')->onClick([$app, 'listener']);
 
             static::dumpApp($app);
             static::openApp();
@@ -327,7 +327,7 @@ testCase('IntegrationTest.php', function () {
                 $label->innerHTML = $input->value;
             });
 
-            $button->click($listener);
+            $button->onClick($listener);
 
             static::dumpApp($app);
             static::openApp();
@@ -404,7 +404,7 @@ testCase('IntegrationTest.php', function () {
                 $app->querySelector('input');
                 $app->querySelector('label');
 
-                $app->querySelector('button')->click(function ($event) {
+                $app->querySelector('button')->onClick(function ($event) {
                     $app = $event->getApp();
                     $input = $app->querySelector('input');
                     $label = $app->querySelector('label');
@@ -441,7 +441,7 @@ testCase('IntegrationTest.php', function () {
                     }
                 };
 
-                $app->querySelector('button')->click(function ($event) {
+                $app->querySelector('button')->onClick(function ($event) {
                     $app = $event->getApp();
                     $input = $app->querySelector('input');
                     $label = $app->querySelector('label');
@@ -481,7 +481,7 @@ testCase('IntegrationTest.php', function () {
                 $input = $app->querySelector('input');
                 $label = $app->querySelector('label');
 
-                $app->querySelector('button')->click(function ($event) use ($input, $label) {
+                $app->querySelector('button')->onClick(function ($event) use ($input, $label) {
                     $app = $event->getApp();
 
                     $label->innerHTML = $input->value;
@@ -556,7 +556,7 @@ testCase('IntegrationTest.php', function () {
                 }
             };
 
-            $app->querySelector('#button')->click(function ($event) use ($attribute, $value) {
+            $app->querySelector('#button')->onClick(function ($event) use ($attribute, $value) {
                 $app = $event->getApp();
                 $button = $event->getSource();
                 $label = $app->querySelector('label');
@@ -608,7 +608,7 @@ testCase('IntegrationTest.php', function () {
             $button = $app->querySelector('button');
             $label = $app->querySelector('label');
 
-            $button->click(function () use ($label) {
+            $button->onClick(function () use ($label) {
                 if ($label->hasClass('label')) {
                     $label->innerHTML = uniqid();
                 }
@@ -653,7 +653,7 @@ testCase('IntegrationTest.php', function () {
             $button = $app->querySelector('button');
             $label = $app->querySelector('label');
 
-            $button->click(function () use ($label) {
+            $button->onClick(function () use ($label) {
                 if ($label->hasAttribute('class')) {
                     $label->innerHTML = uniqid();
                 }
@@ -698,7 +698,7 @@ testCase('IntegrationTest.php', function () {
             $button = $app->querySelector('button');
             $label = $app->querySelector('label');
 
-            $button->click(function () use ($label) {
+            $button->onClick(function () use ($label) {
                 if (! $label->hasAttribute('class')) {
                     $label->innerHTML = uniqid();
                 }
@@ -743,7 +743,7 @@ testCase('IntegrationTest.php', function () {
             $button = $app->querySelector('button');
             $label = $app->querySelector('label');
 
-            $button->click(function () use ($label) {
+            $button->onClick(function () use ($label) {
                 $label->addClass('my-class');
             });
 
@@ -784,7 +784,7 @@ testCase('IntegrationTest.php', function () {
             $button = $app->querySelector('button');
             $label = $app->querySelector('label');
 
-            $button->click(function () use ($label) {
+            $button->onClick(function () use ($label) {
                 $label->removeClass('label');
             });
 
@@ -825,7 +825,7 @@ testCase('IntegrationTest.php', function () {
             $button = $app->querySelector('button');
             $label = $app->querySelector('label');
 
-            $button->click(function () use ($label) {
+            $button->onClick(function () use ($label) {
                 $label->removeAttribute('class');
             });
 
@@ -1087,7 +1087,7 @@ testCase('IntegrationTest.php', function () {
             $input = $app->querySelector('input');
             $input->setId('input');
 
-            $button->click(function () use ($input) {
+            $button->onClick(function () use ($input) {
                 $input->remove();
             });
 
