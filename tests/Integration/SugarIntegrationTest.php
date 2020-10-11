@@ -23,15 +23,15 @@ testCase('SugarIntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
-                            <input s-elem="input" type="text" name="">
-                            <label s-elem="label"></label>
-                            <button s-elem="button">MyButton</button>
+                            <input s-elem="myInput" type="text" name="">
+                            <label s-elem="myLabel"></label>
+                            <button s-elem="myButton">MyButton</button>
                         </body>
                         </html>
                     HTML;
                 }
 
-                public function onClickButton()
+                public function onClickMyButton()
                 {
                     $this->myLabel->innerHTML = $this->myInput->value;
                 }
