@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractApp as TestApp;
 use ThenLabs\StratusPHP\StratusEventListener;
 use ThenLabs\StratusPHP\Event\StratusEvent;
 use Facebook\WebDriver\Remote\RemoteWebElement;
@@ -27,7 +27,7 @@ testCase('IntegrationTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends AbstractApp {
+                $app = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -73,7 +73,7 @@ testCase('IntegrationTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends AbstractApp {
+                $app = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -112,7 +112,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -158,7 +158,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -227,7 +227,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -296,7 +296,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -381,7 +381,7 @@ testCase('IntegrationTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends AbstractApp {
+                $app = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -421,7 +421,7 @@ testCase('IntegrationTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends AbstractApp {
+                $app = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -458,7 +458,7 @@ testCase('IntegrationTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends AbstractApp {
+                $app = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -496,7 +496,7 @@ testCase('IntegrationTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends AbstractApp {
+                $app = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -537,7 +537,7 @@ testCase('IntegrationTest.php', function () {
             $attribute = uniqid('attr-');
             $value = uniqid();
 
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -586,7 +586,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -631,7 +631,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -676,7 +676,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -721,7 +721,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -762,7 +762,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -803,7 +803,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -868,7 +868,7 @@ testCase('IntegrationTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends AbstractApp {
+                $app = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -910,7 +910,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -954,7 +954,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1005,7 +1005,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1063,7 +1063,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1109,7 +1109,7 @@ testCase('IntegrationTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML

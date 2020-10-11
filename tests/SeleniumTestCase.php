@@ -56,7 +56,8 @@ class SeleniumTestCase extends TestCase
         $uses = '';
         $useMatches = [];
 
-        preg_match_all('/use +[\w\\\]+;/', file_get_contents($fileName), $useMatches);
+        preg_match_all('/use +[\w\s\\\]+;/', file_get_contents($fileName), $useMatches);
+
         foreach ($useMatches[0] as $match) {
             $uses .= $match . PHP_EOL;
         }
@@ -99,7 +100,7 @@ class SeleniumTestCase extends TestCase
 
             {$uses}
 
-            class App extends AbstractApp
+            class App extends TestApp
             {
             {$members}
             }

@@ -6,7 +6,7 @@ namespace ThenLabs\StratusPHP\Tests\Functionals;
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractApp as TestApp;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ClassBuilder\ClassBuilder;
 
@@ -27,7 +27,7 @@ testCase('FunctionalTest.php', function () {
 
             $secret = uniqid();
 
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -283,7 +283,7 @@ testCase('FunctionalTest.php', function () {
             $className1 = uniqid('Class1_');
             $secret = uniqid();
 
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -344,7 +344,7 @@ testCase('FunctionalTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends AbstractApp {
+            $app = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
