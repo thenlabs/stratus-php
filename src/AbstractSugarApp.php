@@ -12,28 +12,23 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
  */
 abstract class AbstractSugarApp extends AbstractApp
 {
+    protected $attributeForElements = 's-elem';
+
     public function __construct(string $controllerUri)
     {
         parent::__construct($controllerUri);
 
         $crawler = new HtmlPageCrawler($this->getView());
 
-        foreach ($crawler->filter('*') as $item) {
-            foreach ($item->attributes as $attribute) {
-                $matches = [];
-                preg_match('/^e-([a-zA-Z][a-zA-Z0-9]+)$/', $attribute->name, $matches);
+        foreach ($crawler->filter("[{$this->attributeForElements}]") as $item) {
+            $componentName = $item->getAttribute($this->attributeForElements);
 
-                if (! empty($matches)) {
-                    $componentName = $matches[1];
+            $element = $this->querySelector("[{$this->attributeForElements}=\"{$componentName}\"]");
 
-                    $element = $this->querySelector("[{$matches[0]}]");
+            if ($element) {
+                $element->setName($componentName);
 
-                    if ($element) {
-                        $element->setName($componentName);
-
-                        $this->{$componentName} = $element;
-                    }
-                }
+                $this->{$componentName} = $element;
             }
         }
     }
