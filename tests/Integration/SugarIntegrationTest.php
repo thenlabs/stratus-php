@@ -23,9 +23,9 @@ testCase('SugarIntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
-                            <input ##input type="text" name="">
-                            <label ##label></label>
-                            <button ##button>MyButton</button>
+                            <input e-input type="text" name="">
+                            <label e-label></label>
+                            <button e-button>MyButton</button>
                         </body>
                         </html>
                     HTML;
