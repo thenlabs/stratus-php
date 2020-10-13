@@ -186,14 +186,14 @@ testCase('SugarIntegrationTest.php', function () {
                  * @StratusEventListener(
                  *     frontListener="
                  *         myInput.setAttribute('disabled', true);
-                 *         myLabel.style.color = 'red';
+                 *         myLabel.setAttribute('disabled', true);
                  *     "
                  * )
                  */
                 public function onClickMyButton()
                 {
                     if (true == $this->myInput->getAttribute('disabled') &&
-                        'red' === $this->myLabel->getStyle('color')
+                        true == $this->myLabel->getAttribute('disabled')
                     ) {
                         $this->myLabel->innerHTML = 'OK';
                     }
