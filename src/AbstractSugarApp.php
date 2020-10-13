@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP;
 
 use ThenLabs\ComposedViews\Event\RenderEvent;
+use ThenLabs\StratusPHP\Annotation\StratusEventListener as StratusEventListenerAnnotation;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
+use Doctrine\Common\Annotations\AnnotationReader;
 use ReflectionClass;
 
 /**
@@ -56,7 +58,15 @@ abstract class AbstractSugarApp extends AbstractApp
                         }
                     }
 
-                    $element->addEventListener($eventName, [$this, $methodName]);
+                    $eventListener = new StratusEventListener;
+                    $eventListener->setBackListener([$this, $methodName]);
+
+                    $annotationReader = new AnnotationReader;
+                    if ($annotation = $annotationReader->getMethodAnnotation($method, StratusEventListenerAnnotation::class)) {
+                        $eventListener->setFrontListener($annotation->frontListener);
+                    }
+
+                    $element->addEventListener($eventName, $eventListener);
                 }
             }
         }

@@ -20,7 +20,11 @@ use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
+
+AnnotationRegistry::registerFile(__DIR__.'/Annotation/StratusEventListener.php');
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
