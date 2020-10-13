@@ -160,4 +160,59 @@ testCase('SugarIntegrationTest.php', function () {
             $this->assertEquals('OK', $label->getText());
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input s-elem="myInput" type="text" name="">
+                            <label s-elem="myLabel"></label>
+                            <button s-elem="myButton">MyButton</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+
+                /**
+                 * @StratusEventListener(
+                 *     frontListener="
+                 *         myInput.setAttribute('disabled', true);
+                 *         myLabel.style.color = 'red';
+                 *     "
+                 * )
+                 */
+                public function onClickMyButton()
+                {
+                    if (true == $this->myInput->getAttribute('disabled') &&
+                        'red' === $this->myLabel->getStyle('color')
+                    ) {
+                        $this->myLabel->innerHTML = 'OK';
+                    }
+                }
+            };
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $input = static::findElement('input');
+            $button = static::findElement('button');
+            $label = static::findElement('label');
+
+            // $button->click();
+            // static::waitForResponse();
+
+            $this->assertEquals('OK', $label->getText());
+        });
+    });
 });

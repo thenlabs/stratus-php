@@ -64,7 +64,19 @@ abstract class AbstractSugarApp extends AbstractApp
 
                     $annotationReader = new AnnotationReader;
                     if ($annotation = $annotationReader->getMethodAnnotation($method, StratusEventListenerAnnotation::class)) {
-                        $eventListener->setFrontListener($annotation->frontListener);
+                        if ($frontListener = $annotation->frontListener) {
+                            $lines = explode(PHP_EOL, $frontListener);
+                            if (count($lines) > 1) {
+                                array_walk($lines, function (string &$line) {
+                                    $line = ltrim($line, ' *');
+                                    $line = trim($line);
+                                });
+
+                                $frontListener = implode('', $lines);
+                            }
+
+                            $eventListener->setFrontListener($frontListener);
+                        }
                     }
 
                     $element->addEventListener($eventName, $eventListener);
