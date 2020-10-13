@@ -134,9 +134,7 @@ testCase('SugarIntegrationTest.php', function () {
 
                 /**
                  * @StratusEventListener(
-                 *     frontListener="
-                 *         myInput.setAttribute('disabled', true)
-                 *     "
+                 *     frontListener="myInput.setAttribute('disabled', true)"
                  * )
                  */
                 public function onClickMyButton()

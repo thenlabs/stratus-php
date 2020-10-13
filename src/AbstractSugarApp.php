@@ -31,6 +31,7 @@ abstract class AbstractSugarApp extends AbstractApp
 
             if ($element) {
                 $element->setName($componentName);
+                $element->setJsVarName($componentName);
 
                 $this->{$componentName} = $element;
                 $builtElements[$componentName] = $element;

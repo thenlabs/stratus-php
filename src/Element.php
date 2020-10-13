@@ -24,6 +24,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     protected $criticalProperties = [];
     protected $crawler;
     protected $app;
+    protected $jsVarName;
 
     public function __construct(string $selector)
     {
@@ -183,10 +184,13 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
             $jsRegisterCriticalProperties .= "component.registerCriticalProperty('{$property}');\n";
         }
 
+        $jsVarName = $this->jsVarName ? "var {$this->jsVarName} = component.element;" : null;
+
         return <<<JAVASCRIPT
             const parentElement = {$jsParentElement};
             const component = new ComponentClass('{$myId}', parentElement, '{$this->selector}');
             app.addComponent(component);
+            {$jsVarName}
             {$jsRegisterCriticalProperties}
             {$jsEvents}
         JAVASCRIPT;
@@ -440,5 +444,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     public function setProperties(array $properties): void
     {
         $this->properties = $properties;
+    }
+
+    public function setJsVarName(string $jsVarName): void
+    {
+        $this->jsVarName = $jsVarName;
     }
 }
