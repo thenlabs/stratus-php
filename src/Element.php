@@ -374,6 +374,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $this->properties[$name] = $value;
     }
 
+    public function __isset($name)
+    {
+        return true;
+    }
+
     public function updateData(string $key, $value): void
     {
         $this->properties[$key] = $value;

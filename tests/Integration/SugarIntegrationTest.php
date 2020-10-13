@@ -55,4 +55,58 @@ testCase('SugarIntegrationTest.php', function () {
             $this->assertEquals($secret, $label->getText());
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input s-elem="myInput" type="text" name="">
+                            <label s-elem="myLabel"></label>
+                            <button s-elem="myButton">MyButton</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+
+                public function onClickMyButton()
+                {
+                    if (empty($this->myInput->value)) {
+                        $this->myLabel->innerHTML = 'The input is empty';
+                    } else {
+                        $this->myLabel->innerHTML = 'The input is not empty';
+                    }
+                }
+            };
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $input = static::findElement('input');
+            $button = static::findElement('button');
+            $label = static::findElement('label');
+
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals('The input is empty', $label->getText());
+
+            $input->sendKeys(uniqid());
+
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals('The input is not empty', $label->getText());
+        });
+    });
 });
