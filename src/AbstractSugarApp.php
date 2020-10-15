@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP;
 
-use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\StratusPHP\Annotation\StratusEventListener as StratusEventListenerAnnotation;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use Doctrine\Common\Annotations\AnnotationReader;

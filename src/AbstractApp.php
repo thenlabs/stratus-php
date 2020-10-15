@@ -20,7 +20,6 @@ use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 
