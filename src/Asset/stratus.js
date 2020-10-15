@@ -144,9 +144,13 @@ class StratusApp {
             ) {
                 let newXhr = this.getNewXMLHttpRequest();
                 let data = xhr.data;
-                let result = eval(`(() => {${message.collectDataScript}})()`);
+                let collectedData = eval(`(() => {${message.collectDataScript}})()`);
 
-                Object.assign(data, data, result);
+                for (let id in collectedData.componentData) {
+                    data.componentData[id] = collectedData.componentData[id];
+                }
+
+                // Object.assign(data, result);
                 data.operations = message.operations;
 
                 this.sendRequest(newXhr, data);

@@ -187,13 +187,15 @@ testCase('SugarIntegrationTest.php', function () {
                  *     frontListener="
                  *         myInput.setAttribute('disabled', true);
                  *         myLabel.setAttribute('disabled', true);
+                 *         myButton.setAttribute('disabled', true);
                  *     "
                  * )
                  */
                 public function onClickMyButton()
                 {
                     if (true == $this->myInput->getAttribute('disabled') &&
-                        true == $this->myLabel->getAttribute('disabled')
+                        true == $this->myLabel->getAttribute('disabled') &&
+                        true == $this->myButton->getAttribute('disabled')
                     ) {
                         $this->myLabel->innerHTML = 'OK';
                     }
@@ -209,8 +211,8 @@ testCase('SugarIntegrationTest.php', function () {
             $button = static::findElement('button');
             $label = static::findElement('label');
 
-            // $button->click();
-            // static::waitForResponse();
+            $button->click();
+            static::waitForResponse();
 
             $this->assertEquals('OK', $label->getText());
         });
