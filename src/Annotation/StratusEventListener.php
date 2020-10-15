@@ -11,5 +11,7 @@ namespace ThenLabs\StratusPHP\Annotation;
  */
 final class StratusEventListener
 {
+    public $fetchData = [];
+
     public $frontListener;
 }

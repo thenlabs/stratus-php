@@ -64,6 +64,8 @@ abstract class AbstractSugarApp extends AbstractApp
 
                     $annotationReader = new AnnotationReader;
                     if ($annotation = $annotationReader->getMethodAnnotation($method, StratusEventListenerAnnotation::class)) {
+                        $eventListener->setFetchData($annotation->fetchData);
+
                         if ($frontListener = $annotation->frontListener) {
                             if ($class->hasMethod($frontListener)) {
                                 $eventListener->setFrontListener(call_user_func([$this, $frontListener]));
