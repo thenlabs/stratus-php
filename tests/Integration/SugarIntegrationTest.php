@@ -217,4 +217,65 @@ testCase('SugarIntegrationTest.php', function () {
             $this->assertEquals('OK', $label->getText());
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input s-elem="myInput" type="text" name="">
+                            <label s-elem="myLabel"></label>
+                            <button s-elem="myButton">MyButton</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+
+                public function myFrontListener(): string
+                {
+                    return <<<JAVASCRIPT
+                        myInput.setAttribute('disabled', true);
+                        myLabel.setAttribute('disabled', true);
+                        myButton.setAttribute('disabled', true);
+                    JAVASCRIPT;
+                }
+
+                /**
+                 * @StratusEventListener(
+                 *     frontListener="myFrontListener"
+                 * )
+                 */
+                public function onClickMyButton()
+                {
+                    if (true == $this->myInput->getAttribute('disabled') &&
+                        true == $this->myLabel->getAttribute('disabled')
+                    ) {
+                        $this->myLabel->innerHTML = 'OK';
+                    }
+                }
+            };
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $input = static::findElement('input');
+            $button = static::findElement('button');
+            $label = static::findElement('label');
+
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals('OK', $label->getText());
+        });
+    });
 });

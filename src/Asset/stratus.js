@@ -150,7 +150,6 @@ class StratusApp {
                     data.componentData[id] = collectedData.componentData[id];
                 }
 
-                // Object.assign(data, result);
                 data.operations = message.operations;
 
                 this.sendRequest(newXhr, data);
