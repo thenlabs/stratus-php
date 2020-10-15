@@ -1156,4 +1156,43 @@ testCase('IntegrationTest.php', function () {
             $this->assertEquals($number, $label->getText());
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <button>redirect to about:blank</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $button->onClick(function ($event) {
+                $app = $event->getApp();
+                $app->redirect('about:blank');
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals('about:blank', static::getDriver()->getCurrentURL());
+        });
+    });
 });

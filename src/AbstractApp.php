@@ -401,4 +401,9 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
     {
         $this->invokeJavaScriptFunction(JavaScriptUtils::class, 'alert', compact('text'));
     }
+
+    public function redirect(string $url): void
+    {
+        $this->invokeJavaScriptFunction(JavaScriptUtils::class, 'redirect', compact('url'));
+    }
 }
