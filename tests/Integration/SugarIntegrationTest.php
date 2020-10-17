@@ -24,9 +24,9 @@ testCase('SugarIntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
-                            <input s-elem="myInput" type="text" name="">
-                            <label s-elem="myLabel"></label>
-                            <button s-elem="myButton">MyButton</button>
+                            <input s-element="myInput" type="text" name="">
+                            <label s-element="myLabel"></label>
+                            <button s-element="myButton">MyButton</button>
                         </body>
                         </html>
                     HTML;
@@ -70,9 +70,9 @@ testCase('SugarIntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
-                            <input s-elem="myInput" type="text" name="">
-                            <label s-elem="myLabel"></label>
-                            <button s-elem="myButton">MyButton</button>
+                            <input s-element="myInput" type="text" name="">
+                            <label s-element="myLabel"></label>
+                            <button s-element="myButton">MyButton</button>
                         </body>
                         </html>
                     HTML;
@@ -124,9 +124,9 @@ testCase('SugarIntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
-                            <input s-elem="myInput" type="text" name="">
-                            <label s-elem="myLabel"></label>
-                            <button s-elem="myButton">MyButton</button>
+                            <input s-element="myInput" type="text" name="">
+                            <label s-element="myLabel"></label>
+                            <button s-element="myButton">MyButton</button>
                         </body>
                         </html>
                     HTML;
@@ -174,9 +174,9 @@ testCase('SugarIntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
-                            <input s-elem="myInput" type="text" name="">
-                            <label s-elem="myLabel"></label>
-                            <button s-elem="myButton">MyButton</button>
+                            <input s-element="myInput" type="text" name="">
+                            <label s-element="myLabel"></label>
+                            <button s-element="myButton">MyButton</button>
                         </body>
                         </html>
                     HTML;
@@ -231,9 +231,9 @@ testCase('SugarIntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
-                            <input s-elem="myInput" type="text" name="">
-                            <label s-elem="myLabel"></label>
-                            <button s-elem="myButton">MyButton</button>
+                            <input s-element="myInput" type="text" name="">
+                            <label s-element="myLabel"></label>
+                            <button s-element="myButton">MyButton</button>
                         </body>
                         </html>
                     HTML;
@@ -292,8 +292,8 @@ testCase('SugarIntegrationTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
-                            <input s-elem="myInput" type="text" name="">
-                            <label s-elem="myLabel"></label>
+                            <input s-element="myInput" type="text" name="">
+                            <label s-element="myLabel"></label>
                         </body>
                         </html>
                     HTML;

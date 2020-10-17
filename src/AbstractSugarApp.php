@@ -14,7 +14,7 @@ use ReflectionClass;
  */
 abstract class AbstractSugarApp extends AbstractApp
 {
-    protected $attributeForElements = 's-elem';
+    protected $attributeForElements = 's-element';
 
     public function __construct(string $controllerUri)
     {
