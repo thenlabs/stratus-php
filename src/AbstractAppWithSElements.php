@@ -12,7 +12,7 @@ use ReflectionClass;
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  * @abstract
  */
-abstract class AbstractSElementsApp extends AbstractApp
+abstract class AbstractAppWithSElements extends AbstractApp
 {
     protected $attributeForElements = 's-element';
 

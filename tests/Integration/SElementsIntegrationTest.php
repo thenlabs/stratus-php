@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
-use ThenLabs\StratusPHP\AbstractSElementsApp as TestApp;
+use ThenLabs\StratusPHP\AbstractAppWithSElements as TestApp;
 use ThenLabs\StratusPHP\Annotation\StratusEventListener;
 
 setTestCaseNamespace(__NAMESPACE__);
