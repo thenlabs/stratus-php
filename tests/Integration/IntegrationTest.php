@@ -1190,9 +1190,59 @@ testCase('IntegrationTest.php', function () {
         test(function () {
             $button = static::findElement('button');
             $button->click();
-            static::waitForResponse();
+            usleep(100000);
 
             $this->assertEquals('about:blank', static::getDriver()->getCurrentURL());
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input type="" name="">
+                            <label></label>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $button->onClick(function ($event) {
+                $app = $event->getApp();
+                $input = $app->querySelector('input');
+                $label = $app->querySelector('label');
+
+                $label->textContent = $input->value;
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $value = uniqid();
+            $input = static::findElement('input');
+            $input->sendKeys($value);
+
+            $label = static::findElement('label');
+
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals($value, $label->getText());
         });
     });
 });
