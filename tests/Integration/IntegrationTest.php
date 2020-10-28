@@ -5,6 +5,7 @@ namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\AbstractApp as TestApp;
+use ThenLabs\StratusPHP\Element;
 use ThenLabs\StratusPHP\StratusEventListener;
 use ThenLabs\StratusPHP\Event\StratusEvent;
 use Facebook\WebDriver\Remote\RemoteWebElement;
@@ -1243,6 +1244,57 @@ testCase('IntegrationTest.php', function () {
             static::waitForResponse();
 
             $this->assertEquals($value, $label->getText());
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <button>Button</button>
+                            </div>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $app->querySelector('button')->addEventListener('click', function ($event) {
+                $app = $event->getApp();
+                $container = $app->querySelector('.container');
+
+                $input = Element::createFromString('<input type="" name="">');
+                $label = Element::createFromString('<label></label>');
+
+                $container->append($input);
+                $container->prepend($label);
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $childs = static::findElements('div.container > *');
+
+            $this->assertCount(3, $childs);
+            $this->assertEquals('label', $childs[0]->getTagName());
+            $this->assertEquals('button', $childs[1]->getTagName());
+            $this->assertEquals('input', $childs[2]->getTagName());
         });
     });
 });

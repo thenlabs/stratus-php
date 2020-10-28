@@ -450,4 +450,24 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     {
         $this->jsVarName = $jsVarName;
     }
+
+    public static function createFromString(string $html): self
+    {
+        $crawler = new HtmlPageCrawler($html);
+
+        $element = new self('');
+        $element->setCrawler($crawler);
+
+        return $element;
+    }
+
+    public function append(self $child): void
+    {
+        $this->addChild($child);
+    }
+
+    public function prepend(self $child): void
+    {
+        $this->addChild($child);
+    }
 }
