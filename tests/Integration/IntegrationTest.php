@@ -1297,4 +1297,60 @@ testCase('IntegrationTest.php', function () {
             $this->assertEquals('input', $childs[2]->getTagName());
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <button>Button</button>
+                            </div>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $container = $app->querySelector('.container');
+            $button = $container->querySelector('button');
+
+            $button->addEventListener('click', function ($event) /*use ($container) bug*/ {
+                $container = $event->getApp()->querySelector('.container');
+
+                if (! $input = $container->querySelector('input')) {
+                    $input = Element::createFromString('<input type="text" name="" value="abcd123">');
+                    $container->append($input);
+                }
+
+                if (! $label = $container->querySelector('label')) {
+                    $label = Element::createFromString('<label></label>');
+                    $container->append($label);
+                }
+
+                $label->textContent = $input->value;
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $button = static::findElement('button');
+            $button->click();
+            static::waitForResponse();
+
+            $label = static::findElement('label');
+
+            $this->assertEquals('abcd123', $label->getText());
+        });
+    });
 });

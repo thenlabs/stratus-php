@@ -334,26 +334,30 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         return $this->selector;
     }
 
-    public function querySelector(string $selector): Element
+    public function querySelector(string $selector): self
     {
         foreach ($this->childs as $component) {
-            if ($component instanceof Element &&
+            if ($component instanceof self &&
                 $component->getSelector() == $selector
             ) {
                 return $component;
             }
         }
 
-        $element = new Element($selector);
-        $element->setCrawler($this->crawler->filter($selector));
+        if (! $this->app || ! $this->app->isBooted()) {
+            $element = new self($selector);
+            $element->setCrawler($this->crawler->filter($selector));
 
-        if ($this->app instanceof AbstractApp) {
-            $element->setApp($this->app);
+            if ($this->app instanceof AbstractApp) {
+                $element->setApp($this->app);
+            }
+
+            $this->addChild($element);
+
+            return $element;
+        } else {
+            return $this->parent->querySelector("{$this->selector} > {$selector}");
         }
-
-        $this->addChild($element);
-
-        return $element;
     }
 
     public function setApp(?AbstractApp $app): void
@@ -469,7 +473,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public static function createFromString(string $html): self
     {
-        $crawler = new HtmlPageCrawler($html);
+       $crawler = new HtmlPageCrawler($html);
 
         $element = new self('');
         $element->setCrawler($crawler);
