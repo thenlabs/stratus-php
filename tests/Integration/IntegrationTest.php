@@ -1277,7 +1277,7 @@ testCase('IntegrationTest.php', function () {
                 $label = Element::createFromString('<label></label>');
 
                 $container->append($input);
-                // $container->prepend($label);
+                $container->prepend($label);
             });
 
             static::dumpApp($app);
@@ -1291,10 +1291,10 @@ testCase('IntegrationTest.php', function () {
 
             $childs = static::findElements('div.container > *');
 
-            // $this->assertCount(3, $childs);
-            // $this->assertEquals('label', $childs[0]->getTagName());
-            $this->assertEquals('button', $childs[0]->getTagName());
-            $this->assertEquals('input', $childs[1]->getTagName());
+            $this->assertCount(3, $childs);
+            $this->assertEquals('label', $childs[0]->getTagName());
+            $this->assertEquals('button', $childs[1]->getTagName());
+            $this->assertEquals('input', $childs[2]->getTagName());
         });
     });
 });
