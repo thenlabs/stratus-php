@@ -85,6 +85,14 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 delete app.components[componentId];
             }
 
+            static append(componentId, html) {
+                const newElement = document.createElement('DIV');
+                newElement.innerHTML = html;
+
+                const element = app.getComponent(componentId).element;
+                element.append(newElement.firstElementChild);
+            }
+
             getCriticalData() {
                 let result = {};
 
@@ -463,11 +471,23 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function append(self $child): void
     {
+        $this->verifyAppBooted(__METHOD__);
+
+        $this->app->invokeJavaScriptFunction(self::class, 'append', [
+            'componentId' => $this->getId(),
+            'html' => (string) $child,
+        ]);
+
         $this->addChild($child);
     }
 
     public function prepend(self $child): void
     {
         $this->addChild($child);
+    }
+
+    public function __toString()
+    {
+        return $this->crawler->saveHTML();
     }
 }
