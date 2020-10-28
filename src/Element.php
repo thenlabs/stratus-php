@@ -485,7 +485,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         return $element;
     }
 
-    public function append(self $child): void
+    public function append(self $child, string $mode = 'append'): void
     {
         $this->verifyAppBooted(__METHOD__);
 
@@ -495,7 +495,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
         $this->addChild($child);
 
-        $this->app->invokeJavaScriptFunction(self::class, 'append', [
+        $this->app->invokeJavaScriptFunction(self::class, $mode, [
             'componentId' => $this->getId(),
             'html' => (string) $child,
         ]);
@@ -507,14 +507,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public function prepend(self $child): void
     {
-        $this->verifyAppBooted(__METHOD__);
-
-        $this->app->invokeJavaScriptFunction(self::class, 'prepend', [
-            'componentId' => $this->getId(),
-            'html' => (string) $child,
-        ]);
-
-        $this->addChild($child);
+        $this->append($child, 'prepend');
     }
 
     public function __toString()

@@ -142,6 +142,10 @@ class StratusApp {
                 true === message.resend &&
                 'string' === typeof(message.collectDataScript)
             ) {
+                if (this.debug) {
+                    console.log('The current request should be sent again.');
+                }
+
                 let newXhr = this.getNewXMLHttpRequest();
                 let data = xhr.data;
                 let collectedData = eval(`(() => {${message.collectDataScript}})()`);
