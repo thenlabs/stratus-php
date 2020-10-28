@@ -218,6 +218,10 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         if ($this->hasInmutableView() && ! $child instanceof Element) {
             throw new InmutableViewException;
         }
+
+        if ($child instanceof StratusComponentInterface) {
+            $child->setApp($this);
+        }
     }
 
     public function validateChild(ComponentInterface $child): bool

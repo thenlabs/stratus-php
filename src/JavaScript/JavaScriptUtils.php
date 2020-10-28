@@ -15,6 +15,10 @@ class JavaScriptUtils implements JavaScriptClassInterface
                 alert(text);
             }
 
+            static eval(code) {
+                eval(code);
+            }
+
             static redirect(url) {
                 window.location.href = url;
             }

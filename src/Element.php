@@ -7,6 +7,7 @@ use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
+use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use TypeError;
 use BadMethodCallException;
@@ -202,9 +203,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
         $jsVarName = $this->jsVarName ? "var {$this->jsVarName} = component.element;" : null;
 
+        $jsClassId = $this->app->getJavaScriptClassId(self::class);
+
         return <<<JAVASCRIPT
             const parentElement = {$jsParentElement};
-            const component = new ComponentClass('{$myId}', parentElement, '{$this->selector}');
+            const StratusElementClass = app.getClass('{$jsClassId}');
+            const component = new StratusElementClass('{$myId}', parentElement, '{$this->selector}');
             app.addComponent(component);
             {$jsVarName}
             {$jsRegisterCriticalProperties}
@@ -485,12 +489,20 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
     {
         $this->verifyAppBooted(__METHOD__);
 
+        if (! $child->getSelector()) {
+            $child->selector = $this->selector.' > '.$child->getCrawler()->getNode(0)->tagName;
+        }
+
+        $this->addChild($child);
+
         $this->app->invokeJavaScriptFunction(self::class, 'append', [
             'componentId' => $this->getId(),
             'html' => (string) $child,
         ]);
 
-        $this->addChild($child);
+        $this->app->invokeJavaScriptFunction(JavaScriptUtils::class, 'eval', [
+            'code' => $child->getJavaScriptCreateInstanceScript()
+        ]);
     }
 
     public function prepend(self $child): void
