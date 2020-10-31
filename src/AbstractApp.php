@@ -320,6 +320,11 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         return $this->bus;
     }
 
+    public function setBus(BusInterface $bus): void
+    {
+        $this->bus = $bus;
+    }
+
     public function invokeJavaScriptFunction(string $class, string $function, array $data): void
     {
         $this->bus->write([
