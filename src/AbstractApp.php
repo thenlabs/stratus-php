@@ -280,36 +280,41 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             $eventName = $eventInfo[1];
 
             $component = $this->findChildById($componentId);
+        } else {
+            $componentId = $this->getId();
+            $eventName = $eventInfo[0];
 
-            $event = new StratusEvent;
-            $event->setApp($this);
-            $event->setSource($component);
-            $event->setEventData($eventData = $request->getEventData());
+            $component = $this;
+        }
 
-            try {
-                if ($request->isCapture()) {
-                    $targetCrawler = new HtmlPageCrawler($eventData['target']['innerHTML']);
-                    $targetElement = new Element('');
-                    $targetElement->setCrawler($targetCrawler);
-                    $targetElement->setProperties($eventData['target']);
+        $event = new StratusEvent;
+        $event->setApp($this);
+        $event->setSource($component);
+        $event->setEventData($eventData = $request->getEventData());
 
-                    $event->setTarget($targetElement);
+        try {
+            if ($request->isCapture()) {
+                $targetCrawler = new HtmlPageCrawler($eventData['target']['innerHTML']);
+                $targetElement = new Element('');
+                $targetElement->setCrawler($targetCrawler);
+                $targetElement->setProperties($eventData['target']);
 
-                    $component->getCaptureEventDispatcher()->dispatch($eventName, $event);
-                } else {
-                    $component->dispatchEvent($eventName, $event);
-                }
-            } catch (MissingDataException $exception) {
-                $response->setSuccessful(false);
+                $event->setTarget($targetElement);
 
-                $this->bus->write([
-                    'resend' => true,
-                    'collectDataScript' => $exception->getCollectDataScript(),
-                    'operations' => $this->operations,
-                ]);
-
-                $this->bus->close();
+                $component->getCaptureEventDispatcher()->dispatch($eventName, $event);
+            } else {
+                $component->dispatchEvent($eventName, $event);
             }
+        } catch (MissingDataException $exception) {
+            $response->setSuccessful(false);
+
+            $this->bus->write([
+                'resend' => true,
+                'collectDataScript' => $exception->getCollectDataScript(),
+                'operations' => $this->operations,
+            ]);
+
+            $this->bus->close();
         }
 
         return $response;

@@ -9,6 +9,7 @@ use ThenLabs\StratusPHP\Element;
 use ThenLabs\StratusPHP\StratusEventListener;
 use ThenLabs\StratusPHP\Event\StratusEvent;
 use Facebook\WebDriver\Remote\RemoteWebElement;
+use Facebook\WebDriver\WebDriverExpectedCondition;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
@@ -1295,6 +1296,50 @@ testCase('IntegrationTest.php', function () {
             $this->assertEquals('label', $childs[0]->getTagName());
             $this->assertEquals('button', $childs[1]->getTagName());
             $this->assertEquals('input', $childs[2]->getTagName());
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $app->on('click', function ($event) {
+                $app = $event->getApp();
+                $app->showAlert('Clicked');
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            static::executeScript('stratusAppInstance.dispatch("click", {}, false);');
+
+            $driver = static::getDriver();
+
+            $driver->wait()->until(
+                WebDriverExpectedCondition::alertIsPresent(),
+                'Clicked'
+            );
+            $driver->switchTo()->alert()->accept();
+
+            $this->assertTrue(true);
         });
     });
 
