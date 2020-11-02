@@ -8,6 +8,7 @@ use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\Event\BeforeInsertionEvent;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
+use ThenLabs\ComposedViews\Asset\Script;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Event\StratusEvent;
@@ -55,6 +56,16 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $this->registerJavaScriptClass(Element::class);
         $this->registerJavaScriptClass(JavaScriptUtils::class);
+    }
+
+    public function getOwnDependencies(): array
+    {
+        $stratusScript = new StratusScript('stratus-js', null, '');
+
+        $stratusInitScript = new StratusInitScript('stratus-init-script', null, '');
+        $stratusInitScript->setApp($this);
+
+        return compact('stratusScript', 'stratusInitScript');
     }
 
     public function render(array $data = [], bool $dispatchRenderEvent = true): string
@@ -202,13 +213,13 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
     public function _addStratusAssetScripts(RenderEvent $event): void
     {
-        $stratusScript = new StratusScript('stratus-js', null, '');
+        $body = $event->filter('body');
 
-        $stratusInitScript = new StratusInitScript('stratus-init-script', null, '');
-        $stratusInitScript->setApp($this);
-
-        $event->filter('body')->append($stratusScript->render());
-        $event->filter('body')->append($stratusInitScript->render());
+        foreach ($this->getOwnDependencies() as $dependency) {
+            if ($dependency instanceof Script) {
+                $body->append($dependency->render());
+            }
+        }
     }
 
     public function _beforeInsertionEvent(BeforeInsertionEvent $event): void
