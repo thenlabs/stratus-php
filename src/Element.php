@@ -61,6 +61,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
             static setProperty(componentId, property, value) {
                 const element = app.getComponent(componentId).element;
+
+                if ('string' === typeof(value)) {
+                    value = '`' + value + '`';
+                }
+
                 eval(`element.\${property} = \${value}`);
             }
 
@@ -417,7 +422,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         $data = [
             'componentId' => $this->getId(),
             'property' => $property,
-            'value' => var_export($value, true),
+            'value' => is_string($value) ? $value : var_export($value, true),
         ];
 
         $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);

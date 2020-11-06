@@ -1343,6 +1343,51 @@ testCase('IntegrationTest.php', function () {
         });
     });
 
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <div class="container">
+                            </div>
+                            <button>Button</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+            $div = $app->querySelector('div.container');
+
+            $button->onClick(function () use ($div) {
+                $div->innerHTML = <<<HTML
+                    <input type="" name="">
+                    <label></label>
+                HTML;
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            static::findElement('button')->click();
+            static::waitForResponse();
+
+            $this->assertCount(1, static::findElements('input'));
+            $this->assertCount(1, static::findElements('label'));
+        });
+    });
+
     // testCase(function () {
     //     setUpBeforeClassOnce(function () {
     //         $app = new class('') extends TestApp {
