@@ -5,6 +5,7 @@ namespace ThenLabs\StratusPHP;
 
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
+use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
@@ -133,7 +134,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 $jsEventData = '';
                 $frontListenerSrc = '';
 
-                if ($listener instanceof StratusEventListener) {
+                if ($listener instanceof EventListener) {
                     foreach ($listener->getFetchData() as $key) {
                         $jsEventData .= "eventData['{$key}'] = event['{$key}'];\n";
                     }
@@ -169,7 +170,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
                 $jsEventData = '';
                 $frontListenerSrc = '';
 
-                if ($listener instanceof StratusEventListener) {
+                if ($listener instanceof EventListener) {
                     foreach ($listener->getFetchData() as $key) {
                         $jsEventData .= "eventData['{$key}'] = event['{$key}'];\n";
                     }
@@ -447,7 +448,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
         }
 
         if (is_array($listener)) {
-            $stratusEventListener = new StratusEventListener($listener);
+            $stratusEventListener = new EventListener($listener);
             $this->on($eventName, $stratusEventListener, $capture);
             return;
         }

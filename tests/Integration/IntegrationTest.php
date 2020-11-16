@@ -6,7 +6,7 @@ namespace ThenLabs\StratusPHP\Tests\Integration;
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\AbstractApp as TestApp;
 use ThenLabs\StratusPHP\Element;
-use ThenLabs\StratusPHP\StratusEventListener;
+use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Event\Event;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverExpectedCondition;
@@ -324,7 +324,7 @@ testCase('IntegrationTest.php', function () {
 
             $input->registerCriticalProperty('value');
 
-            $listener = new StratusEventListener;
+            $listener = new EventListener;
             $listener->setBackListener(function () use ($input, $label) {
                 $label->innerHTML = $input->value;
             });
@@ -892,7 +892,7 @@ testCase('IntegrationTest.php', function () {
                 $input = $app->querySelector('input');
                 $label = $app->querySelector('label');
 
-                $listener = new StratusEventListener;
+                $listener = new EventListener;
                 $listener->setFetchData(['key', 'keyCode']);
                 $listener->setBackListener(function (Event $event) use ($label): void {
                     $eventData = $event->getEventData();
@@ -933,7 +933,7 @@ testCase('IntegrationTest.php', function () {
 
             $button = $app->querySelector('button');
 
-            $listener = new StratusEventListener;
+            $listener = new EventListener;
             $listener->setFrontListener(<<<JAVASCRIPT
                 let label = document.querySelector('label');
                 label.remove();
@@ -978,7 +978,7 @@ testCase('IntegrationTest.php', function () {
             $label = $app->querySelector('label');
             $button = $app->querySelector('button');
 
-            $listener = new StratusEventListener;
+            $listener = new EventListener;
 
             $listener->setFrontListener(<<<JAVASCRIPT
                 event.backListener = false;

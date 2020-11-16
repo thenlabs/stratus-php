@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP;
 
 use ThenLabs\StratusPHP\Annotation\EventListener as EventListenerAnnotation;
+use ThenLabs\StratusPHP\Event\EventListener;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use Doctrine\Common\Annotations\AnnotationReader;
 use ReflectionClass;
@@ -43,7 +44,7 @@ abstract class AbstractAppWithSElements extends AbstractApp
                     ) {
                         $eventName = substr($attr->nodeName, strlen($eventAttributePrefix));
 
-                        $eventListener = new StratusEventListener;
+                        $eventListener = new EventListener;
                         $eventListener->setBackListener([$this, $methodName]);
 
                         $element->addEventListener($eventName, $eventListener);
@@ -73,7 +74,7 @@ abstract class AbstractAppWithSElements extends AbstractApp
                         }
                     }
 
-                    $eventListener = new StratusEventListener;
+                    $eventListener = new EventListener;
                     $eventListener->setBackListener([$this, $methodName]);
 
                     $annotationReader = new AnnotationReader;
