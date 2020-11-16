@@ -11,7 +11,7 @@ use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\ComposedViews\Asset\Script;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
-use ThenLabs\StratusPHP\Event\StratusEvent;
+use ThenLabs\StratusPHP\Event\Event;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
@@ -296,7 +296,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
             $component = $this;
         }
 
-        $event = new StratusEvent;
+        $event = new Event;
         $event->setApp($this);
         $event->setSource($component);
         $event->setEventData($eventData = $request->getEventData());

@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Event;
 
-use ThenLabs\Components\Event\Event;
+use ThenLabs\Components\Event\Event as ComponentsEvent;
 use ThenLabs\StratusPHP\AbstractApp;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class StratusEvent extends Event
+class Event extends ComponentsEvent
 {
     protected $app;
     protected $eventData = [];

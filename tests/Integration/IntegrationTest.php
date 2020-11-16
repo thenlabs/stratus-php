@@ -7,7 +7,7 @@ use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\AbstractApp as TestApp;
 use ThenLabs\StratusPHP\Element;
 use ThenLabs\StratusPHP\StratusEventListener;
-use ThenLabs\StratusPHP\Event\StratusEvent;
+use ThenLabs\StratusPHP\Event\Event;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
@@ -894,7 +894,7 @@ testCase('IntegrationTest.php', function () {
 
                 $listener = new StratusEventListener;
                 $listener->setFetchData(['key', 'keyCode']);
-                $listener->setBackListener(function (StratusEvent $event) use ($label): void {
+                $listener->setBackListener(function (Event $event) use ($label): void {
                     $eventData = $event->getEventData();
                     extract($eventData);
                     $label->innerHTML = "key: {$key} keyCode: {$keyCode}";
@@ -1038,7 +1038,7 @@ testCase('IntegrationTest.php', function () {
                     label.innerHTML = `key: \${event.key} `;
                 JAVASCRIPT,
 
-                'backListener' => function (StratusEvent $event) use ($label): void {
+                'backListener' => function (Event $event) use ($label): void {
                     $app = $event->getApp();
                     $label = $app->querySelector('label');
 
