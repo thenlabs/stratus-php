@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Tests\Unit;
 
-use ThenLabs\StratusPHP\StratusResponse;
+use ThenLabs\StratusPHP\Response;
 use ThenLabs\StratusPHP\Tests\TestCase;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(TestCase::class);
 
-testCase('StratusResponseTest.php', function () {
+testCase('ResponseTest.php', function () {
     test(function () {
-        $result = new StratusResponse;
+        $result = new Response;
 
         $this->assertTrue($result->isSuccessful());
     });
 
     test(function () {
-        $result = new StratusResponse;
+        $result = new Response;
 
         $result->setSuccessful(false);
 

@@ -252,7 +252,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         parent::addFilter($callback);
     }
 
-    public function run(Request $request): StratusResponse
+    public function run(Request $request): Response
     {
         if (! $this->booted) {
             $this->booted = true;
@@ -282,7 +282,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         }
 
         $eventInfo = explode('.', $request->getEventName());
-        $response = new StratusResponse;
+        $response = new Response;
 
         if (count($eventInfo) == 2) {
             $componentId = $eventInfo[0];
