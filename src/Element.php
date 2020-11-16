@@ -482,7 +482,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface,
 
     public static function createFromString(string $html): self
     {
-       $crawler = new HtmlPageCrawler($html);
+        $crawler = new HtmlPageCrawler($html);
 
         $element = new self('');
         $element->setCrawler($crawler);
