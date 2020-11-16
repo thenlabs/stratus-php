@@ -59,7 +59,11 @@ class SeleniumTestCase extends TestCase
         preg_match_all('/use +[\w\s\\\]+;/', file_get_contents($fileName), $useMatches);
 
         foreach ($useMatches[0] as $match) {
-            $uses .= $match . PHP_EOL;
+            $useSentence = $match . PHP_EOL;
+
+            if (false === strpos($uses, $useSentence)) {
+                $uses .= $useSentence;
+            }
         }
 
         $file = fopen($fileName, 'r');

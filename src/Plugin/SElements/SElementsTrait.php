@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP;
+namespace ThenLabs\StratusPHP\Plugin\SElements;
 
+use ThenLabs\StratusPHP\Annotation\OnConstructor;
 use ThenLabs\StratusPHP\Annotation\EventListener as EventListenerAnnotation;
 use ThenLabs\StratusPHP\Event\EventListener;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
@@ -11,16 +12,16 @@ use ReflectionClass;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
- * @abstract
  */
-abstract class AbstractAppWithSElements extends AbstractApp
+trait SElementsTrait
 {
     protected $attributeForElements = 's-element';
 
-    public function __construct(string $controllerUri)
+    /**
+     * @OnConstructor
+     */
+    public function runSElementsPlugin(): void
     {
-        parent::__construct($controllerUri);
-
         $crawler = new HtmlPageCrawler($this->getView());
         $builtElements = [];
 

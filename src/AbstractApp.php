@@ -9,6 +9,7 @@ use ThenLabs\Components\Event\BeforeInsertionEvent;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\ComposedViews\Asset\Script;
+use ThenLabs\StratusPHP\Annotation\OnConstructor as OnConstructorAnnotation;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Event\Event;
@@ -22,9 +23,11 @@ use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\AnnotationReader;
 use ReflectionClass;
 
 AnnotationRegistry::registerFile(__DIR__.'/Annotation/EventListener.php');
+AnnotationRegistry::registerFile(__DIR__.'/Annotation/OnConstructor.php');
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -54,6 +57,15 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
 
         $this->registerJavaScriptClass(Element::class);
         $this->registerJavaScriptClass(JavaScriptUtils::class);
+
+        $class = new ReflectionClass($this);
+        $annotationReader = new AnnotationReader;
+
+        foreach ($class->getMethods() as $method) {
+            if ($annotation = $annotationReader->getMethodAnnotation($method, OnConstructorAnnotation::class)) {
+                call_user_func([$this, $method->getName()]);
+            }
+        }
     }
 
     public function getOwnDependencies(): array

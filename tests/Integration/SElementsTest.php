@@ -4,16 +4,18 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
-use ThenLabs\StratusPHP\AbstractAppWithSElements as TestApp;
+use ThenLabs\StratusPHP\AbstractApp as TestApp;
 use ThenLabs\StratusPHP\Annotation\EventListener;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
 
-testCase('SElementsIntegrationTest.php', function () {
+testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML
@@ -60,6 +62,8 @@ testCase('SElementsIntegrationTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML
@@ -106,6 +110,8 @@ testCase('SElementsIntegrationTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML
@@ -160,6 +166,8 @@ testCase('SElementsIntegrationTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML
@@ -210,6 +218,8 @@ testCase('SElementsIntegrationTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML
@@ -267,6 +277,8 @@ testCase('SElementsIntegrationTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML
@@ -328,6 +340,8 @@ testCase('SElementsIntegrationTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML
