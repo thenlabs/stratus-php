@@ -6,7 +6,7 @@ namespace ThenLabs\StratusPHP;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class StratusRequest
+class Request
 {
     protected $token;
     protected $componentData;

@@ -252,7 +252,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         parent::addFilter($callback);
     }
 
-    public function run(StratusRequest $request): StratusResponse
+    public function run(Request $request): StratusResponse
     {
         if (! $this->booted) {
             $this->booted = true;
