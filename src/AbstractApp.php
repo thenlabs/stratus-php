@@ -12,6 +12,7 @@ use ThenLabs\ComposedViews\Asset\Script;
 use ThenLabs\StratusPHP\Annotation\OnConstructor as OnConstructorAnnotation;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
+use ThenLabs\StratusPHP\Component\StratusComponentInterface;
 use ThenLabs\StratusPHP\Event\Event;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;

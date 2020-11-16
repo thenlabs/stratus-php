@@ -6,6 +6,7 @@ namespace ThenLabs\StratusPHP;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\StratusPHP\Event\EventListener;
+use ThenLabs\StratusPHP\Component\StratusComponentInterface;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;

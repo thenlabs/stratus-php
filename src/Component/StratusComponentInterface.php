@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP;
+namespace ThenLabs\StratusPHP\Component;
 
+use ThenLabs\StratusPHP\AbstractApp;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 
 /**
