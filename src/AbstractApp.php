@@ -24,7 +24,7 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 
-AnnotationRegistry::registerFile(__DIR__.'/Annotation/StratusEventListener.php');
+AnnotationRegistry::registerFile(__DIR__.'/Annotation/EventListener.php');
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

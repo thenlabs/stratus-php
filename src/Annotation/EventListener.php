@@ -8,7 +8,7 @@ namespace ThenLabs\StratusPHP\Annotation;
  *
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class StratusEventListener
+class EventListener
 {
     public $fetchData = [];
 

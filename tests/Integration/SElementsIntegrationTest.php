@@ -5,7 +5,7 @@ namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\AbstractAppWithSElements as TestApp;
-use ThenLabs\StratusPHP\Annotation\StratusEventListener;
+use ThenLabs\StratusPHP\Annotation\EventListener;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
@@ -179,7 +179,7 @@ testCase('SElementsIntegrationTest.php', function () {
                 }
 
                 /**
-                 * @StratusEventListener(
+                 * @EventListener(
                  *     frontListener="myInput.setAttribute('disabled', true)"
                  * )
                  */
@@ -229,7 +229,7 @@ testCase('SElementsIntegrationTest.php', function () {
                 }
 
                 /**
-                 * @StratusEventListener(
+                 * @EventListener(
                  *     frontListener="
                  *         myInput.setAttribute('disabled', true);
                  *         myLabel.setAttribute('disabled', true);
@@ -295,7 +295,7 @@ testCase('SElementsIntegrationTest.php', function () {
                 }
 
                 /**
-                 * @StratusEventListener(
+                 * @EventListener(
                  *     frontListener="myFrontListener"
                  * )
                  */
@@ -346,7 +346,7 @@ testCase('SElementsIntegrationTest.php', function () {
                 }
 
                 /**
-                 * @StratusEventListener(fetchData={"key", "keyCode"})
+                 * @EventListener(fetchData={"key", "keyCode"})
                  */
                 public function onKeypressMyInput($event)
                 {
