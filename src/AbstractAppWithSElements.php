@@ -34,6 +34,21 @@ abstract class AbstractAppWithSElements extends AbstractApp
 
                 $this->{$componentName} = $element;
                 $builtElements[$componentName] = $element;
+
+                $eventAttributePrefix = "{$this->attributeForElements}-event-";
+
+                foreach ($item->attributes as $attr) {
+                    if (0 === strpos($attr->nodeName, $eventAttributePrefix) &&
+                        is_callable([$this, $methodName = $attr->nodeValue])
+                    ) {
+                        $eventName = substr($attr->nodeName, strlen($eventAttributePrefix));
+
+                        $eventListener = new StratusEventListener;
+                        $eventListener->setBackListener([$this, $methodName]);
+
+                        $element->addEventListener($eventName, $eventListener);
+                    }
+                }
             }
         }
 

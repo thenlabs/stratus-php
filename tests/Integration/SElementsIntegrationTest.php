@@ -72,6 +72,52 @@ testCase('SElementsIntegrationTest.php', function () {
                         <body>
                             <input s-element="myInput" type="text" name="">
                             <label s-element="myLabel"></label>
+                            <button s-element="myButton" s-element-event-click="clickTheButton">MyButton</button>
+                        </body>
+                        </html>
+                    HTML;
+                }
+
+                public function clickTheButton()
+                {
+                    $this->myLabel->innerHTML = $this->myInput->value;
+                }
+            };
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $input = static::findElement('input');
+            $button = static::findElement('button');
+            $label = static::findElement('label');
+
+            $secret = uniqid();
+
+            $input->sendKeys($secret);
+            $button->click();
+            static::waitForResponse();
+
+            $this->assertEquals($secret, $label->getText());
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input s-element="myInput" type="text" name="">
+                            <label s-element="myLabel"></label>
                             <button s-element="myButton">MyButton</button>
                         </body>
                         </html>
