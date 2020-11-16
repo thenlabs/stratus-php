@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Plugin\SElements;
 
+use ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 use ThenLabs\StratusPHP\Annotation\OnConstructor;
 use ThenLabs\StratusPHP\Annotation\EventListener as EventListenerAnnotation;
 use ThenLabs\StratusPHP\Event\EventListener;
@@ -15,12 +16,14 @@ use ReflectionClass;
  */
 trait SElementsTrait
 {
+    use PageDomTrait;
+
     protected $attributeForElements = 's-element';
 
     /**
      * @OnConstructor
      */
-    public function runSElementsPlugin(): void
+    public function runPluginSElements(): void
     {
         $crawler = new HtmlPageCrawler($this->getView());
         $builtElements = [];
