@@ -9,6 +9,4 @@ namespace ThenLabs\StratusPHP;
 interface QuerySelectorInterface
 {
     public function querySelector(string $selector): Element;
-
-    public function querySelectorAll(string $selector): array;
 }

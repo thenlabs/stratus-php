@@ -18,7 +18,6 @@ use BadMethodCallException;
 class Element implements CompositeComponentInterface, StratusComponentInterface, QuerySelectorInterface
 {
     use CompositeComponentTrait;
-    use QuerySelectorAllImplementationPendingTrait;
 
     protected $selector;
     protected $properties = [];

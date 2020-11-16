@@ -32,8 +32,6 @@ AnnotationRegistry::registerFile(__DIR__.'/Annotation/StratusEventListener.php')
  */
 abstract class AbstractApp extends AbstractCompositeView implements QuerySelectorInterface
 {
-    use QuerySelectorAllImplementationPendingTrait;
-
     protected $controllerUri;
     protected $javaScriptClasses = [];
     protected $debug = false;
