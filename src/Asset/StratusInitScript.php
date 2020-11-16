@@ -9,6 +9,9 @@ use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\ComposedViews\Asset\Script;
 use ReflectionClass;
 
+/**
+ * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
+ */
 class StratusInitScript extends Script
 {
     protected $app;
