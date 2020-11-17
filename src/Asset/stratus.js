@@ -144,6 +144,17 @@ class StratusApp {
                 console.log('Message:', message);
             }
 
+            if ('string' === typeof message.eval) {
+                eval(message.eval);
+            }
+
+            if ('object' === typeof message.handler) {
+                let HandlerClass = this.classes[message.handler.classId];
+                let handler = HandlerClass[message.handler.method];
+
+                handler.apply(null, Object.values(message.data));
+            }
+
             if ('boolean' === typeof(message.resend) &&
                 true === message.resend &&
                 'object' === typeof(message.frontCall)
@@ -166,11 +177,6 @@ class StratusApp {
 
                 let newXhr = this.getNewXMLHttpRequest();
                 this.sendRequest(newXhr, data);
-            } else {
-                let HandlerClass = this.classes[message.handler.classId];
-                let handler = HandlerClass[message.handler.method];
-
-                handler.apply(null, Object.values(message.data));
             }
         }
     }

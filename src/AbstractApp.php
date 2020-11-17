@@ -45,7 +45,6 @@ abstract class AbstractApp extends AbstractCompositeView
     protected $bus;
     protected $inmutableView;
     protected $token;
-    protected $operations = [];
     protected $currentRequest;
 
     public function __construct(string $controllerUri)
@@ -350,7 +349,7 @@ abstract class AbstractApp extends AbstractCompositeView
         }
 
         $vars = get_object_vars($this);
-        $nonSerializable = ['inmutableView', 'operations'];
+        $nonSerializable = ['inmutableView'];
 
         $result = array_diff(array_keys($vars), $nonSerializable);
 
@@ -378,15 +377,24 @@ abstract class AbstractApp extends AbstractCompositeView
         }
     }
 
-    public function executeFrontCall(FrontCall $frontCall)
+    public function executeFrontCall(FrontCall $frontCall, bool $queryMode = true)
     {
-        $frontCalls = $this->currentRequest->getExecutedFrontCalls();
         $hash = $frontCall->getHash();
 
-        if (array_key_exists($hash, $frontCalls)) {
-            return $frontCalls[$hash];
+        if ($queryMode) {
+            $frontCalls = $this->currentRequest->getExecutedFrontCalls();
+
+            if (array_key_exists($hash, $frontCalls)) {
+                return $frontCalls[$hash];
+            } else {
+                throw new FrontCallException($frontCall);
+            }
         } else {
-            throw new FrontCallException($frontCall);
+            $this->bus->write([
+                'eval' => $frontCall->getScript(),
+            ]);
+
+            $this->currentRequest->registerFrontCallResult($hash, null);
         }
     }
 

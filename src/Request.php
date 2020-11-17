@@ -45,6 +45,11 @@ class Request
         $this->executedFrontCalls = $executedFrontCalls;
     }
 
+    public function registerFrontCallResult(string $hash, $value): void
+    {
+        $this->executedFrontCalls[$hash] = $value;
+    }
+
     public function getEventName(): string
     {
         return $this->eventName;

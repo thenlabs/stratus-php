@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
 use ThenLabs\StratusPHP\Annotation\OnConstructor;
+use ThenLabs\StratusPHP\FrontCall;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 
 /**
@@ -19,7 +20,7 @@ trait PageDomTrait
         $this->registerJavaScriptClass(Element::class);
     }
 
-    public function querySelector(string $selector, bool $registerOperation = true): Element
+    public function querySelector(string $selector): Element
     {
         foreach ($this->childs as $component) {
             if ($component instanceof Element &&
@@ -35,23 +36,20 @@ trait PageDomTrait
 
             $this->addChild($element);
 
-            if ($registerOperation) {
-                $this->operations[] = [
-                    'type' => 'querySelector',
-                    'data' => [
-                        'id' => $element->getId(),
-                        'parent' => null,
-                        'selector' => $selector,
-                    ]
-                ];
+            $elementJavaScriptClassId = $this->getJavaScriptClassId(Element::class);
 
-                $this->invokeJavaScriptFunction(Element::class, 'createNew', [
-                    'classId' => $this->getJavaScriptClassId(Element::class),
-                    'componentId' => $element->getId(),
-                    'parent' => null,
-                    'selector' => $selector,
-                ]);
-            }
+            $frontCall = new FrontCall(<<<JAVASCRIPT
+                const ComponentClass = stratusAppInstance.classes['{$elementJavaScriptClassId}'];
+                const component = new ComponentClass(
+                    '{$element->getId()}',
+                    stratusAppInstance.rootElement,
+                    '{$selector}'
+                );
+
+                stratusAppInstance.addComponent(component);
+            JAVASCRIPT);
+
+            $this->executeFrontCall($frontCall, false);
 
             return $element;
         } else {
