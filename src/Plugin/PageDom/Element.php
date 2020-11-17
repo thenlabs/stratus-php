@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP;
+namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
+use ThenLabs\StratusPHP\AbstractApp;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\StratusPHP\Event\EventListener;
@@ -17,7 +18,7 @@ use BadMethodCallException;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class Element implements CompositeComponentInterface, StratusComponentInterface, QuerySelectorInterface
+class Element implements CompositeComponentInterface, StratusComponentInterface
 {
     use CompositeComponentTrait;
 

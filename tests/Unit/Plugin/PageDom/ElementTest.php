@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP\Tests\Unit;
+namespace ThenLabs\StratusPHP\Tests\Unit\Plugin\PageDom;
 
 use ThenLabs\StratusPHP\AbstractApp;
-use ThenLabs\StratusPHP\Element;
+use ThenLabs\StratusPHP\Plugin\PageDom\Element;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Tests\TestCase;
 use Wa72\HtmlPageDom\HtmlPageCrawler;

@@ -21,6 +21,7 @@ use ThenLabs\StratusPHP\Bus\BusInterface;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
+use ThenLabs\StratusPHP\Plugin\PageDom\Element;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -34,7 +35,7 @@ AnnotationRegistry::registerFile(__DIR__.'/Annotation/OnConstructor.php');
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  * @abstract
  */
-abstract class AbstractApp extends AbstractCompositeView implements QuerySelectorInterface
+abstract class AbstractApp extends AbstractCompositeView
 {
     protected $controllerUri;
     protected $javaScriptClasses = [];

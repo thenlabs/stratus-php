@@ -5,7 +5,7 @@ namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\AbstractApp as TestApp;
-use ThenLabs\StratusPHP\Element;
+use ThenLabs\StratusPHP\Plugin\PageDom\Element;
 use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Event\Event;
 use Facebook\WebDriver\Remote\RemoteWebElement;
