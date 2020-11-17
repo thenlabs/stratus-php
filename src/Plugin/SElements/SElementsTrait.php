@@ -16,6 +16,10 @@ use ReflectionClass;
  */
 trait SElementsTrait
 {
+    /**
+     * This is the ideal way but cause know bug of doctrine extensions.
+     * @see https://github.com/doctrine/annotations/issues/268
+     */
     // use PageDomTrait;
 
     protected $attributeForElements = 's-element';
