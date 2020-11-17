@@ -383,7 +383,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
     public function __get($name)
     {
-        if (! isset($this->properties[$name])) {
+        if (! array_key_exists($name, $this->properties)) {
             throw new MissingDataException(<<<JAVASCRIPT
                 const component = stratusAppInstance.getComponent('{$this->getId()}');
 
