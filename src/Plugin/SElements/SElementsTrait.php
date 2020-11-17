@@ -16,7 +16,7 @@ use ReflectionClass;
  */
 trait SElementsTrait
 {
-    use PageDomTrait;
+    // use PageDomTrait;
 
     protected $attributeForElements = 's-element';
 

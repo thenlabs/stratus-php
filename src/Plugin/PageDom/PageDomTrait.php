@@ -10,4 +10,10 @@ use ThenLabs\StratusPHP\Annotation\OnConstructor;
  */
 trait PageDomTrait
 {
+    /**
+     * @OnConstructor
+     */
+    public function runPluginPageDom(): void
+    {
+    }
 }

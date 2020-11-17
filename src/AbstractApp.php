@@ -9,7 +9,7 @@ use ThenLabs\Components\Event\BeforeInsertionEvent;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\ComposedViews\Asset\Script;
-use ThenLabs\StratusPHP\Annotation\OnConstructor as OnConstructorAnnotation;
+use ThenLabs\StratusPHP\Annotation\OnConstructor;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
@@ -63,7 +63,7 @@ abstract class AbstractApp extends AbstractCompositeView implements QuerySelecto
         $annotationReader = new AnnotationReader;
 
         foreach ($class->getMethods() as $method) {
-            if ($annotation = $annotationReader->getMethodAnnotation($method, OnConstructorAnnotation::class)) {
+            if ($annotation = $annotationReader->getMethodAnnotation($method, OnConstructor::class)) {
                 call_user_func([$this, $method->getName()]);
             }
         }

@@ -14,6 +14,7 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
                 use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
 
                 public function getView(): string
@@ -62,6 +63,7 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
                 use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
 
                 public function getView(): string
@@ -110,6 +112,7 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
                 use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
 
                 public function getView(): string
@@ -166,6 +169,7 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
                 use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
 
                 public function getView(): string
@@ -218,6 +222,7 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
                 use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
 
                 public function getView(): string
@@ -277,6 +282,7 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
                 use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
 
                 public function getView(): string
@@ -340,6 +346,7 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
                 use \ThenLabs\StratusPHP\Plugin\SElements\SElementsTrait;
 
                 public function getView(): string
