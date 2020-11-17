@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
 use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\FrontCall;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\StratusPHP\Event\EventListener;
@@ -384,19 +385,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     public function __get($name)
     {
         if (! array_key_exists($name, $this->properties)) {
-            throw new MissingDataException(<<<JAVASCRIPT
+            $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
                 const component = stratusAppInstance.getComponent('{$this->getId()}');
-
                 component.registerCriticalProperty('{$name}');
-
-                return {
-                    componentData: {
-                        '{$this->getId()}': {
-                            '{$name}': component.element['{$name}']
-                        }
-                    }
-                };
-            JAVASCRIPT);
+            JAVASCRIPT));
         }
 
         return $this->properties[$name];

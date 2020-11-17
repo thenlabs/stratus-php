@@ -12,7 +12,7 @@ class Request
     protected $componentData;
     protected $eventName;
     protected $eventData = [];
-    protected $operations = [];
+    protected $executedFrontCalls = [];
     protected $capture = false;
 
     public function getToken(): string
@@ -35,14 +35,14 @@ class Request
         $this->componentData = $componentData;
     }
 
-    public function getOperations(): ?array
+    public function getExecutedFrontCalls(): ?array
     {
-        return $this->operations;
+        return $this->executedFrontCalls;
     }
 
-    public function setOperations(?array $operations): void
+    public function setExecutedFrontCalls(?array $executedFrontCalls): void
     {
-        $this->operations = $operations;
+        $this->executedFrontCalls = $executedFrontCalls;
     }
 
     public function getEventName(): string
@@ -86,8 +86,8 @@ class Request
         $request->setEventData($data['eventData']);
         $request->setCapture($data['capture']);
 
-        if (isset($data['operations'])) {
-            $request->setOperations($data['operations']);
+        if (isset($data['executedFrontCalls'])) {
+            $request->setExecutedFrontCalls($data['executedFrontCalls']);
         }
 
         return $request;

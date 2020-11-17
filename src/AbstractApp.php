@@ -17,6 +17,7 @@ use ThenLabs\StratusPHP\Event\Event;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Exception\MissingDataException;
+use ThenLabs\StratusPHP\Exception\FrontCallException;
 use ThenLabs\StratusPHP\Bus\BusInterface;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
@@ -45,6 +46,7 @@ abstract class AbstractApp extends AbstractCompositeView
     protected $inmutableView;
     protected $token;
     protected $operations = [];
+    protected $currentRequest;
 
     public function __construct(string $controllerUri)
     {
@@ -219,12 +221,7 @@ abstract class AbstractApp extends AbstractCompositeView
             throw new InvalidTokenException;
         }
 
-        foreach ($request->getOperations() as $operation) {
-            if ($operation['type'] == 'querySelector') {
-                $newElement = $this->querySelector($operation['data']['selector'], false);
-                $newElement->setId($operation['data']['id']);
-            }
-        }
+        $this->currentRequest = $request;
 
         foreach ($request->getComponentData() as $componentId => $componentDataList) {
             $component = $this->findChildById($componentId);
@@ -247,7 +244,6 @@ abstract class AbstractApp extends AbstractCompositeView
 
             $component = $this->findChildById($componentId);
         } else {
-            $componentId = $this->getId();
             $eventName = $eventInfo[0];
 
             $component = $this;
@@ -271,13 +267,18 @@ abstract class AbstractApp extends AbstractCompositeView
             } else {
                 $component->dispatchEvent($eventName, $event);
             }
-        } catch (MissingDataException $exception) {
+        } catch (FrontCallException $exception) {
             $response->setSuccessful(false);
+
+            $frontCall = $exception->getFrontCall();
 
             $this->bus->write([
                 'resend' => true,
-                'collectDataScript' => $exception->getCollectDataScript(),
-                'operations' => $this->operations,
+                'executedFrontCalls' => $request->getExecutedFrontCalls(),
+                'frontCall' => [
+                    'hash' => $frontCall->getHash(),
+                    'script' => $frontCall->getScript(),
+                ]
             ]);
 
             $this->bus->close();
@@ -374,6 +375,18 @@ abstract class AbstractApp extends AbstractCompositeView
 
         foreach ($this->getChilds() as $child) {
             $update($child, $this);
+        }
+    }
+
+    public function executeFrontCall(FrontCall $frontCall)
+    {
+        $frontCalls = $this->currentRequest->getExecutedFrontCalls();
+        $hash = $frontCall->getHash();
+
+        if (array_key_exists($hash, $frontCalls)) {
+            return $frontCalls[$hash];
+        } else {
+            throw new FrontCallException($frontCall);
         }
     }
 

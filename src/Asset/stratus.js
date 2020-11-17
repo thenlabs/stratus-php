@@ -86,8 +86,7 @@ class StratusApp {
         return result;
     }
 
-    dispatch(eventName, eventData = {}, capture = false) {
-        const xhr = this.getNewXMLHttpRequest();
+    getComponentData() {
         const componentData = {};
 
         for (let componentId in this.components) {
@@ -98,6 +97,13 @@ class StratusApp {
                 componentData[componentId] = criticalData;
             }
         }
+
+        return componentData;
+    }
+
+    dispatch(eventName, eventData = {}, capture = false) {
+        const xhr = this.getNewXMLHttpRequest();
+        const componentData = this.getComponentData();
 
         Object.assign(componentData, componentData, this.buffer);
 
@@ -140,22 +146,25 @@ class StratusApp {
 
             if ('boolean' === typeof(message.resend) &&
                 true === message.resend &&
-                'string' === typeof(message.collectDataScript)
+                'object' === typeof(message.frontCall)
             ) {
                 if (this.debug) {
                     console.log('The current request should be sent again.');
                 }
 
-                let newXhr = this.getNewXMLHttpRequest();
-                let data = xhr.data;
-                let collectedData = eval(`(() => {${message.collectDataScript}})()`);
+                let frontCall = message.frontCall;
+                let frontCallResult = eval(frontCall.script);
 
-                for (let id in collectedData.componentData) {
-                    data.componentData[id] = collectedData.componentData[id];
+                let data = xhr.data;
+
+                if ('object' !== typeof data.executedFrontCalls) {
+                    data.executedFrontCalls = {};
                 }
 
-                data.operations = message.operations;
+                data.executedFrontCalls[frontCall.hash] = frontCallResult;
+                data.componentData = this.getComponentData();
 
+                let newXhr = this.getNewXMLHttpRequest();
                 this.sendRequest(newXhr, data);
             } else {
                 let HandlerClass = this.classes[message.handler.classId];
