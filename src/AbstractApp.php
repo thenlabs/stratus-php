@@ -57,7 +57,6 @@ abstract class AbstractApp extends AbstractCompositeView
         $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
 
-        $this->registerJavaScriptClass(Element::class);
         $this->registerJavaScriptClass(JavaScriptUtils::class);
 
         $class = new ReflectionClass($this);
@@ -139,62 +138,6 @@ abstract class AbstractApp extends AbstractCompositeView
     public function setJavaScriptClasses(array $javaScriptClasses): void
     {
         $this->javaScriptClasses = $javaScriptClasses;
-    }
-
-    public function querySelector(string $selector, bool $registerOperation = true): Element
-    {
-        foreach ($this->childs as $component) {
-            if ($component instanceof Element &&
-                $component->getSelector() == $selector
-            ) {
-                return $component;
-            }
-        }
-
-        if ($this->booted) {
-            $element = new Element($selector);
-            $element->setApp($this);
-
-            $this->addChild($element);
-
-            if ($registerOperation) {
-                $this->operations[] = [
-                    'type' => 'querySelector',
-                    'data' => [
-                        'id' => $element->getId(),
-                        'parent' => null,
-                        'selector' => $selector,
-                    ]
-                ];
-
-                $this->invokeJavaScriptFunction(Element::class, 'createNew', [
-                    'classId' => $this->getJavaScriptClassId(Element::class),
-                    'componentId' => $element->getId(),
-                    'parent' => null,
-                    'selector' => $selector,
-                ]);
-            }
-
-            return $element;
-        } else {
-            $hasInmutableView = $this->hasInmutableView();
-
-            $view = $hasInmutableView ? $this->inmutableView : $this->render();
-            $crawler = new HtmlPageCrawler($view);
-            $elementCrawler = $crawler->filter($selector);
-
-            $element = new Element($selector);
-            $element->setCrawler($elementCrawler);
-            $element->setApp($this);
-
-            $this->addChild($element);
-
-            if (! $hasInmutableView) {
-                $this->inmutableView = $view;
-            }
-
-            return $element;
-        }
     }
 
     protected function updateJavaScriptClasses(): void

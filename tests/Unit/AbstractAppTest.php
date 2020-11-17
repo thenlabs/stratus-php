@@ -20,6 +20,8 @@ testCase('AbstractAppTest.php', function () {
             $this->controllerUri = uniqid('controllerUri');
 
             $this->app = new class($this->controllerUri) extends AbstractApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML

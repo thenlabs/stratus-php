@@ -345,6 +345,8 @@ testCase('FunctionalTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
+
                 public function getView(): string
                 {
                     return <<<HTML
