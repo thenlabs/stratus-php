@@ -29,14 +29,12 @@ class Browser implements ComponentInterface
 
     public static function getJavaScriptClassMembers(): string
     {
-        return <<<JAVASCRIPT
-        JAVASCRIPT;
+        return '';
     }
 
     public function getJavaScriptCreateInstanceScript(): string
     {
-        return <<<JAVASCRIPT
-        JAVASCRIPT;
+        return '';
     }
 
     public function alert(string $text): void
