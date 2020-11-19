@@ -380,21 +380,20 @@ abstract class AbstractApp extends AbstractCompositeView
     public function executeFrontCall(FrontCall $frontCall, bool $queryMode = true)
     {
         $hash = $frontCall->getHash();
+        $frontCalls = $this->currentRequest->getExecutedFrontCalls();
+
+        if (array_key_exists($hash, $frontCalls)) {
+            return $frontCalls[$hash];
+        }
 
         if ($queryMode) {
-            $frontCalls = $this->currentRequest->getExecutedFrontCalls();
-
-            if (array_key_exists($hash, $frontCalls)) {
-                return $frontCalls[$hash];
-            } else {
-                throw new FrontCallException($frontCall);
-            }
+            throw new FrontCallException($frontCall);
         } else {
             $this->bus->write([
                 'eval' => $frontCall->getScript(),
             ]);
 
-            $this->currentRequest->registerFrontCallResult($hash, null);
+            $this->currentRequest->registerFrontCallResult($hash, '');
         }
     }
 

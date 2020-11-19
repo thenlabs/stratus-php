@@ -17,7 +17,7 @@ class FrontCall
 
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
-        $this->hash = md5(serialize(compact('script', 'backtrace')));
+        $this->hash = md5(serialize(compact(/*'script',*/ 'backtrace')));
     }
 
     public function getScript(): string

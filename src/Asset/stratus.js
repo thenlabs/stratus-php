@@ -164,15 +164,21 @@ class StratusApp {
                 }
 
                 let frontCall = message.frontCall;
-                let frontCallResult = eval(frontCall.script);
+                let frontCallResult = eval('(function() {' + frontCall.script + '})()');
 
                 let data = xhr.data;
+
+                if ('undefined' === typeof(data.executedFrontCalls)) {
+                    data.executedFrontCalls = {};
+                }
+
+                Object.assign(data.executedFrontCalls, message.executedFrontCalls);
 
                 if ('object' !== typeof data.executedFrontCalls) {
                     data.executedFrontCalls = {};
                 }
 
-                data.executedFrontCalls[frontCall.hash] = frontCallResult;
+                data.executedFrontCalls[frontCall.hash] = frontCallResult ? frontCallResult : '';
                 data.componentData = this.getComponentData();
 
                 let newXhr = this.getNewXMLHttpRequest();

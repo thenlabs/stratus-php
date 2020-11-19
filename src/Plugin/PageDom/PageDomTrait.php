@@ -39,17 +39,24 @@ trait PageDomTrait
             $elementJavaScriptClassId = $this->getJavaScriptClassId(Element::class);
 
             $frontCall = new FrontCall(<<<JAVASCRIPT
-                const ComponentClass = stratusAppInstance.classes['{$elementJavaScriptClassId}'];
-                const component = new ComponentClass(
+                const StratusElement = stratusAppInstance.classes['{$elementJavaScriptClassId}'];
+
+                const component = new StratusElement(
                     '{$element->getId()}',
                     stratusAppInstance.rootElement,
                     '{$selector}'
                 );
 
                 stratusAppInstance.addComponent(component);
+
+                return '{$element->getId()}';
             JAVASCRIPT);
 
-            $this->executeFrontCall($frontCall, false);
+            $componentId = $this->executeFrontCall($frontCall, false);
+
+            if ($componentId) {
+                $element->setId($componentId);
+            }
 
             return $element;
         } else {
