@@ -39,6 +39,7 @@ abstract class AbstractApp extends AbstractCompositeView
 {
     protected $controllerUri;
     protected $javaScriptClasses = [];
+    protected $classListWithTotalInsertionCapability = [];
     protected $debug = false;
     protected $booted = false;
     protected $bus;
@@ -181,7 +182,9 @@ abstract class AbstractApp extends AbstractCompositeView
     {
         $child = $event->getChild();
 
-        if ($this->hasInmutableView() && ! $child instanceof Element) {
+        if ($this->hasInmutableView() &&
+            ! in_array(get_class($child), $this->classListWithTotalInsertionCapability)
+        ) {
             throw new InmutableViewException;
         }
 

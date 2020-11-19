@@ -17,6 +17,8 @@ trait PageDomTrait
      */
     public function runPluginPageDom(): void
     {
+        $this->classListWithTotalInsertionCapability[] = Element::class;
+
         $this->registerJavaScriptClass(Element::class);
     }
 
