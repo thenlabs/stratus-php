@@ -50,9 +50,18 @@ class Browser implements ComponentInterface
     {
         $frontCall = new FrontCall(<<<JAVASCRIPT
             return confirm('{$text}');
-        JAVASCRIPT, false);
+        JAVASCRIPT, true);
 
         return (bool) $this->app->executeFrontCall($frontCall);
+    }
+
+    public function prompt(string $text): ?string
+    {
+        $frontCall = new FrontCall(<<<JAVASCRIPT
+            return prompt('{$text}');
+        JAVASCRIPT, true);
+
+        return $this->app->executeFrontCall($frontCall);
     }
 
     public function redirect(string $url): void
