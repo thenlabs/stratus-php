@@ -70,10 +70,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
                 eval(`element.\${property} = \${value}`);
             }
 
-            static setAttribute(componentId, attribute, value) {
-                app.getComponent(componentId).element.setAttribute(attribute, value);
-            }
-
             static removeAttribute(componentId, attribute) {
                 app.getComponent(componentId).element.removeAttribute(attribute);
             }
