@@ -70,10 +70,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
                 eval(`element.\${property} = \${value}`);
             }
 
-            static removeAttribute(componentId, attribute) {
-                app.getComponent(componentId).element.removeAttribute(attribute);
-            }
-
             static addClass(componentId, className) {
                 app.getComponent(componentId).element.classList.add(className);
             }
@@ -277,10 +273,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->invokeJavaScriptFunction(self::class, 'removeAttribute', [
-            'componentId' => $this->getId(),
-            'attribute' => $attribute,
-        ]);
+        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            let component = stratusAppInstance.getComponent('{$this->getId()}');
+            component.element.removeAttribute('{$attribute}');
+        JAVASCRIPT, false));
     }
 
     public function hasClass(string $cssClass): bool
