@@ -249,13 +249,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $data = [
-            'componentId' => $this->getId(),
-            'attribute' => $attribute,
-            'value' => $value,
-        ];
+        $jsValue = var_export($value, true);
 
-        $this->app->invokeJavaScriptFunction(self::class, 'setAttribute', $data);
+        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            let component = stratusAppInstance.getComponent('{$this->getId()}');
+            component.element.setAttribute('{$attribute}', {$jsValue});
+        JAVASCRIPT, false));
 
         if (! isset($this->properties['attributes'])) {
             $this->properties['attributes'] = [];
