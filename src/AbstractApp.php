@@ -395,8 +395,6 @@ abstract class AbstractApp extends AbstractCompositeView
                     'script' => $frontCall->getScript(),
                 ]
             ]);
-
-            $this->currentRequest->registerFrontCallResult($hash, '');
         }
     }
 

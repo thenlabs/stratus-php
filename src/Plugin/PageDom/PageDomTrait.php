@@ -56,6 +56,13 @@ trait PageDomTrait
 
             if ($componentId) {
                 $element->setId($componentId);
+
+                $componentData = $this->currentRequest->getComponentData()[$componentId] ?? null;
+                if (is_array($componentData)) {
+                    foreach ($componentData as $key => $value) {
+                        $element->updateData($key, $value);
+                    }
+                }
             }
 
             return $element;
