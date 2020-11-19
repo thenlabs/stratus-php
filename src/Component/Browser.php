@@ -17,6 +17,10 @@ class Browser implements ComponentInterface
     {
     }
 
+    public function registerCriticalProperty(string $property): void
+    {
+    }
+
     public function setApp(?AbstractApp $app): void
     {
         $this->app = $app;
