@@ -390,7 +390,10 @@ abstract class AbstractApp extends AbstractCompositeView
             throw new FrontCallException($frontCall);
         } else {
             $this->bus->write([
-                'eval' => $frontCall->getScript(),
+                'frontCall' => [
+                    'hash' => $frontCall->getHash(),
+                    'script' => $frontCall->getScript(),
+                ]
             ]);
 
             $this->currentRequest->registerFrontCallResult($hash, '');

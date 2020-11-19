@@ -7,7 +7,7 @@ class StratusApp {
         this.token = token;
         this.classes = {};
         this.components = {};
-        this.buffer = {};
+        this.frontCallsResultsBuffer = {};
         this.debug = false;
         this.rootElement = document;
         this.httpRequests = [];
@@ -105,8 +105,6 @@ class StratusApp {
         const xhr = this.getNewXMLHttpRequest();
         const componentData = this.getComponentData();
 
-        Object.assign(componentData, componentData, this.buffer);
-
         const data = {
             token: this.token,
             componentData,
@@ -116,13 +114,13 @@ class StratusApp {
         };
 
         this.sendRequest(xhr, data);
-        this.buffer = {};
     }
 
     sendRequest(xhr, data) {
         xhr.data = data;
         xhr.send('stratus_request=' + JSON.stringify(data, this._stringifyReplacer));
         this.httpRequests.push(xhr);
+        this.frontCallsResultsBuffer = {};
     }
 
     processMessage(text, xhr) {
@@ -144,10 +142,6 @@ class StratusApp {
                 console.log('Message:', message);
             }
 
-            if ('string' === typeof message.eval) {
-                eval(message.eval);
-            }
-
             if ('object' === typeof message.handler) {
                 let HandlerClass = this.classes[message.handler.classId];
                 let handler = HandlerClass[message.handler.method];
@@ -155,30 +149,31 @@ class StratusApp {
                 handler.apply(null, Object.values(message.data));
             }
 
+            if ('object' === typeof message.frontCall) {
+                let frontCallResult = eval('(function() {' + message.frontCall.script + '})()');
+
+                this.frontCallsResultsBuffer[message.frontCall.hash] = frontCallResult ? frontCallResult : '';
+            }
+
             if ('boolean' === typeof(message.resend) &&
-                true === message.resend &&
-                'object' === typeof(message.frontCall)
+                true === message.resend
             ) {
                 if (this.debug) {
                     console.log('The current request should be sent again.');
                 }
 
-                let frontCall = message.frontCall;
-                let frontCallResult = eval('(function() {' + frontCall.script + '})()');
-
                 let data = xhr.data;
-
-                if ('undefined' === typeof(data.executedFrontCalls)) {
-                    data.executedFrontCalls = {};
-                }
-
-                Object.assign(data.executedFrontCalls, message.executedFrontCalls);
 
                 if ('object' !== typeof data.executedFrontCalls) {
                     data.executedFrontCalls = {};
                 }
 
-                data.executedFrontCalls[frontCall.hash] = frontCallResult ? frontCallResult : '';
+                if ('object' === typeof message.executedFrontCalls) {
+                    Object.assign(data.executedFrontCalls, message.executedFrontCalls);
+                }
+
+                Object.assign(data.executedFrontCalls, this.frontCallsResultsBuffer);
+
                 data.componentData = this.getComponentData();
 
                 let newXhr = this.getNewXMLHttpRequest();
