@@ -1412,6 +1412,61 @@ testCase('PageDomTest.php', function () {
                             <title>Document</title>
                         </head>
                         <body>
+                            <button>Button</button>
+                            <label></label>
+                        </body>
+                        </html>
+                    HTML;
+                }
+            };
+
+            $button = $app->querySelector('button');
+
+            $button->on('click', function ($event) {
+                $app = $event->getApp();
+
+                if ($app->getBrowser()->confirm('Do you confirm?')) {
+                    $app->querySelector('label')->textContent = 'yes';
+                } else {
+                    $app->querySelector('label')->textContent = 'no';
+                }
+            });
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            static::findElement('button')->click();
+
+            static::getDriver()->wait()->until(
+                WebDriverExpectedCondition::alertIsPresent(),
+                'Do you confirm?'
+            );
+
+            static::getDriver()->switchTo()->alert()->accept();
+
+            static::waitForResponse();
+
+            $this->assertEquals('yes', static::findElement('label')->getText());
+        });
+    });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
+
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
                             <div class="container">
                             </div>
                             <button>Button</button>
