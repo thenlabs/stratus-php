@@ -302,6 +302,13 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
+        $jsValue = var_export($value, true);
+
+        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            let component = stratusAppInstance.getComponent('{$this->getId()}');
+            component.element.style['{$property}'] = {$jsValue};
+        JAVASCRIPT, false));
+
         $this->setPropertyOnFront("style.{$property}", $value);
     }
 
@@ -377,7 +384,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
     public function __set($name, $value)
     {
-        $this->setPropertyOnFront($name, $value);
+        $jsValue = is_string($value) ? "`{$value}`" : var_export($value, true);
+
+        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            let component = stratusAppInstance.getComponent('{$this->getId()}');
+            component.element['{$name}'] = {$jsValue};
+        JAVASCRIPT, false));
 
         $this->properties[$name] = $value;
     }
