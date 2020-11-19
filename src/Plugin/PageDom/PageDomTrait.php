@@ -86,5 +86,4 @@ trait PageDomTrait
             return $element;
         }
     }
-
 }

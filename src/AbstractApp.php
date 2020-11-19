@@ -16,7 +16,6 @@ use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterfac
 use ThenLabs\StratusPHP\Event\Event;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
-use ThenLabs\StratusPHP\Exception\MissingDataException;
 use ThenLabs\StratusPHP\Exception\FrontCallException;
 use ThenLabs\StratusPHP\Bus\BusInterface;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
