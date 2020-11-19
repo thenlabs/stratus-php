@@ -55,7 +55,7 @@ trait PageDomTrait
                 stratusAppInstance.addComponent(component);
 
                 return '{$element->getId()}';
-            JAVASCRIPT);
+            JAVASCRIPT, true);
 
             $componentId = $this->executeFrontCall($frontCall, false);
 

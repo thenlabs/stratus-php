@@ -387,7 +387,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
             $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
                 const component = stratusAppInstance.getComponent('{$this->getId()}');
                 component.registerCriticalProperty('{$name}');
-            JAVASCRIPT));
+            JAVASCRIPT, true));
         }
 
         return $this->properties[$name];

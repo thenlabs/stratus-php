@@ -375,7 +375,7 @@ abstract class AbstractApp extends AbstractCompositeView
         }
     }
 
-    public function executeFrontCall(FrontCall $frontCall, bool $queryMode = true)
+    public function executeFrontCall(FrontCall $frontCall)
     {
         $hash = $frontCall->getHash();
         $frontCalls = $this->currentRequest->getExecutedFrontCalls();
@@ -384,7 +384,7 @@ abstract class AbstractApp extends AbstractCompositeView
             return $frontCalls[$hash];
         }
 
-        if ($queryMode) {
+        if ($frontCall->getQueryMode()) {
             throw new FrontCallException($frontCall);
         } else {
             $this->bus->write([

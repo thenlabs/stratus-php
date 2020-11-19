@@ -10,10 +10,12 @@ class FrontCall
 {
     protected $script;
     protected $hash;
+    protected $queryMode;
 
-    public function __construct(string $script)
+    public function __construct(string $script, bool $queryMode)
     {
         $this->script = $script;
+        $this->queryMode = $queryMode;
 
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
@@ -28,5 +30,10 @@ class FrontCall
     public function getHash(): string
     {
         return $this->hash;
+    }
+
+    public function getQueryMode(): bool
+    {
+        return $this->queryMode;
     }
 }
