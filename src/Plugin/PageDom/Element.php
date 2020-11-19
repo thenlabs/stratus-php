@@ -10,7 +10,6 @@ use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
-use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use TypeError;
 use BadMethodCallException;
@@ -496,10 +495,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         $this->app->invokeJavaScriptFunction(self::class, $mode, [
             'componentId' => $this->getId(),
             'html' => (string) $child,
-        ]);
-
-        $this->app->invokeJavaScriptFunction(JavaScriptUtils::class, 'eval', [
-            'code' => $child->getJavaScriptCreateInstanceScript()
         ]);
     }
 

@@ -22,7 +22,6 @@ use ThenLabs\StratusPHP\Exception\FrontCallException;
 use ThenLabs\StratusPHP\Bus\BusInterface;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
-use ThenLabs\StratusPHP\JavaScript\JavaScriptUtils;
 use ThenLabs\StratusPHP\Plugin\PageDom\Element;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
@@ -63,8 +62,6 @@ abstract class AbstractApp extends AbstractCompositeView
 
         $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
-
-        $this->registerJavaScriptClass(JavaScriptUtils::class);
 
         $class = new ReflectionClass($this);
         $annotationReader = new AnnotationReader;
@@ -404,15 +401,5 @@ abstract class AbstractApp extends AbstractCompositeView
                 ]
             ]);
         }
-    }
-
-    // public function showAlert(string $text): void
-    // {
-    //     $this->invokeJavaScriptFunction(JavaScriptUtils::class, 'alert', compact('text'));
-    // }
-
-    public function redirect(string $url): void
-    {
-        $this->invokeJavaScriptFunction(JavaScriptUtils::class, 'redirect', compact('url'));
     }
 }

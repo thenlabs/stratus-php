@@ -1230,7 +1230,7 @@ testCase('PageDomTest.php', function () {
             $button = $app->querySelector('button');
             $button->onClick(function ($event) {
                 $app = $event->getApp();
-                $app->redirect('about:blank');
+                $app->getBrowser()->redirect('about:blank');
             });
 
             static::dumpApp($app);

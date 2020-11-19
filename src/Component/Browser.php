@@ -47,4 +47,13 @@ class Browser implements ComponentInterface
 
         $this->app->executeFrontCall($frontCall);
     }
+
+    public function redirect(string $url): void
+    {
+        $frontCall = new FrontCall(<<<JAVASCRIPT
+            window.location.href = '{$url}';
+        JAVASCRIPT, false);
+
+        $this->app->executeFrontCall($frontCall);
+    }
 }
