@@ -306,17 +306,6 @@ abstract class AbstractApp extends AbstractCompositeView
         $this->bus = $bus;
     }
 
-    public function invokeJavaScriptFunction(string $class, string $function, array $data): void
-    {
-        $this->bus->write([
-            'handler' => [
-                'classId' => $this->javaScriptClasses[$class],
-                'method' => $function,
-            ],
-            'data' => $data,
-        ]);
-    }
-
     public function __sleep()
     {
         $sanatizeDispatcher = function () {
