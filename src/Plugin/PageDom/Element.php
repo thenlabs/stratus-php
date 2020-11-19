@@ -60,16 +60,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
                 stratusAppInstance.addComponent(component);
             }
 
-            static setProperty(componentId, property, value) {
-                const element = app.getComponent(componentId).element;
-
-                if ('string' === typeof(value)) {
-                    value = '`' + value + '`';
-                }
-
-                eval(`element.\${property} = \${value}`);
-            }
-
             static remove(componentId) {
                 app.getComponent(componentId).element.remove();
 
@@ -308,8 +298,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.style['{$property}'] = {$jsValue};
         JAVASCRIPT, false));
-
-        $this->setPropertyOnFront("style.{$property}", $value);
     }
 
     public function getStyle(string $property): string
@@ -402,17 +390,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     public function updateData(string $key, $value): void
     {
         $this->properties[$key] = $value;
-    }
-
-    private function setPropertyOnFront(string $property, $value): void
-    {
-        $data = [
-            'componentId' => $this->getId(),
-            'property' => $property,
-            'value' => is_string($value) ? $value : var_export($value, true),
-        ];
-
-        $this->app->invokeJavaScriptFunction(self::class, 'setProperty', $data);
     }
 
     private function verifyAppBooted(string $method): void
