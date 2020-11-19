@@ -60,28 +60,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
                 stratusAppInstance.addComponent(component);
             }
 
-            static remove(componentId) {
-                app.getComponent(componentId).element.remove();
-
-                delete app.components[componentId];
-            }
-
-            static append(componentId, html) {
-                const newElement = document.createElement('DIV');
-                newElement.innerHTML = html;
-
-                const element = app.getComponent(componentId).element;
-                element.append(newElement.firstElementChild);
-            }
-
-            static prepend(componentId, html) {
-                const newElement = document.createElement('DIV');
-                newElement.innerHTML = html;
-
-                const element = app.getComponent(componentId).element;
-                element.prepend(newElement.firstElementChild);
-            }
-
             getCriticalData() {
                 let result = {};
 
@@ -424,9 +402,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->setParent(null);
 
-        $this->app->invokeJavaScriptFunction(self::class, 'remove', [
-            'componentId' => $this->getId(),
-        ]);
+        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            let component = stratusAppInstance.getComponent('{$this->getId()}');
+            component.element.remove();
+            delete stratusAppInstance.components[component.id];
+        JAVASCRIPT, false));
     }
 
     public function getProperties(): array
@@ -464,10 +444,15 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
         $this->addChild($child);
 
-        $this->app->invokeJavaScriptFunction(self::class, $mode, [
-            'componentId' => $this->getId(),
-            'html' => (string) $child,
-        ]);
+        $html = (string) $child;
+
+        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            const newElement = document.createElement('DIV');
+            newElement.innerHTML = `{$html}`;
+
+            const element = stratusAppInstance.getComponent('{$this->getId()}').element;
+            element.{$mode}(newElement.firstElementChild);
+        JAVASCRIPT, false));
     }
 
     public function prepend(self $child): void
