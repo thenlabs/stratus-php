@@ -13,6 +13,7 @@ use ThenLabs\StratusPHP\Annotation\OnConstructor;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
+use ThenLabs\StratusPHP\Component\Browser;
 use ThenLabs\StratusPHP\Event\Event;
 use ThenLabs\StratusPHP\Event\SleepChildEvent;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
@@ -47,6 +48,7 @@ abstract class AbstractApp extends AbstractCompositeView
     protected $inmutableView;
     protected $token;
     protected $currentRequest;
+    protected $browser;
 
     public function __construct(string $controllerUri)
     {
@@ -55,6 +57,9 @@ abstract class AbstractApp extends AbstractCompositeView
         $this->controllerUri = $controllerUri;
         $this->bus = new StreamingBus;
         $this->token = uniqid('token', true);
+
+        $this->browser = new Browser;
+        $this->browser->setApp($this);
 
         $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
@@ -69,6 +74,11 @@ abstract class AbstractApp extends AbstractCompositeView
                 call_user_func([$this, $method->getName()]);
             }
         }
+    }
+
+    public function getBrowser(): Browser
+    {
+        return $this->browser;
     }
 
     public function getOwnDependencies(): array
@@ -396,10 +406,10 @@ abstract class AbstractApp extends AbstractCompositeView
         }
     }
 
-    public function showAlert(string $text): void
-    {
-        $this->invokeJavaScriptFunction(JavaScriptUtils::class, 'alert', compact('text'));
-    }
+    // public function showAlert(string $text): void
+    // {
+    //     $this->invokeJavaScriptFunction(JavaScriptUtils::class, 'alert', compact('text'));
+    // }
 
     public function redirect(string $url): void
     {

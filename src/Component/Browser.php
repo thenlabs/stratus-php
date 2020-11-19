@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Component;
 
 use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\FrontCall;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -36,5 +37,14 @@ class Browser implements ComponentInterface
     {
         return <<<JAVASCRIPT
         JAVASCRIPT;
+    }
+
+    public function alert(string $text): void
+    {
+        $frontCall = new FrontCall(<<<JAVASCRIPT
+            alert('{$text}');
+        JAVASCRIPT, false);
+
+        $this->app->executeFrontCall($frontCall);
     }
 }

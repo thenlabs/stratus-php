@@ -1375,7 +1375,7 @@ testCase('PageDomTest.php', function () {
 
             $app->on('click', function ($event) {
                 $app = $event->getApp();
-                $app->showAlert('Clicked');
+                $app->getBrowser()->alert('Clicked');
             });
 
             static::dumpApp($app);
