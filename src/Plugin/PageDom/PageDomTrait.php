@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
 use ThenLabs\StratusPHP\Annotation\OnConstructor;
+use ThenLabs\StratusPHP\Event\SleepChildEvent;
 use ThenLabs\StratusPHP\FrontCall;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 
@@ -20,6 +21,8 @@ trait PageDomTrait
         $this->classListWithTotalInsertionCapability[] = Element::class;
 
         $this->registerJavaScriptClass(Element::class);
+
+        $this->eventDispatcher->addListener(SleepChildEvent::class, [$this, '_sleepElements']);
     }
 
     public function querySelector(string $selector): Element
@@ -86,6 +89,19 @@ trait PageDomTrait
             }
 
             return $element;
+        }
+    }
+
+    public function _sleepElements(SleepChildEvent $event): void
+    {
+        $child = $event->getChild();
+
+        if ($child instanceof Element) {
+            $child->setCrawler(null);
+
+            (function () {
+                $this->criticalProperties = [];
+            })->call($child);
         }
     }
 }

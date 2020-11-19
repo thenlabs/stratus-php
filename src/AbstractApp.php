@@ -14,6 +14,7 @@ use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
 use ThenLabs\StratusPHP\Event\Event;
+use ThenLabs\StratusPHP\Event\SleepChildEvent;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
 use ThenLabs\StratusPHP\Exception\FrontCallException;
@@ -331,13 +332,8 @@ abstract class AbstractApp extends AbstractCompositeView
         foreach ($this->children() as $child) {
             $removeParent->call($child);
 
-            if ($child instanceof Element) {
-                $child->setCrawler(null);
-
-                (function () {
-                    $this->criticalProperties = [];
-                })->call($child);
-            }
+            $sleepChildEvent = new SleepChildEvent($child);
+            $this->eventDispatcher->dispatch($sleepChildEvent);
 
             if ($child instanceof StratusComponentInterface) {
                 $child->setApp(null);
