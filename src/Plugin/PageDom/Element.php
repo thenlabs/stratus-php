@@ -70,14 +70,6 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
                 eval(`element.\${property} = \${value}`);
             }
 
-            static addClass(componentId, className) {
-                app.getComponent(componentId).element.classList.add(className);
-            }
-
-            static removeClass(componentId, className) {
-                app.getComponent(componentId).element.classList.remove(className);
-            }
-
             static remove(componentId) {
                 app.getComponent(componentId).element.remove();
 
@@ -290,20 +282,20 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->invokeJavaScriptFunction(self::class, 'addClass', [
-            'componentId' => $this->getId(),
-            'cssClass' => $cssClass,
-        ]);
+        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            let component = stratusAppInstance.getComponent('{$this->getId()}');
+            component.element.classList.add('{$cssClass}');
+        JAVASCRIPT, false));
     }
 
     public function removeClass(string $cssClass): void
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->invokeJavaScriptFunction(self::class, 'removeClass', [
-            'componentId' => $this->getId(),
-            'cssClass' => $cssClass,
-        ]);
+        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            let component = stratusAppInstance.getComponent('{$this->getId()}');
+            component.element.classList.remove('{$cssClass}');
+        JAVASCRIPT, false));
     }
 
     public function setStyle(string $property, string $value): void
