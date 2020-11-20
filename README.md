@@ -1,6 +1,11 @@
 
 # StratusPHP
 
+## Documentación.
+
+- [Español](https://thenlabs.org/es/doc/stratus-php/master/index.html)
+- [English](https:p//thenlabs.org/en/doc/stratus-php/master/index.html)
+
 ## Ejecutando las pruebas.
 
 Antes de ejecutar las pruebas es necesario iniciar el servidor web con el siguiente comando:
