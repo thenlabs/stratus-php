@@ -4,7 +4,7 @@
 ## Documentación.
 
 - [Español](https://thenlabs.org/es/doc/stratus-php/master/index.html)
-- [English](https:p//thenlabs.org/en/doc/stratus-php/master/index.html)
+- [English](https://thenlabs.org/en/doc/stratus-php/master/index.html)
 
 ## Ejecutando las pruebas.
 
