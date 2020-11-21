@@ -22,7 +22,6 @@ use ThenLabs\StratusPHP\Exception\FrontCallException;
 use ThenLabs\StratusPHP\Bus\BusInterface;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
-use ThenLabs\StratusPHP\Plugin\PageDom\Element;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -265,13 +264,6 @@ abstract class AbstractApp extends AbstractCompositeView
 
         try {
             if ($request->isCapture()) {
-                $targetCrawler = new HtmlPageCrawler($eventData['target']['innerHTML']);
-                $targetElement = new Element('');
-                $targetElement->setCrawler($targetCrawler);
-                $targetElement->setProperties($eventData['target']);
-
-                $event->setTarget($targetElement);
-
                 $component->getCaptureEventDispatcher()->dispatch($eventName, $event);
             } else {
                 $component->dispatchEvent($eventName, $event);

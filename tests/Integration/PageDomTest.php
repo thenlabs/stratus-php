@@ -10,6 +10,7 @@ use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Event\Event;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Wa72\HtmlPageDom\HtmlPageCrawler;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
@@ -1162,7 +1163,13 @@ testCase('PageDomTest.php', function () {
             $body->setId('body');
 
             $body->addEventListener('click', function ($event) use ($label) {
-                $button = $event->getTarget();
+                $eventData = $event->getEventData();
+                $crawler = new HtmlPageCrawler($eventData['target']['innerHTML']);
+
+                $button = new Element('');
+                $button->setCrawler($crawler);
+                $button->setProperties($eventData['target']);
+
                 $label->innerHTML = $button->innerHTML;
             }, true);
 
