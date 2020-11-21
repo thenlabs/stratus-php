@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
-use ThenLabs\StratusPHP\AbstractApp as TestApp;
+use ThenLabs\StratusPHP\Plugin\PageDom\AbstractApp as TestApp;
 use ThenLabs\StratusPHP\Plugin\PageDom\Element;
 use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Event\Event;
@@ -30,7 +30,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-                    use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                     public function getView(): string
                     {
@@ -78,7 +77,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-                    use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                     public function getView(): string
                     {
@@ -119,7 +117,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -167,7 +164,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -238,7 +234,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -309,7 +304,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -396,7 +390,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-                    use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                     public function getView(): string
                     {
@@ -438,7 +431,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-                    use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                     public function getView(): string
                     {
@@ -477,7 +469,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-                    use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                     public function getView(): string
                     {
@@ -517,7 +508,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-                    use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                     public function getView(): string
                     {
@@ -560,7 +550,6 @@ testCase('PageDomTest.php', function () {
             $value = uniqid();
 
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -611,7 +600,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -658,7 +646,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -705,7 +692,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -752,7 +738,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -795,7 +780,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -838,7 +822,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -905,7 +888,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-                    use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                     public function getView(): string
                     {
@@ -949,7 +931,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -995,7 +976,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1048,7 +1028,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1108,7 +1087,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1156,7 +1134,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1208,7 +1185,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1249,7 +1225,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1301,7 +1276,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1354,7 +1328,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1400,7 +1373,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1455,7 +1427,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
@@ -1509,7 +1480,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-                use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
                 {
