@@ -37,17 +37,61 @@ AnnotationRegistry::registerFile(__DIR__.'/Annotation/OnConstructor.php');
  */
 abstract class AbstractApp extends AbstractCompositeView
 {
+    /**
+     * @var string
+     */
     protected $controllerUri;
+
+    /**
+     * @var array
+     */
     protected $javaScriptClasses = [];
+
+    /**
+     * @var array
+     */
     protected $classListWithTotalInsertionCapability = [];
+
+    /**
+     * @var boolean
+     */
     protected $debug = false;
+
+    /**
+     * @var boolean
+     */
     protected $booted = false;
+
+    /**
+     * @var BusInterface
+     */
     protected $bus;
+
+    /**
+     * @var string
+     */
     protected $inmutableView;
+
+    /**
+     * @var string
+     */
     protected $token;
+
+    /**
+     * @var Request
+     */
     protected $currentRequest;
+
+    /**
+     * @var Browser
+     */
     protected $browser;
 
+    /**
+     * Uri of the processing controller.
+     *
+     * @param string $controllerUri
+     */
     public function __construct(string $controllerUri)
     {
         parent::__construct();
@@ -72,11 +116,17 @@ abstract class AbstractApp extends AbstractCompositeView
         }
     }
 
+    /**
+     * @return Browser
+     */
     public function getBrowser(): Browser
     {
         return $this->browser;
     }
 
+    /**
+     * @return array
+     */
     public function getOwnDependencies(): array
     {
         $stratusScript = new StratusScript('stratus-js', null, '');
@@ -87,6 +137,11 @@ abstract class AbstractApp extends AbstractCompositeView
         return compact('stratusScript', 'stratusInitScript');
     }
 
+    /**
+     * @param  array   $data
+     * @param  boolean $dispatchRenderEvent
+     * @return string
+     */
     public function render(array $data = [], bool $dispatchRenderEvent = true): string
     {
         $this->updateJavaScriptClasses();
@@ -94,16 +149,26 @@ abstract class AbstractApp extends AbstractCompositeView
         return parent::render($data, $dispatchRenderEvent);
     }
 
+    /**
+     * @return string
+     */
     public function getToken(): string
     {
         return $this->token;
     }
 
+    /**
+     * @return string
+     */
     public function getControllerUri(): string
     {
         return $this->controllerUri;
     }
 
+    /**
+     * @param  string $className
+     * @return string
+     */
     public function registerJavaScriptClass(string $className): string
     {
         $classId = $this->debug ? $className : uniqid('Class');
@@ -113,36 +178,58 @@ abstract class AbstractApp extends AbstractCompositeView
         return $classId;
     }
 
+    /**
+     * @param  string      $className
+     * @return string|null
+     */
     public function getJavaScriptClassId(string $className): ?string
     {
         return $this->javaScriptClasses[$className] ?? null;
     }
 
+    /**
+     * @return boolean
+     */
     public function isDebug(): bool
     {
         return $this->debug;
     }
 
+    /**
+     * @param boolean $debug
+     */
     public function setDebug(bool $debug): void
     {
         $this->debug = $debug;
     }
 
+    /**
+     * @return boolean
+     */
     public function isBooted(): bool
     {
         return $this->booted;
     }
 
+    /**
+     * @param boolean $booted
+     */
     public function setBooted(bool $booted): void
     {
         $this->booted = $booted;
     }
 
+    /**
+     * @return array
+     */
     public function getJavaScriptClasses(): array
     {
         return $this->javaScriptClasses;
     }
 
+    /**
+     * @param array $javaScriptClasses
+     */
     public function setJavaScriptClasses(array $javaScriptClasses): void
     {
         $this->javaScriptClasses = $javaScriptClasses;
@@ -174,6 +261,9 @@ abstract class AbstractApp extends AbstractCompositeView
         }
     }
 
+    /**
+     * @param RenderEvent $event
+     */
     public function _addStratusAssetScripts(RenderEvent $event): void
     {
         $body = $event->filter('body');
@@ -185,6 +275,9 @@ abstract class AbstractApp extends AbstractCompositeView
         }
     }
 
+    /**
+     * @param  BeforeInsertionEvent $event
+     */
     public function _beforeInsertionEvent(BeforeInsertionEvent $event): void
     {
         $child = $event->getChild();
@@ -200,16 +293,26 @@ abstract class AbstractApp extends AbstractCompositeView
         }
     }
 
+    /**
+     * @param  ComponentInterface $child
+     * @return boolean
+     */
     public function validateChild(ComponentInterface $child): bool
     {
         return true;
     }
 
+    /**
+     * @return boolean
+     */
     public function hasInmutableView(): bool
     {
         return $this->inmutableView ? true : false;
     }
 
+    /**
+     * @param callable $callback
+     */
     public function addFilter(callable $callback): void
     {
         if ($this->hasInmutableView()) {
@@ -219,6 +322,10 @@ abstract class AbstractApp extends AbstractCompositeView
         parent::addFilter($callback);
     }
 
+    /**
+     * @param  Request $request
+     * @return Response
+     */
     public function run(Request $request): Response
     {
         if (! $this->booted) {
@@ -288,11 +395,17 @@ abstract class AbstractApp extends AbstractCompositeView
         return $response;
     }
 
+    /**
+     * @return BusInterface
+     */
     public function getBus(): BusInterface
     {
         return $this->bus;
     }
 
+    /**
+     * @param BusInterface $bus
+     */
     public function setBus(BusInterface $bus): void
     {
         $this->bus = $bus;
@@ -363,6 +476,10 @@ abstract class AbstractApp extends AbstractCompositeView
         }
     }
 
+    /**
+     * @param  FrontCall $frontCall
+     * @return mixed
+     */
     public function executeFrontCall(FrontCall $frontCall)
     {
         $hash = $frontCall->getHash();
