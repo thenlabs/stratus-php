@@ -29,5 +29,12 @@ interface ComponentInterface extends JavaScriptInstanceInterface
      */
     public function updateData(string $key, $value): void;
 
+    /**
+     * Register a critical data of the component.
+     *
+     * The critical data of a component are sent in every request.
+     *
+     * @param  string $dataName
+     */
     public function registerCriticalData(string $dataName): void;
 }
