@@ -8,10 +8,16 @@ namespace ThenLabs\StratusPHP\Bus;
  */
 class StreamingBus implements BusInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function open()
     {
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write(array $data)
     {
         echo json_encode($data).'%SSS%';
@@ -20,6 +26,9 @@ class StreamingBus implements BusInterface
         flush();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function close()
     {
         die;
