@@ -377,9 +377,9 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         }
     }
 
-    public function registerCriticalProperty(string $property): void
+    public function registerCriticalData(string $dataName): void
     {
-        $this->criticalProperties[] = $property;
+        $this->criticalProperties[] = $dataName;
     }
 
     public function addEventListener(string $eventName, $listener, bool $capture = false): void

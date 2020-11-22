@@ -17,7 +17,7 @@ class Browser implements ComponentInterface
     {
     }
 
-    public function registerCriticalProperty(string $property): void
+    public function registerCriticalData(string $dataName): void
     {
     }
 

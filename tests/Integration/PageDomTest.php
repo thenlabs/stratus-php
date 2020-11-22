@@ -329,7 +329,7 @@ testCase('PageDomTest.php', function () {
             $input = $app->querySelector('input');
             $label = $app->querySelector('label');
 
-            $input->registerCriticalProperty('value');
+            $input->registerCriticalData('value');
 
             $listener = new EventListener;
             $listener->setBackListener(function () use ($input, $label) {

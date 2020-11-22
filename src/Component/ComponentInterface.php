@@ -29,5 +29,5 @@ interface ComponentInterface extends JavaScriptInstanceInterface
      */
     public function updateData(string $key, $value): void;
 
-    public function registerCriticalProperty(string $property): void;
+    public function registerCriticalData(string $dataName): void;
 }

@@ -366,7 +366,7 @@ testCase('FunctionalTest.php', function () {
             $body = $app->querySelector('body');
             $body->setId('body');
 
-            $body->registerCriticalProperty('attributes');
+            $body->registerCriticalData('attributes');
 
             static::dumpApp($app);
             static::openApp();
