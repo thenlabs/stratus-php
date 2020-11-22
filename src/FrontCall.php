@@ -8,10 +8,25 @@ namespace ThenLabs\StratusPHP;
  */
 class FrontCall
 {
+    /**
+     * @var string
+     */
     protected $script;
+
+    /**
+     * @var string
+     */
     protected $hash;
+
+    /**
+     * @var boolean
+     */
     protected $queryMode;
 
+    /**
+     * @param string  $script
+     * @param boolean $queryMode
+     */
     public function __construct(string $script, bool $queryMode)
     {
         $this->script = $script;
@@ -22,16 +37,25 @@ class FrontCall
         $this->hash = md5(serialize(compact('backtrace')));
     }
 
+    /**
+     * @return string
+     */
     public function getScript(): string
     {
         return $this->script;
     }
 
+    /**
+     * @return string
+     */
     public function getHash(): string
     {
         return $this->hash;
     }
 
+    /**
+     * @return boolean
+     */
     public function getQueryMode(): bool
     {
         return $this->queryMode;
