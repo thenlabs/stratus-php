@@ -10,13 +10,22 @@ use ThenLabs\StratusPHP\FrontCall;
  */
 class FrontCallException extends StratusException
 {
+    /**
+     * @var FrontCall
+     */
     protected $frontCall;
 
+    /**
+     * @param FrontCall $frontCall
+     */
     public function __construct(FrontCall $frontCall)
     {
         $this->frontCall = $frontCall;
     }
 
+    /**
+     * @return FrontCall
+     */
     public function getFrontCall(): FrontCall
     {
         return $this->frontCall;
