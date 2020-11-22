@@ -25,6 +25,10 @@ trait PageDomTrait
         $this->eventDispatcher->addListener(SleepChildEvent::class, [$this, '_sleepElements']);
     }
 
+    /**
+     * @param  string $selector css selector.
+     * @return Element
+     */
     public function querySelector(string $selector): Element
     {
         foreach ($this->childs as $component) {
