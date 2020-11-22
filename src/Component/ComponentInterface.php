@@ -24,8 +24,8 @@ interface ComponentInterface extends JavaScriptInstanceInterface
     /**
      * Update a data of the component.
      *
-     * @param  string $key   data name.
-     * @param  mixed  $value data value.
+     * @param string $key   data name.
+     * @param mixed  $value data value.
      */
     public function updateData(string $key, $value): void;
 
@@ -34,7 +34,7 @@ interface ComponentInterface extends JavaScriptInstanceInterface
      *
      * The critical data of a component are sent in every request.
      *
-     * @param  string $dataName
+     * @param string $dataName
      */
     public function registerCriticalData(string $dataName): void;
 }

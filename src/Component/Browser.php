@@ -11,36 +11,62 @@ use ThenLabs\StratusPHP\FrontCall;
  */
 class Browser implements ComponentInterface
 {
+    /**
+     * @var AbstractApp
+     */
     protected $app;
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateData(string $key, $value): void
     {
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function registerCriticalData(string $dataName): void
     {
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setApp(?AbstractApp $app): void
     {
         $this->app = $app;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getApp(): ?AbstractApp
     {
         return $this->app;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getJavaScriptClassMembers(): string
     {
         return '';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getJavaScriptCreateInstanceScript(): string
     {
         return '';
     }
 
+    /**
+     * Shows a browser native alert.
+     *
+     * @param string $text The message text.
+     */
     public function alert(string $text): void
     {
         $frontCall = new FrontCall(<<<JAVASCRIPT
@@ -50,6 +76,11 @@ class Browser implements ComponentInterface
         $this->app->executeFrontCall($frontCall);
     }
 
+    /**
+     * Shows a browser native confirmation.
+     *
+     * @param string $text The message text.
+     */
     public function confirm(string $text): bool
     {
         $frontCall = new FrontCall(<<<JAVASCRIPT
@@ -59,6 +90,12 @@ class Browser implements ComponentInterface
         return (bool) $this->app->executeFrontCall($frontCall);
     }
 
+    /**
+     * Shows a browser native prompt.
+     *
+     * @param  string $text The message text.
+     * @return string|null  The user answer.
+     */
     public function prompt(string $text): ?string
     {
         $frontCall = new FrontCall(<<<JAVASCRIPT
@@ -68,6 +105,11 @@ class Browser implements ComponentInterface
         return $this->app->executeFrontCall($frontCall);
     }
 
+    /**
+     * Redirect the browser.
+     *
+     * @param  string $url
+     */
     public function redirect(string $url): void
     {
         $frontCall = new FrontCall(<<<JAVASCRIPT
