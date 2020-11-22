@@ -15,29 +15,63 @@ use TypeError;
 use BadMethodCallException;
 
 /**
+ * Represents an Element of the page DOM.
+ *
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
 class Element implements CompositeComponentInterface, StratusComponentInterface
 {
     use CompositeComponentTrait;
 
+    /**
+     * @var string
+     */
     protected $selector;
+
+    /**
+     * @var array
+     */
     protected $properties = [];
+
+    /**
+     * @var array
+     */
     protected $criticalProperties = [];
+
+    /**
+     * @var HtmlPageCrawler|null
+     */
     protected $crawler;
+
+    /**
+     * @var AbstractApp
+     */
     protected $app;
+
+    /**
+     * @var string
+     */
     protected $jsVarName;
 
+    /**
+     * @param string $selector
+     */
     public function __construct(string $selector)
     {
         $this->selector = $selector;
     }
 
+    /**
+     * @param string $id
+     */
     public function setId(string $id): void
     {
         $this->id = $id;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getJavaScriptClassMembers(): string
     {
         return <<<JAVASCRIPT
@@ -76,6 +110,9 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         JAVASCRIPT;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getJavaScriptCreateInstanceScript(): string
     {
         $myId = $this->getId();
@@ -197,6 +234,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         throw new BadMethodCallException($exceptionMessage);
     }
 
+    /**
+     * Sets an attribute to the HTML element.
+     *
+     * @param string $attribute
+     * @param mixed  $value
+     */
     public function setAttribute(string $attribute, $value): void
     {
         $this->verifyAppBooted(__METHOD__);
@@ -215,6 +258,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         $this->properties['attributes'][$attribute] = $value;
     }
 
+    /**
+     * Returns an attribute of the HTML element.
+     *
+     * @param  string $attribute
+     * @return mixed
+     */
     public function getAttribute(string $attribute)
     {
         $this->verifyAppBooted(__METHOD__);
@@ -222,6 +271,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         return $this->attributes[$attribute];
     }
 
+    /**
+     * Checks if the HTML element has an attribute.
+     *
+     * @param  string  $attribute
+     * @return boolean
+     */
     public function hasAttribute(string $attribute): bool
     {
         $this->verifyAppBooted(__METHOD__);
@@ -229,6 +284,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         return isset($this->attributes[$attribute]);
     }
 
+    /**
+     * Remove an attribute of the HTML element.
+     *
+     * @param string $attribute
+     */
     public function removeAttribute(string $attribute): void
     {
         $this->verifyAppBooted(__METHOD__);
@@ -239,6 +299,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         JAVASCRIPT, false));
     }
 
+    /**
+     * Checks if the HTML element has assigned a css class.
+     *
+     * @param  string  $cssClass
+     * @return boolean
+     */
     public function hasClass(string $cssClass): bool
     {
         $this->verifyAppBooted(__METHOD__);
@@ -246,6 +312,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         return in_array($cssClass, $this->classList);
     }
 
+    /**
+     * Adds a css class to the HTML element.
+     *
+     * @param string $cssClass
+     */
     public function addClass(string $cssClass): void
     {
         $this->verifyAppBooted(__METHOD__);
@@ -256,6 +327,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         JAVASCRIPT, false));
     }
 
+    /**
+     * Remove a css class of the HTML element.
+     *
+     * @param  string $cssClass
+     */
     public function removeClass(string $cssClass): void
     {
         $this->verifyAppBooted(__METHOD__);
@@ -266,6 +342,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         JAVASCRIPT, false));
     }
 
+    /**
+     * Sets a css property on the HTML element.
+     *
+     * @param string $property
+     * @param string $value
+     */
     public function setStyle(string $property, string $value): void
     {
         $this->verifyAppBooted(__METHOD__);
@@ -278,6 +360,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         JAVASCRIPT, false));
     }
 
+    /**
+     * Returns a css property of the HTML element.
+     *
+     * @param  string $property
+     * @return string
+     */
     public function getStyle(string $property): string
     {
         $this->verifyAppBooted(__METHOD__);
@@ -285,21 +373,36 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         return $this->style[$property];
     }
 
+    /**
+     * @return HtmlPageCrawler|null
+     */
     public function getCrawler(): ?HtmlPageCrawler
     {
         return $this->crawler;
     }
 
+    /**
+     * @param HtmlPageCrawler|null $crawler
+     */
     public function setCrawler(?HtmlPageCrawler $crawler): void
     {
         $this->crawler = $crawler;
     }
 
+    /**
+     * @return string
+     */
     public function getSelector(): string
     {
         return $this->selector;
     }
 
+    /**
+     * Returns a child element.
+     *
+     * @param  string $selector the css selector.
+     * @return self|null
+     */
     public function querySelector(string $selector): self
     {
         foreach ($this->childs as $component) {
@@ -326,16 +429,25 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         }
     }
 
+    /**
+     * @param AbstractApp|null $app
+     */
     public function setApp(?AbstractApp $app): void
     {
         $this->app = $app;
     }
 
+    /**
+     * @return AbstractApp|null
+     */
     public function getApp(): ?AbstractApp
     {
         return $this->app;
     }
 
+    /**
+     * Returns a property of the HTML element.
+     */
     public function __get($name)
     {
         if (! array_key_exists($name, $this->properties)) {
@@ -348,6 +460,9 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         return $this->properties[$name];
     }
 
+    /**
+     * Sets a property on the HTML element.
+     */
     public function __set($name, $value)
     {
         $jsValue = is_string($value) ? "`{$value}`" : var_export($value, true);
@@ -365,6 +480,9 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateData(string $key, $value): void
     {
         $this->properties[$key] = $value;
@@ -377,11 +495,19 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function registerCriticalData(string $dataName): void
     {
         $this->criticalProperties[] = $dataName;
     }
 
+    /**
+     * @param string   $eventName
+     * @param callable $listener
+     * @param boolean  $capture
+     */
     public function addEventListener(string $eventName, $listener, bool $capture = false): void
     {
         if (is_callable($listener)) {
@@ -398,6 +524,9 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         throw new TypeError('Invalid listener.');
     }
 
+    /**
+     * Remove the HTML element and this component.
+     */
     public function remove(): void
     {
         $this->setParent(null);
@@ -409,21 +538,34 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         JAVASCRIPT, false));
     }
 
+    /**
+     * @return array
+     */
     public function getProperties(): array
     {
         return $this->properties;
     }
 
+    /**
+     * @param array $properties
+     */
     public function setProperties(array $properties): void
     {
         $this->properties = $properties;
     }
 
+    /**
+     * @param string $jsVarName
+     */
     public function setJsVarName(string $jsVarName): void
     {
         $this->jsVarName = $jsVarName;
     }
 
+    /**
+     * @param  string $html
+     * @return self
+     */
     public static function createFromString(string $html): self
     {
         $crawler = new HtmlPageCrawler($html);
@@ -434,6 +576,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         return $element;
     }
 
+    /**
+     * Append a child on the HTML element.
+     *
+     * @param  self   $child
+     * @param  string $mode  The mode may be 'append' or 'prepend'.
+     */
     public function append(self $child, string $mode = 'append'): void
     {
         $this->verifyAppBooted(__METHOD__);
@@ -455,6 +603,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         JAVASCRIPT, false));
     }
 
+    /**
+     * Prepend a child on the HTML element.
+     *
+     * @param  self $child
+     */
     public function prepend(self $child): void
     {
         $this->append($child, 'prepend');
