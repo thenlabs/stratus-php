@@ -11,10 +11,22 @@ use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
  */
 interface ComponentInterface extends JavaScriptInstanceInterface
 {
+    /**
+     * @param AbstractApp|null $app
+     */
     public function setApp(?AbstractApp $app): void;
 
+    /**
+     * @return AbstractApp|null
+     */
     public function getApp(): ?AbstractApp;
 
+    /**
+     * Update a data of the component.
+     *
+     * @param  string $key   data name.
+     * @param  mixed  $value data value.
+     */
     public function updateData(string $key, $value): void;
 
     public function registerCriticalProperty(string $property): void;
