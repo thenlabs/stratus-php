@@ -8,13 +8,22 @@ namespace ThenLabs\StratusPHP;
  */
 class Response
 {
+    /**
+     * @var boolean
+     */
     protected $successful = true;
 
+    /**
+     * @return boolean
+     */
     public function isSuccessful(): bool
     {
         return $this->successful;
     }
 
+    /**
+     * @param bool $successful
+     */
     public function setSuccessful(bool $successful): void
     {
         $this->successful = $successful;
