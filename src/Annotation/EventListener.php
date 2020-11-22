@@ -10,7 +10,13 @@ namespace ThenLabs\StratusPHP\Annotation;
  */
 class EventListener
 {
+    /**
+     * @var array
+     */
     public $fetchData = [];
 
+    /**
+     * @var string
+     */
     public $frontListener;
 }

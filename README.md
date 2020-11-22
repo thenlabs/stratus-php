@@ -14,7 +14,7 @@ Antes de ejecutar las pruebas es necesario iniciar el servidor web con el siguie
 
 Seguidamente se deberá iniciar Selenium Server de la siguiente manera:
 
-    $ java -jar selenium-server-standalone-<x.y.z>.jar
+    $ java -jar /path/to/selenium-server-standalone-<x.y.z>.jar
 
 Sustituya `<x.y.z>` por su valor correspondiente.
 
