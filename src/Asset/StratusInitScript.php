@@ -14,13 +14,22 @@ use ReflectionClass;
  */
 class StratusInitScript extends Script
 {
+    /**
+     * @var AbstractApp
+     */
     protected $app;
 
+    /**
+     * @param AbstractApp $app
+     */
     public function setApp(AbstractApp $app): void
     {
         $this->app = $app;
     }
 
+    /**
+     * @return string
+     */
     public function getSource(): string
     {
         $jsClasses = '';
