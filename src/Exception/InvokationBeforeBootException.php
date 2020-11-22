@@ -8,6 +8,9 @@ namespace ThenLabs\StratusPHP\Exception;
  */
 class InvokationBeforeBootException extends StratusException
 {
+    /**
+     * @param string $method
+     */
     public function __construct(string $method)
     {
         parent::__construct("The '{$method}' method can only be called once the app has been booted.");

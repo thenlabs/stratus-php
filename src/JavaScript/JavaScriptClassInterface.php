@@ -8,5 +8,8 @@ namespace ThenLabs\StratusPHP\JavaScript;
  */
 interface JavaScriptClassInterface
 {
+    /**
+     * @return string The JavaScript source code that define the members of the class.
+     */
     public static function getJavaScriptClassMembers(): string;
 }
