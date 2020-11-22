@@ -22,6 +22,9 @@ trait SElementsTrait
      */
     // use PageDomTrait;
 
+    /**
+     * @var string
+     */
     protected $attributeForElements = 's-element';
 
     /**
