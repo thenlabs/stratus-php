@@ -24,7 +24,7 @@
         }
     },
     "require": {
-        "thenlabs/composed-views": "^1.0",
+        "thenlabs/composed-views": "^1.0.7",
         "thenlabs/class-builder": "^1.0",
         "opis/closure": "^3.5"
     }

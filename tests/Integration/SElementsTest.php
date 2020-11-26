@@ -377,4 +377,64 @@ testCase('SElementsTest.php', function () {
             $this->assertEquals('key: a keyCode: 97', $label->getText());
         });
     });
+
+    testCase(function () {
+        setUpBeforeClassOnce(function () {
+            $app = new class('') extends TestApp {
+
+                public function getView(): string
+                {
+                    return <<<HTML
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Document</title>
+                        </head>
+                        <body>
+                            <input s-element="myInput" type="text" name="">
+                            <label s-element="myLabel"></label>
+                        </body>
+                        </html>
+                    HTML;
+                }
+
+                /**
+                 * @EventListener(
+                 *     fetchData={"key", "keyCode"},
+                 *     frontListener="
+                 *         if (! (eventData.keyCode >= 97 && eventData.keyCode <= 122)) {
+                 *             myLabel.textContent = 'Only lower letters they are accepted.';
+                 *             event.backListener = false;
+                 *         }
+                 *     "
+                 * )
+                 */
+                public function onKeypressMyInput($event)
+                {
+                    $eventData = $event->getEventData();
+                    extract($eventData);
+                    $this->myLabel->textContent = "key: {$key} keyCode: {$keyCode}";
+                }
+            };
+
+            static::dumpApp($app);
+            static::openApp();
+        });
+
+        test(function () {
+            $input = static::findElement('input');
+            $label = static::findElement('label');
+
+            $input->sendKeys('1');
+            static::waitForResponse();
+
+            $this->assertEquals('Only lower letters they are accepted.', $label->getText());
+
+            $input->sendKeys('a');
+            static::waitForResponse();
+
+            $this->assertEquals('key: a keyCode: 97', $label->getText());
+        });
+    });
 });
