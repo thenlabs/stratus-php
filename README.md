@@ -1,24 +1,26 @@
 
 # StratusPHP
 
-## Documentación.
+PHP framework for creating single page applications using the event driven programming paradigm between browser and server.
+
+## Documentation.
 
 - [Español](https://thenlabs.org/es/doc/stratus-php/master/index.html)
 - [English](https://thenlabs.org/en/doc/stratus-php/master/index.html)
 
-## Ejecutando las pruebas.
+## Running the tests.
 
-Antes de ejecutar las pruebas es necesario iniciar el servidor web con el siguiente comando:
+Before start the tests it's necesary start the web server with the next command:
 
     $ php -S localhost:8000 -t tests/public
 
-Seguidamente se deberá iniciar Selenium Server de la siguiente manera:
+Then Selenium Server must be started as follows:
 
     $ java -jar /path/to/selenium-server-standalone-<x.y.z>.jar
 
-Sustituya `<x.y.z>` por su valor correspondiente.
+Change `<x.y.z>` for respective value.
 
-Una vez realizados los pasos anteriores será posible ejecutar las pruebas con el siguiente comando:
+Once the previous steps have been carried out, it will be possible to run the tests with the following command:
 
     $ ./vendor/bin/phpunit
 
