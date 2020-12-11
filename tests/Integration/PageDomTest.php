@@ -31,7 +31,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-
                     public function getView(): string
                     {
                         return <<<HTML
@@ -78,7 +77,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-
                     public function getView(): string
                     {
                         return <<<HTML
@@ -118,7 +116,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -165,7 +162,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -235,7 +231,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -305,7 +300,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -391,7 +385,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-
                     public function getView(): string
                     {
                         return <<<HTML
@@ -432,7 +425,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-
                     public function getView(): string
                     {
                         return <<<HTML
@@ -470,7 +462,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-
                     public function getView(): string
                     {
                         return <<<HTML
@@ -509,7 +500,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-
                     public function getView(): string
                     {
                         return <<<HTML
@@ -551,7 +541,6 @@ testCase('PageDomTest.php', function () {
             $value = uniqid();
 
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -601,7 +590,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -647,7 +635,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -693,7 +680,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -739,7 +725,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -781,7 +766,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -823,7 +807,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -889,7 +872,6 @@ testCase('PageDomTest.php', function () {
         testCase(function () {
             setUpBeforeClassOnce(function () {
                 $app = new class('') extends TestApp {
-
                     public function getView(): string
                     {
                         return <<<HTML
@@ -932,7 +914,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -977,7 +958,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1029,7 +1009,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1088,7 +1067,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1135,7 +1113,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1192,7 +1169,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1232,7 +1208,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1283,7 +1258,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1335,7 +1309,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1380,7 +1353,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1434,7 +1406,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1487,7 +1458,6 @@ testCase('PageDomTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML

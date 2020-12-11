@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Component;
 
 use ThenLabs\StratusPHP\AbstractApp;
-use ThenLabs\StratusPHP\FrontCall;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -69,11 +68,7 @@ class Browser implements ComponentInterface
      */
     public function alert(string $text): void
     {
-        $frontCall = new FrontCall(<<<JAVASCRIPT
-            alert('{$text}');
-        JAVASCRIPT, false);
-
-        $this->app->executeFrontCall($frontCall);
+        $this->app->executeScript("alert('{$text}');", false);
     }
 
     /**
@@ -83,11 +78,7 @@ class Browser implements ComponentInterface
      */
     public function confirm(string $text): bool
     {
-        $frontCall = new FrontCall(<<<JAVASCRIPT
-            return confirm('{$text}');
-        JAVASCRIPT, true);
-
-        return (bool) $this->app->executeFrontCall($frontCall);
+        return (bool) $this->app->executeScript("return confirm('{$text}');", true);
     }
 
     /**
@@ -98,11 +89,7 @@ class Browser implements ComponentInterface
      */
     public function prompt(string $text): ?string
     {
-        $frontCall = new FrontCall(<<<JAVASCRIPT
-            return prompt('{$text}');
-        JAVASCRIPT, true);
-
-        return $this->app->executeFrontCall($frontCall);
+        return $this->app->executeScript("return prompt('{$text}');", true);
     }
 
     /**
@@ -112,10 +99,6 @@ class Browser implements ComponentInterface
      */
     public function redirect(string $url): void
     {
-        $frontCall = new FrontCall(<<<JAVASCRIPT
-            window.location.href = '{$url}';
-        JAVASCRIPT, false);
-
-        $this->app->executeFrontCall($frontCall);
+        $this->app->executeScript("window.location.href = '{$url}';", false);
     }
 }

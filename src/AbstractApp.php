@@ -23,7 +23,6 @@ use ThenLabs\StratusPHP\Bus\BusInterface;
 use ThenLabs\StratusPHP\Bus\StreamingBus;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Wa72\HtmlPageDom\HtmlPageCrawler;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
 use ReflectionClass;
@@ -480,7 +479,7 @@ abstract class AbstractApp extends AbstractCompositeView
      * @param  FrontCall $frontCall
      * @return mixed
      */
-    public function executeFrontCall(FrontCall $frontCall)
+    private function executeFrontCall(FrontCall $frontCall)
     {
         $hash = $frontCall->getHash();
         $frontCalls = $this->currentRequest->getExecutedFrontCalls();
@@ -499,5 +498,17 @@ abstract class AbstractApp extends AbstractCompositeView
                 ]
             ]);
         }
+    }
+
+    /**
+     * @param  string $script
+     * @param  bool   $queryMode
+     * @return mixed
+     */
+    public function executeScript(string $script, bool $queryMode)
+    {
+        $frontCall = new FrontCall($script, $queryMode);
+
+        return $this->executeFrontCall($frontCall);
     }
 }

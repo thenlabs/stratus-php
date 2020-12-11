@@ -5,7 +5,6 @@ namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
 use ThenLabs\StratusPHP\Annotation\OnConstructor;
 use ThenLabs\StratusPHP\Event\SleepChildEvent;
-use ThenLabs\StratusPHP\FrontCall;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 
 /**
@@ -47,7 +46,7 @@ trait PageDomTrait
 
             $elementJavaScriptClassId = $this->getJavaScriptClassId(Element::class);
 
-            $frontCall = new FrontCall(<<<JAVASCRIPT
+            $componentId = $this->executeScript(<<<JAVASCRIPT
                 const StratusElement = stratusAppInstance.classes['{$elementJavaScriptClassId}'];
 
                 const component = new StratusElement(
@@ -60,8 +59,6 @@ trait PageDomTrait
 
                 return '{$element->getId()}';
             JAVASCRIPT, true);
-
-            $componentId = $this->executeFrontCall($frontCall, false);
 
             if ($componentId) {
                 $element->setId($componentId);

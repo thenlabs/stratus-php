@@ -14,7 +14,6 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -61,7 +60,6 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -108,7 +106,6 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -163,7 +160,6 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -214,7 +210,6 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -272,7 +267,6 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -334,7 +328,6 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
@@ -381,7 +374,6 @@ testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $app = new class('') extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML

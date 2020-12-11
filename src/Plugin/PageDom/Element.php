@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
 use ThenLabs\StratusPHP\AbstractApp;
-use ThenLabs\StratusPHP\FrontCall;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
@@ -246,10 +245,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
         $jsValue = var_export($value, true);
 
-        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+        $this->app->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.setAttribute('{$attribute}', {$jsValue});
-        JAVASCRIPT, false));
+        JAVASCRIPT, false);
 
         if (! isset($this->properties['attributes'])) {
             $this->properties['attributes'] = [];
@@ -293,10 +292,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+        $this->app->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.removeAttribute('{$attribute}');
-        JAVASCRIPT, false));
+        JAVASCRIPT, false);
     }
 
     /**
@@ -321,10 +320,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+        $this->app->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.classList.add('{$cssClass}');
-        JAVASCRIPT, false));
+        JAVASCRIPT, false);
     }
 
     /**
@@ -336,10 +335,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+        $this->app->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.classList.remove('{$cssClass}');
-        JAVASCRIPT, false));
+        JAVASCRIPT, false);
     }
 
     /**
@@ -354,10 +353,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
         $jsValue = var_export($value, true);
 
-        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+        $this->app->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.style['{$property}'] = {$jsValue};
-        JAVASCRIPT, false));
+        JAVASCRIPT, false);
     }
 
     /**
@@ -451,10 +450,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     public function __get($name)
     {
         if (! array_key_exists($name, $this->properties)) {
-            $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+            $this->app->executeScript(<<<JAVASCRIPT
                 const component = stratusAppInstance.getComponent('{$this->getId()}');
                 component.registerCriticalProperty('{$name}');
-            JAVASCRIPT, true));
+            JAVASCRIPT, true);
         }
 
         return $this->properties[$name];
@@ -467,10 +466,10 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $jsValue = is_string($value) ? "`{$value}`" : var_export($value, true);
 
-        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+        $this->app->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element['{$name}'] = {$jsValue};
-        JAVASCRIPT, false));
+        JAVASCRIPT, false);
 
         $this->properties[$name] = $value;
     }
@@ -531,11 +530,11 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->setParent(null);
 
-        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+        $this->app->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.remove();
             delete stratusAppInstance.components[component.id];
-        JAVASCRIPT, false));
+        JAVASCRIPT, false);
     }
 
     /**
@@ -594,13 +593,13 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
         $html = (string) $child;
 
-        $this->app->executeFrontCall(new FrontCall(<<<JAVASCRIPT
+        $this->app->executeScript(<<<JAVASCRIPT
             const newElement = document.createElement('DIV');
             newElement.innerHTML = `{$html}`;
 
             const element = stratusAppInstance.getComponent('{$this->getId()}').element;
             element.{$mode}(newElement.firstElementChild);
-        JAVASCRIPT, false));
+        JAVASCRIPT, false);
     }
 
     /**
