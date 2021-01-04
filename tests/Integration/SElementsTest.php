@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
-use ThenLabs\StratusPHP\Plugin\SElements\AbstractApp as TestApp;
+use ThenLabs\StratusPHP\Plugin\SElements\AbstractPage as TestApp;
 use ThenLabs\StratusPHP\Annotation\EventListener;
 
 setTestCaseNamespace(__NAMESPACE__);
@@ -13,7 +13,7 @@ setTestCaseClass(SeleniumTestCase::class);
 testCase('SElementsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -38,7 +38,7 @@ testCase('SElementsTest.php', function () {
                 }
             };
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -59,7 +59,7 @@ testCase('SElementsTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -84,7 +84,7 @@ testCase('SElementsTest.php', function () {
                 }
             };
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -105,7 +105,7 @@ testCase('SElementsTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -134,7 +134,7 @@ testCase('SElementsTest.php', function () {
                 }
             };
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -159,7 +159,7 @@ testCase('SElementsTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -191,7 +191,7 @@ testCase('SElementsTest.php', function () {
                 }
             };
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -209,7 +209,7 @@ testCase('SElementsTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -248,7 +248,7 @@ testCase('SElementsTest.php', function () {
                 }
             };
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -266,7 +266,7 @@ testCase('SElementsTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -309,7 +309,7 @@ testCase('SElementsTest.php', function () {
                 }
             };
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -327,7 +327,7 @@ testCase('SElementsTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -356,7 +356,7 @@ testCase('SElementsTest.php', function () {
                 }
             };
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -373,7 +373,7 @@ testCase('SElementsTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -410,7 +410,7 @@ testCase('SElementsTest.php', function () {
                 }
             };
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 

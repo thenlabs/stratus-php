@@ -8,9 +8,9 @@ if (isset($_GET['data'])) {
     extract(unserialize($_GET['data']));
 }
 
-$app = require_once __DIR__.'/app.php';
+$page = require_once __DIR__.'/page.php';
 
 session_start();
-$_SESSION['app'] = s($app);
+$_SESSION['page'] = s($page);
 
-echo $app;
+echo $page;

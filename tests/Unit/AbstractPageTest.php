@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Tests\Unit;
 
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractPage;
 use ThenLabs\StratusPHP\Request;
 use ThenLabs\StratusPHP\Exception\InmutableViewException;
 use ThenLabs\StratusPHP\Exception\InvalidTokenException;
@@ -14,12 +14,12 @@ use ThenLabs\Components\ComponentTrait;
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(TestCase::class);
 
-testCase('AbstractAppTest.php', function () {
+testCase('AbstractPageTest.php', function () {
     testCase(function () {
         setUp(function () {
             $this->controllerUri = uniqid('controllerUri');
 
-            $this->app = new class($this->controllerUri) extends AbstractApp {
+            $this->page = new class($this->controllerUri) extends AbstractPage {
                 use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
@@ -41,39 +41,30 @@ testCase('AbstractAppTest.php', function () {
         });
 
         test(function () {
-            $this->assertEquals($this->controllerUri, $this->app->getControllerUri());
+            $this->assertEquals($this->controllerUri, $this->page->getControllerUri());
         });
 
         test(function () {
-            $token = $this->app->getToken();
+            $token = $this->page->getToken();
 
             $this->assertStringStartsWith('token', $token);
             $this->assertGreaterThan(23, strlen($token));
         });
 
         test(function () {
-            $this->assertFalse($this->app->isDebug());
+            $this->assertFalse($this->page->isDebug());
         });
 
         test(function () {
-            $this->assertFalse($this->app->isBooted());
+            $this->assertFalse($this->page->isBooted());
         });
 
         test(function () {
-            $this->assertFalse($this->app->hasInmutableView());
+            $this->assertFalse($this->page->hasInmutableView());
         });
 
         test(function () {
-            $this->assertNull($this->app->getJavaScriptClassId(uniqid('Class')));
-        });
-
-        test(function () {
-            $this->expectException(InvalidTokenException::class);
-
-            $request = new Request;
-            $request->setToken(uniqid());
-
-            $this->app->run($request);
+            $this->assertNull($this->page->getJavaScriptClassId(uniqid('Class')));
         });
 
         test(function () {
@@ -82,37 +73,46 @@ testCase('AbstractAppTest.php', function () {
             $request = new Request;
             $request->setToken(uniqid());
 
-            $this->app->run($request);
+            $this->page->run($request);
         });
 
         test(function () {
-            $this->body = $this->app->querySelector('body');
+            $this->expectException(InvalidTokenException::class);
+
+            $request = new Request;
+            $request->setToken(uniqid());
+
+            $this->page->run($request);
+        });
+
+        test(function () {
+            $this->body = $this->page->querySelector('body');
             $this->button = $this->body->querySelector('button');
 
-            $this->assertSame($this->app, $this->body->getApp());
-            $this->assertSame($this->app, $this->button->getApp());
+            $this->assertSame($this->page, $this->body->getPage());
+            $this->assertSame($this->page, $this->button->getPage());
         });
 
         testCase(function () {
             setUp(function () {
-                $this->app->setDebug(true);
+                $this->page->setDebug(true);
             });
 
             test(function () {
-                $this->assertTrue($this->app->isDebug());
+                $this->assertTrue($this->page->isDebug());
             });
 
             testCase(function () {
                 setUp(function () {
                     $this->className = uniqid('Class');
 
-                    $this->app->registerJavaScriptClass($this->className);
+                    $this->page->registerJavaScriptClass($this->className);
                 });
 
                 test(function () {
                     $this->assertSame(
                         $this->className,
-                        $this->app->getJavaScriptClassId($this->className)
+                        $this->page->getJavaScriptClassId($this->className)
                     );
                 });
             });
@@ -122,11 +122,11 @@ testCase('AbstractAppTest.php', function () {
             setUp(function () {
                 $this->className = uniqid('Class');
 
-                $this->app->registerJavaScriptClass($this->className);
+                $this->page->registerJavaScriptClass($this->className);
             });
 
             test(function () {
-                $jsClassId = $this->app->getJavaScriptClassId($this->className);
+                $jsClassId = $this->page->getJavaScriptClassId($this->className);
 
                 $this->assertNotEquals($this->className, $jsClassId);
                 $this->assertStringStartsWith('Class', $jsClassId);
@@ -136,29 +136,29 @@ testCase('AbstractAppTest.php', function () {
 
         testCase(function () {
             setUp(function () {
-                $this->app->setBooted(true);
+                $this->page->setBooted(true);
             });
 
             test(function () {
-                $this->assertTrue($this->app->isBooted());
+                $this->assertTrue($this->page->isBooted());
             });
         });
 
         testCase(function () {
             setUp(function () {
-                $this->buttonElement = $this->app->querySelector('button');
+                $this->buttonElement = $this->page->querySelector('button');
             });
 
             test(function () {
-                $this->assertSame($this->buttonElement, $this->app->querySelector('button'));
+                $this->assertSame($this->buttonElement, $this->page->querySelector('button'));
             });
 
             test(function () {
-                $this->assertTrue($this->app->hasInmutableView());
+                $this->assertTrue($this->page->hasInmutableView());
             });
 
             test(function () {
-                $this->assertSame($this->app, $this->buttonElement->getApp());
+                $this->assertSame($this->page, $this->buttonElement->getPage());
             });
 
             testCase(function () {
@@ -167,7 +167,7 @@ testCase('AbstractAppTest.php', function () {
                 });
 
                 test(function () {
-                    $this->app->addFilter(function () {
+                    $this->page->addFilter(function () {
                     });
                 });
 
@@ -176,7 +176,7 @@ testCase('AbstractAppTest.php', function () {
                         use ComponentTrait;
                     };
 
-                    $this->app->addChild($child);
+                    $this->page->addChild($child);
                 });
             });
         });

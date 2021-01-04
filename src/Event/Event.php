@@ -24,7 +24,7 @@ class Event extends ComponentsEvent
     /**
      * @return AbstractPage
      */
-    public function getApp(): AbstractPage
+    public function getPage(): AbstractPage
     {
         return $this->page;
     }
@@ -32,7 +32,7 @@ class Event extends ComponentsEvent
     /**
      * @param AbstractPage $page
      */
-    public function setApp(AbstractPage $page): void
+    public function setPage(AbstractPage $page): void
     {
         $this->page = $page;
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests\Integration;
 
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
-use ThenLabs\StratusPHP\Plugin\PageDom\AbstractApp as TestApp;
+use ThenLabs\StratusPHP\Plugin\PageDom\AbstractPage as TestApp;
 use ThenLabs\StratusPHP\Plugin\PageDom\Element;
 use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Event\Event;
@@ -30,7 +30,7 @@ testCase('PageDomTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends TestApp {
+                $page = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -50,17 +50,17 @@ testCase('PageDomTest.php', function () {
 
                     public function listener($event): void
                     {
-                        $app = $event->getApp();
-                        $label = $app->querySelector('label');
+                        $page = $event->getPage();
+                        $label = $page->querySelector('label');
 
                         $label->innerHTML = uniqid();
                         $label->style = 'color: red';
                     }
                 };
 
-                $app->querySelector('button')->onClick([$app, 'listener']);
+                $page->querySelector('button')->onClick([$page, 'listener']);
 
-                static::dumpApp($app);
+                static::dumpApp($page);
                 static::openApp();
             });
 
@@ -76,7 +76,7 @@ testCase('PageDomTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends TestApp {
+                $page = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -96,16 +96,16 @@ testCase('PageDomTest.php', function () {
 
                     public function onButtonClick($event): void
                     {
-                        $app = $event->getApp();
-                        $label = $app->querySelector('label');
+                        $page = $event->getPage();
+                        $label = $page->querySelector('label');
 
                         $label->innerHTML = uniqid();
                     }
                 };
 
-                $app->querySelector('button')->onClick([$app, 'onButtonClick']);
+                $page->querySelector('button')->onClick([$page, 'onButtonClick']);
 
-                static::dumpApp($app);
+                static::dumpApp($page);
                 static::openApp();
             });
 
@@ -115,7 +115,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -135,16 +135,16 @@ testCase('PageDomTest.php', function () {
 
                 public function onButtonClick($event): void
                 {
-                    $label = $event->getApp()->querySelector('label');
+                    $label = $event->getPage()->querySelector('label');
 
                     $label->innerHTML = uniqid();
                     $label->setStyle('color', 'red');
                 }
             };
 
-            $app->querySelector('button')->onClick([$app, 'onButtonClick']);
+            $page->querySelector('button')->onClick([$page, 'onButtonClick']);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -161,7 +161,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -181,15 +181,15 @@ testCase('PageDomTest.php', function () {
 
                 public function onButtonClick($event): void
                 {
-                    $label = $event->getApp()->querySelector('label');
+                    $label = $event->getPage()->querySelector('label');
 
                     $label->innerHTML = uniqid();
                     $label->setStyle('color', 'red');
                 }
             };
 
-            $button = $app->querySelector('button');
-            $label = $app->querySelector('label');
+            $button = $page->querySelector('button');
+            $label = $page->querySelector('label');
 
             $button->onClick(function () use ($label) {
                 if ($label->getStyle('color') == 'red') {
@@ -199,7 +199,7 @@ testCase('PageDomTest.php', function () {
                 }
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -230,7 +230,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -251,20 +251,20 @@ testCase('PageDomTest.php', function () {
 
                 public function listener($event): void
                 {
-                    $app = $event->getApp();
-                    $input = $app->querySelector('input');
-                    $label = $app->querySelector('label');
+                    $page = $event->getPage();
+                    $input = $page->querySelector('input');
+                    $label = $page->querySelector('label');
 
                     $label->innerHTML = $input->value;
                 }
             };
 
-            $app->querySelector('input');
-            $app->querySelector('label');
+            $page->querySelector('input');
+            $page->querySelector('label');
 
-            $app->querySelector('button')->onClick([$app, 'listener']);
+            $page->querySelector('button')->onClick([$page, 'listener']);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -299,7 +299,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -319,9 +319,9 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
-            $input = $app->querySelector('input');
-            $label = $app->querySelector('label');
+            $button = $page->querySelector('button');
+            $input = $page->querySelector('input');
+            $label = $page->querySelector('label');
 
             $input->registerCriticalData('value');
 
@@ -332,7 +332,7 @@ testCase('PageDomTest.php', function () {
 
             $button->onClick($listener);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -384,7 +384,7 @@ testCase('PageDomTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends TestApp {
+                $page = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -404,18 +404,18 @@ testCase('PageDomTest.php', function () {
                     }
                 };
 
-                $app->querySelector('input');
-                $app->querySelector('label');
+                $page->querySelector('input');
+                $page->querySelector('label');
 
-                $app->querySelector('button')->onClick(function ($event) {
-                    $app = $event->getApp();
-                    $input = $app->querySelector('input');
-                    $label = $app->querySelector('label');
+                $page->querySelector('button')->onClick(function ($event) {
+                    $page = $event->getPage();
+                    $input = $page->querySelector('input');
+                    $label = $page->querySelector('label');
 
                     $label->innerHTML = $input->value;
                 });
 
-                static::dumpApp($app);
+                static::dumpApp($page);
                 static::openApp();
             });
 
@@ -424,7 +424,7 @@ testCase('PageDomTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends TestApp {
+                $page = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -444,15 +444,15 @@ testCase('PageDomTest.php', function () {
                     }
                 };
 
-                $app->querySelector('button')->onClick(function ($event) {
-                    $app = $event->getApp();
-                    $input = $app->querySelector('input');
-                    $label = $app->querySelector('label');
+                $page->querySelector('button')->onClick(function ($event) {
+                    $page = $event->getPage();
+                    $input = $page->querySelector('input');
+                    $label = $page->querySelector('label');
 
                     $label->innerHTML = $input->value;
                 });
 
-                static::dumpApp($app);
+                static::dumpApp($page);
                 static::openApp();
             });
 
@@ -461,7 +461,7 @@ testCase('PageDomTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends TestApp {
+                $page = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -481,16 +481,16 @@ testCase('PageDomTest.php', function () {
                     }
                 };
 
-                $input = $app->querySelector('input');
-                $label = $app->querySelector('label');
+                $input = $page->querySelector('input');
+                $label = $page->querySelector('label');
 
-                $app->querySelector('button')->onClick(function ($event) use ($input, $label) {
-                    $app = $event->getApp();
+                $page->querySelector('button')->onClick(function ($event) use ($input, $label) {
+                    $page = $event->getPage();
 
                     $label->innerHTML = $input->value;
                 });
 
-                static::dumpApp($app);
+                static::dumpApp($page);
                 static::openApp();
             });
 
@@ -499,7 +499,7 @@ testCase('PageDomTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends TestApp {
+                $page = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -519,15 +519,15 @@ testCase('PageDomTest.php', function () {
                     }
                 };
 
-                $button = $app->querySelector('button');
-                $input = $app->querySelector('input');
-                $label = $app->querySelector('label');
+                $button = $page->querySelector('button');
+                $input = $page->querySelector('input');
+                $label = $page->querySelector('label');
 
                 $button->addEventListener('click', function () use ($input, $label) {
                     $label->innerHTML = $input->value;
                 });
 
-                static::dumpApp($app);
+                static::dumpApp($page);
                 static::openApp();
             });
 
@@ -540,7 +540,7 @@ testCase('PageDomTest.php', function () {
             $attribute = uniqid('attr-');
             $value = uniqid();
 
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -559,16 +559,16 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $app->querySelector('#button')->onClick(function ($event) use ($attribute, $value) {
-                $app = $event->getApp();
+            $page->querySelector('#button')->onClick(function ($event) use ($attribute, $value) {
+                $page = $event->getPage();
                 $button = $event->getSource();
-                $label = $app->querySelector('label');
+                $label = $page->querySelector('label');
 
                 $button->setAttribute($attribute, $value);
                 $label->innerHTML = $button->getAttribute($attribute);
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
 
             static::addVars(compact('attribute', 'value'));
 
@@ -589,7 +589,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -608,8 +608,8 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
-            $label = $app->querySelector('label');
+            $button = $page->querySelector('button');
+            $label = $page->querySelector('label');
 
             $button->onClick(function () use ($label) {
                 if ($label->hasClass('label')) {
@@ -617,7 +617,7 @@ testCase('PageDomTest.php', function () {
                 }
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -634,7 +634,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -653,8 +653,8 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
-            $label = $app->querySelector('label');
+            $button = $page->querySelector('button');
+            $label = $page->querySelector('label');
 
             $button->onClick(function () use ($label) {
                 if ($label->hasAttribute('class')) {
@@ -662,7 +662,7 @@ testCase('PageDomTest.php', function () {
                 }
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -679,7 +679,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -698,8 +698,8 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
-            $label = $app->querySelector('label');
+            $button = $page->querySelector('button');
+            $label = $page->querySelector('label');
 
             $button->onClick(function () use ($label) {
                 if (! $label->hasAttribute('class')) {
@@ -707,7 +707,7 @@ testCase('PageDomTest.php', function () {
                 }
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -724,7 +724,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -743,14 +743,14 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
-            $label = $app->querySelector('label');
+            $button = $page->querySelector('button');
+            $label = $page->querySelector('label');
 
             $button->onClick(function () use ($label) {
                 $label->addClass('my-class');
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -765,7 +765,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -784,14 +784,14 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
-            $label = $app->querySelector('label');
+            $button = $page->querySelector('button');
+            $label = $page->querySelector('label');
 
             $button->onClick(function () use ($label) {
                 $label->removeClass('label');
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -806,7 +806,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -825,14 +825,14 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
-            $label = $app->querySelector('label');
+            $button = $page->querySelector('button');
+            $label = $page->querySelector('label');
 
             $button->onClick(function () use ($label) {
                 $label->removeAttribute('class');
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -871,7 +871,7 @@ testCase('PageDomTest.php', function () {
 
         testCase(function () {
             setUpBeforeClassOnce(function () {
-                $app = new class('') extends TestApp {
+                $page = new class('') extends TestApp {
                     public function getView(): string
                     {
                         return <<<HTML
@@ -890,8 +890,8 @@ testCase('PageDomTest.php', function () {
                     }
                 };
 
-                $input = $app->querySelector('input');
-                $label = $app->querySelector('label');
+                $input = $page->querySelector('input');
+                $label = $page->querySelector('label');
 
                 $listener = new EventListener;
                 $listener->setFetchData(['key', 'keyCode']);
@@ -903,7 +903,7 @@ testCase('PageDomTest.php', function () {
 
                 $input->addEventListener('keypress', $listener);
 
-                static::dumpApp($app);
+                static::dumpApp($page);
                 static::openApp();
             });
 
@@ -913,7 +913,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -932,7 +932,7 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
+            $button = $page->querySelector('button');
 
             $listener = new EventListener;
             $listener->setFrontListener(<<<JAVASCRIPT
@@ -942,7 +942,7 @@ testCase('PageDomTest.php', function () {
 
             $button->addEventListener('click', $listener);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -957,7 +957,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -976,8 +976,8 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $label = $app->querySelector('label');
-            $button = $app->querySelector('button');
+            $label = $page->querySelector('label');
+            $button = $page->querySelector('button');
 
             $listener = new EventListener;
 
@@ -991,7 +991,7 @@ testCase('PageDomTest.php', function () {
 
             $button->addEventListener('click', $listener);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1008,7 +1008,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1028,8 +1028,8 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $label = $app->querySelector('label');
-            $input = $app->querySelector('input');
+            $label = $page->querySelector('label');
+            $input = $page->querySelector('input');
 
             $input->addEventListener('keypress', [
                 'fetchData' => ['key', 'keyCode'],
@@ -1040,8 +1040,8 @@ testCase('PageDomTest.php', function () {
                 JAVASCRIPT,
 
                 'backListener' => function (Event $event) use ($label): void {
-                    $app = $event->getApp();
-                    $label = $app->querySelector('label');
+                    $page = $event->getPage();
+                    $label = $page->querySelector('label');
 
                     $eventData = $event->getEventData();
 
@@ -1049,7 +1049,7 @@ testCase('PageDomTest.php', function () {
                 },
             ]);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1066,7 +1066,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1085,16 +1085,16 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
+            $button = $page->querySelector('button');
 
-            $input = $app->querySelector('input');
+            $input = $page->querySelector('input');
             $input->setId('input');
 
             $button->onClick(function () use ($input) {
                 $input->remove();
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1112,7 +1112,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1133,10 +1133,10 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $label = $app->querySelector('label');
+            $label = $page->querySelector('label');
             $label->setId('label');
 
-            $body = $app->querySelector('body');
+            $body = $page->querySelector('body');
             $body->setId('body');
 
             $body->addEventListener('click', function ($event) use ($label) {
@@ -1150,7 +1150,7 @@ testCase('PageDomTest.php', function () {
                 $label->innerHTML = $button->innerHTML;
             }, true);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1168,7 +1168,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1186,13 +1186,13 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
+            $button = $page->querySelector('button');
             $button->onClick(function ($event) {
-                $app = $event->getApp();
-                $app->getBrowser()->redirect('about:blank');
+                $page = $event->getPage();
+                $page->getBrowser()->redirect('about:blank');
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1207,7 +1207,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1227,16 +1227,16 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
+            $button = $page->querySelector('button');
             $button->onClick(function ($event) {
-                $app = $event->getApp();
-                $input = $app->querySelector('input');
-                $label = $app->querySelector('label');
+                $page = $event->getPage();
+                $input = $page->querySelector('input');
+                $label = $page->querySelector('label');
 
                 $label->textContent = $input->value;
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1257,7 +1257,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1277,9 +1277,9 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $app->querySelector('button')->addEventListener('click', function ($event) {
-                $app = $event->getApp();
-                $container = $app->querySelector('.container');
+            $page->querySelector('button')->addEventListener('click', function ($event) {
+                $page = $event->getPage();
+                $container = $page->querySelector('.container');
 
                 $input = Element::createFromString('<input type="" name="">');
                 $label = Element::createFromString('<label></label>');
@@ -1288,7 +1288,7 @@ testCase('PageDomTest.php', function () {
                 $container->prepend($label);
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1308,7 +1308,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1326,12 +1326,12 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $app->on('click', function ($event) {
-                $app = $event->getApp();
-                $app->getBrowser()->alert('Clicked');
+            $page->on('click', function ($event) {
+                $page = $event->getPage();
+                $page->getBrowser()->alert('Clicked');
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1352,7 +1352,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1371,19 +1371,19 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
+            $button = $page->querySelector('button');
 
             $button->on('click', function ($event) {
-                $app = $event->getApp();
+                $page = $event->getPage();
 
-                if ($app->getBrowser()->confirm('Do you confirm?')) {
-                    $app->querySelector('label')->textContent = 'yes';
+                if ($page->getBrowser()->confirm('Do you confirm?')) {
+                    $page->querySelector('label')->textContent = 'yes';
                 } else {
-                    $app->querySelector('label')->textContent = 'no';
+                    $page->querySelector('label')->textContent = 'no';
                 }
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1405,7 +1405,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1424,15 +1424,15 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
+            $button = $page->querySelector('button');
 
             $button->on('click', function ($event) {
-                $app = $event->getApp();
+                $page = $event->getPage();
 
-                $app->querySelector('label')->textContent = $app->getBrowser()->prompt('Enter a text');
+                $page->querySelector('label')->textContent = $page->getBrowser()->prompt('Enter a text');
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1457,7 +1457,7 @@ testCase('PageDomTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -1477,8 +1477,8 @@ testCase('PageDomTest.php', function () {
                 }
             };
 
-            $button = $app->querySelector('button');
-            $div = $app->querySelector('div.container');
+            $button = $page->querySelector('button');
+            $div = $page->querySelector('div.container');
 
             $button->onClick(function () use ($div) {
                 $div->innerHTML = <<<HTML
@@ -1487,7 +1487,7 @@ testCase('PageDomTest.php', function () {
                 HTML;
             });
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 
@@ -1502,7 +1502,7 @@ testCase('PageDomTest.php', function () {
 
     // testCase(function () {
     //     setUpBeforeClassOnce(function () {
-    //         $app = new class('') extends TestApp {
+    //         $page = new class('') extends TestApp {
     //             public function getView(): string
     //             {
     //                 return <<<HTML
@@ -1522,11 +1522,11 @@ testCase('PageDomTest.php', function () {
     //             }
     //         };
 
-    //         $container = $app->querySelector('.container');
+    //         $container = $page->querySelector('.container');
     //         $button = $container->querySelector('button');
 
     //         $button->addEventListener('click', function ($event) {
-    //             $container = $event->getApp()->querySelector('.container');
+    //             $container = $event->getPage()->querySelector('.container');
 
     //             $input = Element::createFromString('<input type="text" name="" value="abcd123">');
     //             $container->append($input);
@@ -1537,7 +1537,7 @@ testCase('PageDomTest.php', function () {
     //             $label->textContent = $input->value;
     //         });
 
-    //         static::dumpApp($app);
+    //         static::dumpApp($page);
     //         static::openApp();
     //     });
 
@@ -1554,7 +1554,7 @@ testCase('PageDomTest.php', function () {
 
     // testCase(function () {
     //     setUpBeforeClassOnce(function () {
-    //         $app = new class('') extends TestApp {
+    //         $page = new class('') extends TestApp {
     //             public function getView(): string
     //             {
     //                 return <<<HTML
@@ -1574,11 +1574,11 @@ testCase('PageDomTest.php', function () {
     //             }
     //         };
 
-    //         $container = $app->querySelector('.container');
+    //         $container = $page->querySelector('.container');
     //         $button = $container->querySelector('button');
 
     //         $button->addEventListener('click', function ($event) use ($container) bug {
-    //             $container = $event->getApp()->querySelector('.container');
+    //             $container = $event->getPage()->querySelector('.container');
 
     //             if (! $input = $container->querySelector('input')) {
     //                 $input = Element::createFromString('<input type="text" name="" value="abcd123">');
@@ -1593,7 +1593,7 @@ testCase('PageDomTest.php', function () {
     //             $label->textContent = $input->value;
     //         });
 
-    //         static::dumpApp($app);
+    //         static::dumpApp($page);
     //         static::openApp();
     //     });
 

@@ -40,7 +40,7 @@ trait PageDomTrait
 
         if ($this->booted) {
             $element = new Element($selector);
-            $element->setApp($this);
+            $element->setPage($this);
 
             $this->addChild($element);
 
@@ -81,7 +81,7 @@ trait PageDomTrait
 
             $element = new Element($selector);
             $element->setCrawler($elementCrawler);
-            $element->setApp($this);
+            $element->setPage($this);
 
             $this->addChild($element);
 

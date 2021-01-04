@@ -100,7 +100,7 @@ abstract class AbstractPage extends AbstractCompositeView
         $this->token = uniqid('token', true);
 
         $this->browser = new Browser;
-        $this->browser->setApp($this);
+        $this->browser->setPage($this);
 
         $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
@@ -131,7 +131,7 @@ abstract class AbstractPage extends AbstractCompositeView
         $stratusScript = new StratusScript('stratus-js', null, '');
 
         $stratusInitScript = new StratusInitScript('stratus-init-script', null, '');
-        $stratusInitScript->setApp($this);
+        $stratusInitScript->setPage($this);
 
         return compact('stratusScript', 'stratusInitScript');
     }
@@ -288,7 +288,7 @@ abstract class AbstractPage extends AbstractCompositeView
         }
 
         if ($child instanceof StratusComponentInterface) {
-            $child->setApp($this);
+            $child->setPage($this);
         }
     }
 
@@ -364,7 +364,7 @@ abstract class AbstractPage extends AbstractCompositeView
         }
 
         $event = new Event;
-        $event->setApp($this);
+        $event->setPage($this);
         $event->setSource($component);
         $event->setEventData($eventData = $request->getEventData());
 
@@ -436,7 +436,7 @@ abstract class AbstractPage extends AbstractCompositeView
             $this->eventDispatcher->dispatch($sleepChildEvent);
 
             if ($child instanceof StratusComponentInterface) {
-                $child->setApp(null);
+                $child->setPage(null);
             }
 
             $sanatizeDispatcher->call($child->getEventDispatcher());
@@ -466,7 +466,7 @@ abstract class AbstractPage extends AbstractCompositeView
             }
 
             if ($child instanceof StratusComponentInterface) {
-                $child->setApp($this);
+                $child->setPage($this);
             }
         };
 

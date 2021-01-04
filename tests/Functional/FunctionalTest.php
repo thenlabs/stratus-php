@@ -6,7 +6,7 @@ namespace ThenLabs\StratusPHP\Tests\Functionals;
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
-use ThenLabs\StratusPHP\AbstractApp as TestApp;
+use ThenLabs\StratusPHP\AbstractPage as TestApp;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ClassBuilder\ClassBuilder;
 
@@ -27,7 +27,7 @@ testCase('FunctionalTest.php', function () {
 
             $secret = uniqid();
 
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -44,7 +44,7 @@ testCase('FunctionalTest.php', function () {
                 }
             };
 
-            $app->setDebug(true);
+            $page->setDebug(true);
 
             $child1 = (new ClassBuilder($className1))
                 ->extends(AbstractCompositeView::class)
@@ -161,10 +161,10 @@ testCase('FunctionalTest.php', function () {
             $child1->addChild($child2);
             $child2->addChild($child3);
 
-            $app->addChild($child1);
-            $app->addChild($child4);
+            $page->addChild($child1);
+            $page->addChild($child4);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
 
             static::addVars(compact(
                 'className1',
@@ -283,7 +283,7 @@ testCase('FunctionalTest.php', function () {
             $className1 = uniqid('Class1_');
             $secret = uniqid();
 
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -317,9 +317,9 @@ testCase('FunctionalTest.php', function () {
                 ->newInstance()
             ;
 
-            $app->addChild($child1);
+            $page->addChild($child1);
 
-            static::dumpApp($app);
+            static::dumpApp($page);
 
             static::addVars(compact(
                 'className1',
@@ -328,7 +328,7 @@ testCase('FunctionalTest.php', function () {
 
             static::openApp();
 
-            static::setVar('jsClassId1', $app->getJavaScriptClassId($className1));
+            static::setVar('jsClassId1', $page->getJavaScriptClassId($className1));
         });
 
         test(function () {
@@ -344,7 +344,7 @@ testCase('FunctionalTest.php', function () {
 
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $app = new class('') extends TestApp {
+            $page = new class('') extends TestApp {
                 use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
@@ -363,12 +363,12 @@ testCase('FunctionalTest.php', function () {
                 }
             };
 
-            $body = $app->querySelector('body');
+            $body = $page->querySelector('body');
             $body->setId('body');
 
             $body->registerCriticalData('attributes');
 
-            static::dumpApp($app);
+            static::dumpApp($page);
             static::openApp();
         });
 

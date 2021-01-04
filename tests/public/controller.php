@@ -9,13 +9,13 @@ use function Opis\Closure\unserialize as u;
 
 session_start();
 
-$app = u($_SESSION['app']);
+$page = u($_SESSION['page']);
 $request = Request::createFromJson($_REQUEST['stratus_request']);
 
-$result = $app->run($request);
+$result = $page->run($request);
 
 if ($result->isSuccessful()) {
-    $_SESSION['app'] = s($app);
+    $_SESSION['page'] = s($page);
 }
 
 die();

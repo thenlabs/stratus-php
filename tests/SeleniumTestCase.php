@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Tests;
 
 use ThenLabs\PyramidalTests\Utils\StaticVarsInjectionTrait;
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractPage;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
@@ -41,9 +41,9 @@ class SeleniumTestCase extends TestCase
         return self::$driver;
     }
 
-    public static function dumpApp(AbstractApp $app): void
+    public static function dumpApp(AbstractPage $page): void
     {
-        $class = new ReflectionClass($app);
+        $class = new ReflectionClass($page);
 
         if (! $class->isAnonymous()) {
             throw new Exception('The class of the instance is not anonymous.');
@@ -86,7 +86,7 @@ class SeleniumTestCase extends TestCase
 
         $rest = '';
         while ($line = fgets($file)) {
-            if (false === strpos($line, 'static::dumpApp($app);')) {
+            if (false === strpos($line, 'static::dumpApp($page);')) {
                 $rest .= $line;
             } else {
                 break;
@@ -95,9 +95,9 @@ class SeleniumTestCase extends TestCase
 
         (function () {
             $this->updateJavaScriptClasses();
-        })->call($app);
+        })->call($page);
 
-        $javaScriptClassesDef = var_export($app->getJavaScriptClasses(), true);
+        $javaScriptClassesDef = var_export($page->getJavaScriptClasses(), true);
 
         $classSource = <<<PHP
             <?php
@@ -117,17 +117,17 @@ class SeleniumTestCase extends TestCase
 
             require_once 'App.class.php';
 
-            \$app = new App('/controller.php');
-            \$app->setDebug(true);
-            \$app->setJavaScriptClasses({$javaScriptClassesDef});
+            \$page = new App('/controller.php');
+            \$page->setDebug(true);
+            \$page->setJavaScriptClasses({$javaScriptClassesDef});
 
             {$rest}
 
-            return \$app;
+            return \$page;
         PHP;
 
         file_put_contents(__DIR__.'/public/App.class.php', $classSource);
-        file_put_contents(__DIR__.'/public/app.php', $source);
+        file_put_contents(__DIR__.'/public/page.php', $source);
 
         fclose($file);
     }

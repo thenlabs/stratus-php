@@ -417,7 +417,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
             $element->setCrawler($this->crawler->filter($selector));
 
             if ($this->page instanceof AbstractPage) {
-                $element->setApp($this->page);
+                $element->setPage($this->page);
             }
 
             $this->addChild($element);

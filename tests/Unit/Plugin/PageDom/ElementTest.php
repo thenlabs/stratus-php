@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Tests\Unit\Plugin\PageDom;
 
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractPage;
 use ThenLabs\StratusPHP\Plugin\PageDom\Element;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Tests\TestCase;
@@ -30,7 +30,7 @@ testCase('ElementTest.php', function () {
         setUp(function () {
             $this->expectException(InvokationBeforeBootException::class);
             $this->element = new Element(uniqid());
-            $this->element->setApp($this->createMock(AbstractApp::class));
+            $this->element->setPage($this->createMock(AbstractPage::class));
         });
 
         test(function () {
