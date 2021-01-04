@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__.'/../../bootstrap.php';
-require_once __DIR__.'/App.class.php';
+require_once __DIR__.'/Page.php';
 
 use ThenLabs\StratusPHP\Request;
 use function Opis\Closure\serialize as s;

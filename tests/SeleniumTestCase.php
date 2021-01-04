@@ -115,7 +115,7 @@ class SeleniumTestCase extends TestCase
 
             {$uses}
 
-            require_once 'App.class.php';
+            require_once 'Page.php';
 
             \$page = new App('/controller.php');
             \$page->setDebug(true);
@@ -126,7 +126,7 @@ class SeleniumTestCase extends TestCase
             return \$page;
         PHP;
 
-        file_put_contents(__DIR__.'/public/App.class.php', $classSource);
+        file_put_contents(__DIR__.'/public/Page.php', $classSource);
         file_put_contents(__DIR__.'/public/page.php', $source);
 
         fclose($file);

@@ -3,6 +3,6 @@ vendor/
 !.editorconfig
 !.gitignore
 !.php_cs.dist
-tests/public/app.php
-tests/public/App.class.php
+tests/public/page.php
+tests/public/Page.php
 demos/
