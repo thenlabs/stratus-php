@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Component;
 
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractPage;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -11,9 +11,9 @@ use ThenLabs\StratusPHP\AbstractApp;
 class Browser implements ComponentInterface
 {
     /**
-     * @var AbstractApp
+     * @var AbstractPage
      */
-    protected $app;
+    protected $page;
 
     /**
      * {@inheritdoc}
@@ -32,17 +32,17 @@ class Browser implements ComponentInterface
     /**
      * {@inheritdoc}
      */
-    public function setApp(?AbstractApp $app): void
+    public function setPage(?AbstractPage $page): void
     {
-        $this->app = $app;
+        $this->page = $page;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getApp(): ?AbstractApp
+    public function getPage(): ?AbstractPage
     {
-        return $this->app;
+        return $this->page;
     }
 
     /**
@@ -68,7 +68,7 @@ class Browser implements ComponentInterface
      */
     public function alert(string $text): void
     {
-        $this->app->executeScript("alert('{$text}');", false);
+        $this->page->executeScript("alert('{$text}');", false);
     }
 
     /**
@@ -78,7 +78,7 @@ class Browser implements ComponentInterface
      */
     public function confirm(string $text): bool
     {
-        return (bool) $this->app->executeScript("return confirm('{$text}');", true);
+        return (bool) $this->page->executeScript("return confirm('{$text}');", true);
     }
 
     /**
@@ -89,7 +89,7 @@ class Browser implements ComponentInterface
      */
     public function prompt(string $text): ?string
     {
-        return $this->app->executeScript("return prompt('{$text}');", true);
+        return $this->page->executeScript("return prompt('{$text}');", true);
     }
 
     /**
@@ -99,6 +99,6 @@ class Browser implements ComponentInterface
      */
     public function redirect(string $url): void
     {
-        $this->app->executeScript("window.location.href = '{$url}';", false);
+        $this->page->executeScript("window.location.href = '{$url}';", false);
     }
 }

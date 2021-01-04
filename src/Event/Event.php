@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Event;
 
 use ThenLabs\Components\Event\Event as ComponentsEvent;
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractPage;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -12,9 +12,9 @@ use ThenLabs\StratusPHP\AbstractApp;
 class Event extends ComponentsEvent
 {
     /**
-     * @var AbstractApp
+     * @var AbstractPage
      */
-    protected $app;
+    protected $page;
 
     /**
      * @var array
@@ -22,19 +22,19 @@ class Event extends ComponentsEvent
     protected $eventData = [];
 
     /**
-     * @return AbstractApp
+     * @return AbstractPage
      */
-    public function getApp(): AbstractApp
+    public function getApp(): AbstractPage
     {
-        return $this->app;
+        return $this->page;
     }
 
     /**
-     * @param AbstractApp $app
+     * @param AbstractPage $page
      */
-    public function setApp(AbstractApp $app): void
+    public function setApp(AbstractPage $page): void
     {
-        $this->app = $app;
+        $this->page = $page;
     }
 
     /**

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Component;
 
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractPage;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 
 /**
@@ -12,14 +12,14 @@ use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 interface ComponentInterface extends JavaScriptInstanceInterface
 {
     /**
-     * @param AbstractApp|null $app
+     * @param AbstractPage|null $page
      */
-    public function setApp(?AbstractApp $app): void;
+    public function setPage(?AbstractPage $page): void;
 
     /**
-     * @return AbstractApp|null
+     * @return AbstractPage|null
      */
-    public function getApp(): ?AbstractApp;
+    public function getPage(): ?AbstractPage;
 
     /**
      * Update a data of the component.

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Asset;
 
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractPage;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\ComposedViews\Asset\Script;
@@ -15,16 +15,16 @@ use ReflectionClass;
 class StratusInitScript extends Script
 {
     /**
-     * @var AbstractApp
+     * @var AbstractPage
      */
-    protected $app;
+    protected $page;
 
     /**
-     * @param AbstractApp $app
+     * @param AbstractPage $page
      */
-    public function setApp(AbstractApp $app): void
+    public function setPage(AbstractPage $page): void
     {
-        $this->app = $app;
+        $this->page = $page;
     }
 
     /**
@@ -35,7 +35,7 @@ class StratusInitScript extends Script
         $jsClasses = '';
         $jsInstances = '';
 
-        foreach ($this->app->getJavaScriptClasses() as $className => $jsClassId) {
+        foreach ($this->page->getJavaScriptClasses() as $className => $jsClassId) {
             $jsClassMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
             $jsExtends = null;
             $jsParentClass = null;
@@ -46,7 +46,7 @@ class StratusInitScript extends Script
             if ($parentClass &&
                 $parentClass->implementsInterface(JavaScriptClassInterface::class)
             ) {
-                $jsParentClassId = $this->app->getJavaScriptClassId($parentClass->getName());
+                $jsParentClassId = $this->page->getJavaScriptClassId($parentClass->getName());
 
                 $jsParentClass = <<<JAVASCRIPT
                     var ParentClass = stratusAppInstance.getClass('{$jsParentClassId}');
@@ -63,9 +63,9 @@ class StratusInitScript extends Script
             JAVASCRIPT;
         }
 
-        foreach ($this->app->children() as $child) {
+        foreach ($this->page->children() as $child) {
             if ($child instanceof JavaScriptInstanceInterface) {
-                $jsClassId = $this->app->getJavaScriptClassId(get_class($child));
+                $jsClassId = $this->page->getJavaScriptClassId(get_class($child));
 
                 $jsInstances .= <<<JAVASCRIPT
                     \n{
@@ -76,14 +76,14 @@ class StratusInitScript extends Script
             }
         }
 
-        $jsSetDebug = $this->app->isDebug() ? "app.debug = true;\n" : '';
+        $jsSetDebug = $this->page->isDebug() ? "app.debug = true;\n" : '';
 
         return <<<JAVASCRIPT
             "use strict";
 
             window.stratusAppInstance = new StratusApp(
-                '{$this->app->getControllerUri()}',
-                '{$this->app->getToken()}'
+                '{$this->page->getControllerUri()}',
+                '{$this->page->getToken()}'
             );
 
             (app => {

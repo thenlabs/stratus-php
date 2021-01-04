@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
-use ThenLabs\StratusPHP\AbstractApp;
+use ThenLabs\StratusPHP\AbstractPage;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
@@ -43,9 +43,9 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     protected $crawler;
 
     /**
-     * @var AbstractApp
+     * @var AbstractPage
      */
-    protected $app;
+    protected $page;
 
     /**
      * @var string
@@ -185,7 +185,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
         }
 
         $parent = $this->getParent();
-        $jsParentElement = $parent instanceof AbstractApp ?
+        $jsParentElement = $parent instanceof AbstractPage ?
             'document' :
             "app.getComponent('{$parent->getId()}').element"
         ;
@@ -197,7 +197,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
         $jsVarName = $this->jsVarName ? "var {$this->jsVarName} = component.element;" : null;
 
-        $jsClassId = $this->app->getJavaScriptClassId(self::class);
+        $jsClassId = $this->page->getJavaScriptClassId(self::class);
 
         return <<<JAVASCRIPT
             const parentElement = {$jsParentElement};
@@ -245,7 +245,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
         $jsValue = var_export($value, true);
 
-        $this->app->executeScript(<<<JAVASCRIPT
+        $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.setAttribute('{$attribute}', {$jsValue});
         JAVASCRIPT, false);
@@ -292,7 +292,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->executeScript(<<<JAVASCRIPT
+        $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.removeAttribute('{$attribute}');
         JAVASCRIPT, false);
@@ -320,7 +320,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->executeScript(<<<JAVASCRIPT
+        $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.classList.add('{$cssClass}');
         JAVASCRIPT, false);
@@ -335,7 +335,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $this->app->executeScript(<<<JAVASCRIPT
+        $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.classList.remove('{$cssClass}');
         JAVASCRIPT, false);
@@ -353,7 +353,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
         $jsValue = var_export($value, true);
 
-        $this->app->executeScript(<<<JAVASCRIPT
+        $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.style['{$property}'] = {$jsValue};
         JAVASCRIPT, false);
@@ -412,12 +412,12 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
             }
         }
 
-        if (! $this->app || ! $this->app->isBooted()) {
+        if (! $this->page || ! $this->page->isBooted()) {
             $element = new self($selector);
             $element->setCrawler($this->crawler->filter($selector));
 
-            if ($this->app instanceof AbstractApp) {
-                $element->setApp($this->app);
+            if ($this->page instanceof AbstractPage) {
+                $element->setApp($this->page);
             }
 
             $this->addChild($element);
@@ -429,19 +429,19 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     }
 
     /**
-     * @param AbstractApp|null $app
+     * @param AbstractPage|null $page
      */
-    public function setApp(?AbstractApp $app): void
+    public function setPage(?AbstractPage $page): void
     {
-        $this->app = $app;
+        $this->page = $page;
     }
 
     /**
-     * @return AbstractApp|null
+     * @return AbstractPage|null
      */
-    public function getApp(): ?AbstractApp
+    public function getPage(): ?AbstractPage
     {
-        return $this->app;
+        return $this->page;
     }
 
     /**
@@ -450,7 +450,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     public function __get($name)
     {
         if (! array_key_exists($name, $this->properties)) {
-            $this->app->executeScript(<<<JAVASCRIPT
+            $this->page->executeScript(<<<JAVASCRIPT
                 const component = stratusAppInstance.getComponent('{$this->getId()}');
                 component.registerCriticalProperty('{$name}');
             JAVASCRIPT, true);
@@ -466,7 +466,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $jsValue = is_string($value) ? "`{$value}`" : var_export($value, true);
 
-        $this->app->executeScript(<<<JAVASCRIPT
+        $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element['{$name}'] = {$jsValue};
         JAVASCRIPT, false);
@@ -489,7 +489,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
     private function verifyAppBooted(string $method): void
     {
-        if (! $this->app->isBooted()) {
+        if (! $this->page->isBooted()) {
             throw new InvokationBeforeBootException($method);
         }
     }
@@ -530,7 +530,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->setParent(null);
 
-        $this->app->executeScript(<<<JAVASCRIPT
+        $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
             component.element.remove();
             delete stratusAppInstance.components[component.id];
@@ -593,7 +593,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
 
         $html = (string) $child;
 
-        $this->app->executeScript(<<<JAVASCRIPT
+        $this->page->executeScript(<<<JAVASCRIPT
             const newElement = document.createElement('DIV');
             newElement.innerHTML = `{$html}`;
 

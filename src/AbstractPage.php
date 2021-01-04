@@ -34,7 +34,7 @@ AnnotationRegistry::registerFile(__DIR__.'/Annotation/OnConstructor.php');
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  * @abstract
  */
-abstract class AbstractApp extends AbstractCompositeView
+abstract class AbstractPage extends AbstractCompositeView
 {
     /**
      * @var string
