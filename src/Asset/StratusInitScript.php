@@ -7,6 +7,7 @@ use ThenLabs\StratusPHP\AbstractPage;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\ComposedViews\Asset\Script;
+use MatthiasMullie\Minify;
 use ReflectionClass;
 
 /**
@@ -14,18 +15,7 @@ use ReflectionClass;
  */
 class StratusInitScript extends Script
 {
-    /**
-     * @var AbstractPage
-     */
-    protected $page;
-
-    /**
-     * @param AbstractPage $page
-     */
-    public function setPage(AbstractPage $page): void
-    {
-        $this->page = $page;
-    }
+    use PageTrait;
 
     /**
      * @return string
@@ -78,7 +68,7 @@ class StratusInitScript extends Script
 
         $jsSetDebug = $this->page->isDebug() ? "app.debug = true;\n" : '';
 
-        return <<<JAVASCRIPT
+        $source = <<<JAVASCRIPT
             "use strict";
 
             window.stratusAppInstance = new StratusApp(
@@ -94,5 +84,11 @@ class StratusInitScript extends Script
                 {$jsInstances}
             })(window.stratusAppInstance);
         JAVASCRIPT;
+
+        if (! $this->page->isDebug()) {
+            $source = $this->compressJavaScript($source);
+        }
+
+        return $source;
     }
 }

@@ -110,6 +110,10 @@ class SeleniumTestCase extends TestCase
             }
         PHP;
 
+        $setDebug = isset($_ENV['DEBUG']) && $_ENV['DEBUG'] == 1 ?
+            '$page->setDebug(true);' : ''
+        ;
+
         $source = <<<PHP
             <?php
 
@@ -118,7 +122,7 @@ class SeleniumTestCase extends TestCase
             require_once 'Page.php';
 
             \$page = new App('/controller.php');
-            \$page->setDebug(true);
+            {$setDebug}
             \$page->setJavaScriptClasses({$javaScriptClassesDef});
 
             {$rest}

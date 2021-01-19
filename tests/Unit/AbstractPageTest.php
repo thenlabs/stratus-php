@@ -93,6 +93,18 @@ testCase('AbstractPageTest.php', function () {
             $this->assertSame($this->page, $this->button->getPage());
         });
 
+        test(function () {
+            $newControllerUri = uniqid('uri');
+
+            $this->page->setControllerUri($newControllerUri);
+
+            $this->assertSame($newControllerUri, $this->page->getControllerUri());
+        });
+
+        test(function () {
+            $this->assertNotContains('inmutableView', $this->page->__sleep());
+        });
+
         testCase(function () {
             setUp(function () {
                 $this->page->setDebug(true);

@@ -8,6 +8,7 @@
         <env name="SELENIUM_SERVER" value="http://localhost:4444/wd/hub"></env>
         <env name="SELENIUM_BROWSER" value="chrome"></env>
         <env name="TEST_URL" value="http://localhost:8000/index.php"></env>
+        <env name="DEBUG" value="0"></env>
     </php>
 
     <testsuites>

@@ -10,6 +10,7 @@ use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\ComposedViews\Asset\Script;
 use ThenLabs\StratusPHP\Annotation\OnConstructor;
+use ThenLabs\StratusPHP\Annotation\Sleep;
 use ThenLabs\StratusPHP\Asset\StratusScript;
 use ThenLabs\StratusPHP\Asset\StratusInitScript;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
@@ -29,6 +30,7 @@ use ReflectionClass;
 
 AnnotationRegistry::registerFile(__DIR__.'/Annotation/EventListener.php');
 AnnotationRegistry::registerFile(__DIR__.'/Annotation/OnConstructor.php');
+AnnotationRegistry::registerFile(__DIR__.'/Annotation/Sleep.php');
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -67,6 +69,7 @@ abstract class AbstractPage extends AbstractCompositeView
     protected $bus;
 
     /**
+     * @Sleep
      * @var string
      */
     protected $inmutableView;
@@ -129,6 +132,7 @@ abstract class AbstractPage extends AbstractCompositeView
     public function getOwnDependencies(): array
     {
         $stratusScript = new StratusScript('stratus-js', null, '');
+        $stratusScript->setPage($this);
 
         $stratusInitScript = new StratusInitScript('stratus-init-script', null, '');
         $stratusInitScript->setPage($this);
@@ -162,6 +166,14 @@ abstract class AbstractPage extends AbstractCompositeView
     public function getControllerUri(): string
     {
         return $this->controllerUri;
+    }
+
+    /**
+     * @param string $controllerUri
+     */
+    public function setControllerUri(string $controllerUri): void
+    {
+        $this->controllerUri = $controllerUri;
     }
 
     /**
@@ -447,7 +459,16 @@ abstract class AbstractPage extends AbstractCompositeView
         }
 
         $vars = get_object_vars($this);
-        $nonSerializable = ['inmutableView'];
+        $nonSerializable = [];
+
+        $class = new ReflectionClass($this);
+        $annotationReader = new AnnotationReader;
+
+        foreach ($class->getProperties() as $property) {
+            if ($annotation = $annotationReader->getPropertyAnnotation($property, Sleep::class)) {
+                $nonSerializable[] = $property->getName();
+            }
+        }
 
         $result = array_diff(array_keys($vars), $nonSerializable);
 
