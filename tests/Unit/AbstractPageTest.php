@@ -17,9 +17,9 @@ setTestCaseClass(TestCase::class);
 testCase('AbstractPageTest.php', function () {
     testCase(function () {
         setUp(function () {
-            $this->controllerUri = uniqid('controllerUri');
+            $this->ajaxControllerUri = uniqid('ajaxControllerUri');
 
-            $this->page = new class($this->controllerUri) extends AbstractPage {
+            $this->page = new class($this->ajaxControllerUri) extends AbstractPage {
                 use \ThenLabs\StratusPHP\Plugin\PageDom\PageDomTrait;
 
                 public function getView(): string
@@ -41,7 +41,7 @@ testCase('AbstractPageTest.php', function () {
         });
 
         test(function () {
-            $this->assertEquals($this->controllerUri, $this->page->getControllerUri());
+            $this->assertEquals($this->ajaxControllerUri, $this->page->getAjaxControllerUri());
         });
 
         test(function () {
@@ -96,9 +96,9 @@ testCase('AbstractPageTest.php', function () {
         test(function () {
             $newControllerUri = uniqid('uri');
 
-            $this->page->setControllerUri($newControllerUri);
+            $this->page->setAjaxControllerUri($newControllerUri);
 
-            $this->assertSame($newControllerUri, $this->page->getControllerUri());
+            $this->assertSame($newControllerUri, $this->page->getAjaxControllerUri());
         });
 
         test(function () {

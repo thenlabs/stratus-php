@@ -72,7 +72,7 @@ class StratusInitScript extends Script
             "use strict";
 
             window.stratusAppInstance = new StratusApp(
-                '{$this->page->getControllerUri()}',
+                '{$this->page->getAjaxControllerUri()}',
                 '{$this->page->getToken()}'
             );
 

@@ -41,7 +41,7 @@ abstract class AbstractPage extends AbstractCompositeView
     /**
      * @var string
      */
-    protected $controllerUri;
+    protected $ajaxControllerUri;
 
     /**
      * @var array
@@ -92,13 +92,13 @@ abstract class AbstractPage extends AbstractCompositeView
     /**
      * Uri of the processing controller.
      *
-     * @param string $controllerUri
+     * @param string $ajaxControllerUri
      */
-    public function __construct(string $controllerUri)
+    public function __construct(string $ajaxControllerUri)
     {
         parent::__construct();
 
-        $this->controllerUri = $controllerUri;
+        $this->ajaxControllerUri = $ajaxControllerUri;
         $this->bus = new StreamingBus;
         $this->token = uniqid('token', true);
 
@@ -163,17 +163,17 @@ abstract class AbstractPage extends AbstractCompositeView
     /**
      * @return string
      */
-    public function getControllerUri(): string
+    public function getAjaxControllerUri(): string
     {
-        return $this->controllerUri;
+        return $this->ajaxControllerUri;
     }
 
     /**
-     * @param string $controllerUri
+     * @param string $ajaxControllerUri
      */
-    public function setControllerUri(string $controllerUri): void
+    public function setAjaxControllerUri(string $ajaxControllerUri): void
     {
-        $this->controllerUri = $controllerUri;
+        $this->ajaxControllerUri = $ajaxControllerUri;
     }
 
     /**
