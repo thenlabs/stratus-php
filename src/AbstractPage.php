@@ -94,7 +94,7 @@ abstract class AbstractPage extends AbstractCompositeView
      *
      * @param string $ajaxControllerUri
      */
-    public function __construct(string $ajaxControllerUri)
+    public function __construct(string $ajaxControllerUri, bool $runPlugins = true)
     {
         parent::__construct();
 
@@ -108,13 +108,8 @@ abstract class AbstractPage extends AbstractCompositeView
         $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
 
-        $class = new ReflectionClass($this);
-        $annotationReader = new AnnotationReader;
-
-        foreach ($class->getMethods() as $method) {
-            if ($annotation = $annotationReader->getMethodAnnotation($method, OnConstructor::class)) {
-                call_user_func([$this, $method->getName()]);
-            }
+        if ($runPlugins) {
+            $this->runPlugins();
         }
     }
 
@@ -531,5 +526,17 @@ abstract class AbstractPage extends AbstractCompositeView
         $frontCall = new FrontCall($script, $queryMode);
 
         return $this->executeFrontCall($frontCall);
+    }
+
+    public function runPlugins(): void
+    {
+        $class = new ReflectionClass($this);
+        $annotationReader = new AnnotationReader;
+
+        foreach ($class->getMethods() as $method) {
+            if ($annotation = $annotationReader->getMethodAnnotation($method, OnConstructor::class)) {
+                call_user_func([$this, $method->getName()]);
+            }
+        }
     }
 }
