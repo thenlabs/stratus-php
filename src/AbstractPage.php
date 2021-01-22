@@ -377,7 +377,7 @@ abstract class AbstractPage extends AbstractCompositeView
 
         try {
             if ($request->isCapture()) {
-                $component->getCaptureEventDispatcher()->dispatch($eventName, $event);
+                $component->getCaptureEventDispatcher()->dispatch($event, $eventName);
             } else {
                 $component->dispatchEvent($eventName, $event);
             }
