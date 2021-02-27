@@ -12,6 +12,9 @@ class StratusScript extends Script
 {
     use PageTrait;
 
+    /**
+     * @return string
+     */
     private function getJavaScriptCode(): string
     {
         return <<<JAVASCRIPT
@@ -199,7 +202,6 @@ class StratusScript extends Script
                     }
                 }
             }
-
         JAVASCRIPT;
     }
 
