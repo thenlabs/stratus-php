@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Asset;
 
-use ThenLabs\StratusPHP\AbstractPage;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptClassInterface;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
 use ThenLabs\ComposedViews\Asset\Script;
-use MatthiasMullie\Minify;
 use ReflectionClass;
 
 /**
