@@ -126,11 +126,13 @@ abstract class AbstractPage extends AbstractCompositeView
      */
     public function getOwnDependencies(): array
     {
-        $stratusScript = new StratusScript('stratus-js', null, '');
+        $stratusScript = new StratusScript('stratus', null, '');
         $stratusScript->setPage($this);
+        $stratusScript->setAttribute('class', 'stratus');
 
-        $stratusInitScript = new StratusInitScript('stratus-init-script', null, '');
+        $stratusInitScript = new StratusInitScript('stratus-init', null, '');
         $stratusInitScript->setPage($this);
+        $stratusInitScript->setAttribute('class', 'stratus-init');
 
         return compact('stratusScript', 'stratusInitScript');
     }
@@ -274,10 +276,16 @@ abstract class AbstractPage extends AbstractCompositeView
     {
         $body = $event->filter('body');
 
-        foreach ($this->getOwnDependencies() as $dependency) {
-            if ($dependency instanceof Script) {
-                $body->append($dependency->render());
-            }
+        extract($this->getOwnDependencies());
+
+        $stratusScriptElement = $body->filter("script.{$stratusScript->getName()}");
+        if (0 === count($stratusScriptElement)) {
+            $body->append($stratusScript->render());
+        }
+
+        $stratusInitScriptElement = $body->filter("script.{$stratusInitScript->getName()}");
+        if (0 === count($stratusInitScriptElement)) {
+            $body->append($stratusInitScript->render());
         }
     }
 

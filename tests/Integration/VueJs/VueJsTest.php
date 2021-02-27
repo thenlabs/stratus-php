@@ -32,8 +32,6 @@ testCase('VueJsTest.php', function () {
                             <div>
                                 {$this->renderChildren()}
                             </div>
-
-                            {$this->renderScripts()}
                         </body>
                         </html>
                     HTML;
@@ -41,7 +39,9 @@ testCase('VueJsTest.php', function () {
 
                 public function onClickMyButton(): void
                 {
-                    $this->myTable->setRows([
+                    $myTable = $this->findChildByName('myTable');
+
+                    $myTable->setRows([
                         ['name' => 'Andy Navarro', 'gender' => 'Male'],
                         ['name' => 'Daniel Taño', 'gender' => 'Male'],
                     ]);
