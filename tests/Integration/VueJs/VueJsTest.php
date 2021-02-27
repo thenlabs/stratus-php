@@ -41,17 +41,20 @@ testCase('VueJsTest.php', function () {
 
                 public function onClickMyButton(): void
                 {
-                    $this->setRows([
+                    $this->myTable->setRows([
                         ['name' => 'Andy Navarro', 'gender' => 'Male'],
                         ['name' => 'Daniel Taño', 'gender' => 'Male'],
                     ]);
                 }
             };
 
-            $page->addChild(new MyTable);
+            $myTable = new MyTable;
+            $myTable->setName('myTable');
+
+            $page->addChild($myTable);
             $page->runPlugins();
 
-            static::dumpApp($page);
+            static::dumpApp($page, false);
             static::openApp();
         });
 

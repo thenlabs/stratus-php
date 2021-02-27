@@ -41,7 +41,7 @@ class SeleniumTestCase extends TestCase
         return self::$driver;
     }
 
-    public static function dumpApp(AbstractPage $page): void
+    public static function dumpApp(AbstractPage $page, bool $runPlugins = true): void
     {
         $class = new ReflectionClass($page);
 
@@ -86,7 +86,10 @@ class SeleniumTestCase extends TestCase
 
         $rest = '';
         while ($line = fgets($file)) {
-            if (false === strpos($line, 'static::dumpApp($page);')) {
+            if (false === strpos($line, 'static::dumpApp($page);') &&
+                false === strpos($line, 'static::dumpApp($page, true);') &&
+                false === strpos($line, 'static::dumpApp($page, false);')
+            ) {
                 $rest .= $line;
             } else {
                 break;
@@ -114,6 +117,8 @@ class SeleniumTestCase extends TestCase
             '$page->setDebug(true);' : ''
         ;
 
+        $runPluginsStr = var_export($runPlugins, true);
+
         $source = <<<PHP
             <?php
 
@@ -121,7 +126,7 @@ class SeleniumTestCase extends TestCase
 
             require_once 'Page.php';
 
-            \$page = new App('/controller.php');
+            \$page = new App('/controller.php', {$runPluginsStr});
             {$setDebug}
             \$page->setJavaScriptClasses({$javaScriptClassesDef});
 
