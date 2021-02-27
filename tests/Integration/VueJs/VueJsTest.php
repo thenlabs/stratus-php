@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\StratusPHP\Tests\Integration;
+namespace ThenLabs\StratusPHP\Tests\Integration\VueJs;
 
 use ThenLabs\StratusPHP\Plugin\SElements\AbstractPage as TestApp;
-use ThenLabs\StratusPHP\Plugin\VueJs\Annotation as VueJs;
-use ThenLabs\StratusPHP\Plugin\VueJs\AbstractComponent as AbstractVueJsComponent;
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
+use ThenLabs\StratusPHP\Tests\Integration\VueJs\MyTable;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
@@ -14,40 +13,8 @@ setTestCaseClass(SeleniumTestCase::class);
 testCase('VueJsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
-            $table = new class extends AbstractVueJsComponent
-            {
-                /**
-                 * @VueJs\Data
-                 */
-                protected $rows = [
-                    ['name' => 'Andy', 'gender' => 'Male'],
-                ];
+            $page = new class('', false) extends TestApp {
 
-                public function getView(): string
-                {
-                    return <<<HTML
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Gender</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="row in rows">
-                                    <td></td>
-                                    <td>{{ row.name }}</td>
-                                    <td>{{ row.gender }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    HTML;
-                }
-            };
-
-            $page = new class('') extends TestApp
-            {
                 public function getView(): string
                 {
                     return <<<HTML
@@ -81,7 +48,8 @@ testCase('VueJsTest.php', function () {
                 }
             };
 
-            $page->addChild($table);
+            $page->addChild(new MyTable);
+            $page->runPlugins();
 
             static::dumpApp($page);
             static::openApp();
