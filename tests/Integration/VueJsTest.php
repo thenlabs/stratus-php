@@ -17,7 +17,7 @@ testCase('VueJsTest.php', function () {
             $table = new class extends AbstractVueJsComponent
             {
                 /**
-                 * @VueJs\Data(type="array")
+                 * @VueJs\Data
                  */
                 protected $rows = [
                     ['name' => 'Andy', 'gender' => 'Male'],
