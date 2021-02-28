@@ -26,7 +26,8 @@ class Utils
                 break;
 
             case 'array':
-                $result = json_encode($value);
+                $json = json_encode($value);
+                $result = "JSON.parse(`{$json}`)";
                 break;
 
             default:
