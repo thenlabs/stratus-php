@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
 use ThenLabs\StratusPHP\AbstractPage;
-use ThenLabs\StratusPHP\Utils;
+use ThenLabs\StratusPHP\JavaScript\Utils;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
