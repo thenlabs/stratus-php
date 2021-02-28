@@ -44,10 +44,10 @@ testCase('VueJsTest.php', function () {
                 {
                     $myTable = $this->findChildByName('myTable');
 
-                    $myTable->setRows([
+                    $myTable->rows = [
                         ['name' => 'Andy Navarro', 'gender' => 'Male'],
                         ['name' => 'Daniel Taño', 'gender' => 'Male'],
-                    ]);
+                    ];
                 }
             };
 
