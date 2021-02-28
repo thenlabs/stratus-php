@@ -152,6 +152,8 @@ class StratusScript extends Script
                     for (let id in lines) {
                         let line = lines[id];
 
+                        line = line.trim();
+
                         if (! line.length) {
                             continue;
                         }
