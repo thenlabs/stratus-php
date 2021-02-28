@@ -10,6 +10,9 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use ThenLabs\StratusPHP\AbstractPage;
 use ThenLabs\StratusPHP\Component\ComponentInterface;
 use ThenLabs\StratusPHP\JavaScript\Utils;
+use ReflectionClass;
+use ReflectionProperty;
+use Exception;
 
 AnnotationRegistry::registerFile(__DIR__.'/Annotation/Data.php');
 
@@ -112,6 +115,20 @@ abstract class AbstractComponent extends AbstractCompositeView implements Compon
 
     public function __set($name, $value)
     {
+        $class = new ReflectionClass($this);
+        $property = $class->getProperty($name);
+
+        if (! $property instanceof ReflectionProperty) {
+            throw new Exception("Unexistent property with name '{$name} of a vue component.'");
+        }
+
+        $reader = new AnnotationReader;
+        $dataAnnotation = $reader->getPropertyAnnotation($property, Annotation\Data::class);
+
+        if (! $dataAnnotation instanceof Annotation\Data) {
+            throw new Exception("Unexistent property with name '{$name} of a vue component.'");
+        }
+
         $jsValue = Utils::getJavaScriptValue($value);
 
         $this->page->executeScript(<<<JAVASCRIPT
