@@ -14,4 +14,10 @@ AnnotationRegistry::registerFile(__DIR__.'/Annotation/Data.php');
  */
 abstract class AbstractComponent extends AbstractCompositeView
 {
+    public function getOwnDependencies(): array
+    {
+        return [
+            'vuejs' => Asset\VueJsScript::getInstance(),
+        ];
+    }
 }

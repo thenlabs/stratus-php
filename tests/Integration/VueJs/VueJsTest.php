@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\StratusPHP\Tests\Integration\VueJs;
 
+use ThenLabs\StratusPHP\Plugin\VueJs\Asset\VueJsScript;
 use ThenLabs\StratusPHP\Plugin\SElements\AbstractPage as TestApp;
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
 use ThenLabs\StratusPHP\Tests\Integration\VueJs\MyTable;
@@ -31,6 +32,8 @@ testCase('VueJsTest.php', function () {
 
                             <div>
                                 {$this->renderChildren()}
+
+                                {$this->renderScripts()}
                             </div>
                         </body>
                         </html>
@@ -47,6 +50,8 @@ testCase('VueJsTest.php', function () {
                     ]);
                 }
             };
+
+            VueJsScript::getInstance()->setUri('https://cdn.jsdelivr.net/npm/vue@2');
 
             $myTable = new MyTable;
             $myTable->setName('myTable');

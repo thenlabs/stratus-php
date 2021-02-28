@@ -6,6 +6,7 @@ namespace ThenLabs\StratusPHP;
 use ThenLabs\Components\ComponentInterface;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\Event\BeforeInsertionEvent;
+use ThenLabs\Components\Event\FilterDependenciesEvent;
 use ThenLabs\ComposedViews\AbstractCompositeView;
 use ThenLabs\ComposedViews\Event\RenderEvent;
 use ThenLabs\ComposedViews\Asset\Script;
@@ -107,6 +108,10 @@ abstract class AbstractPage extends AbstractCompositeView
 
         $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
+        $this->on(
+            FilterDependenciesEvent::class."_{$this->getId()}",
+            [$this, '_filterDependenciesEvent']
+        );
 
         if ($runPlugins) {
             $this->runPlugins();
@@ -305,6 +310,27 @@ abstract class AbstractPage extends AbstractCompositeView
         if ($child instanceof StratusComponentInterface) {
             $child->setPage($this);
         }
+    }
+
+    /**
+     * The assets stratus and stratus-init should be the lastest.
+     *
+     * @param  FilterDependenciesEvent $event
+     */
+    public function _filterDependenciesEvent(FilterDependenciesEvent $event): void
+    {
+        $dependencies = $event->getDependencies();
+
+        $stratusScript = $dependencies['stratus'];
+        $stratusInitScript = $dependencies['stratus-init'];
+
+        unset($dependencies['stratus']);
+        unset($dependencies['stratus-init']);
+
+        $dependencies['stratus'] = $stratusScript;
+        $dependencies['stratus-init'] = $stratusInitScript;
+
+        $event->setDependencies($dependencies);
     }
 
     /**
