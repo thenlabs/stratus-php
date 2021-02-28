@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Plugin\PageDom;
 
 use ThenLabs\StratusPHP\AbstractPage;
+use ThenLabs\StratusPHP\Utils;
 use ThenLabs\StratusPHP\Exception\InvokationBeforeBootException;
 use ThenLabs\StratusPHP\Event\EventListener;
 use ThenLabs\StratusPHP\Component\ComponentInterface as StratusComponentInterface;
@@ -243,7 +244,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $jsValue = var_export($value, true);
+        $jsValue = Utils::getJavaScriptValue($value);
 
         $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
@@ -351,7 +352,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
     {
         $this->verifyAppBooted(__METHOD__);
 
-        $jsValue = var_export($value, true);
+        $jsValue = Utils::getJavaScriptValue($value);
 
         $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
@@ -464,7 +465,7 @@ class Element implements CompositeComponentInterface, StratusComponentInterface
      */
     public function __set($name, $value)
     {
-        $jsValue = is_string($value) ? "`{$value}`" : var_export($value, true);
+        $jsValue = Utils::getJavaScriptValue($value);
 
         $this->page->executeScript(<<<JAVASCRIPT
             let component = stratusAppInstance.getComponent('{$this->getId()}');
