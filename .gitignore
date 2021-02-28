@@ -5,4 +5,5 @@ vendor/
 !.php_cs.dist
 tests/public/page.php
 tests/public/Page.php
+tests/public/node_modules/
 demos/

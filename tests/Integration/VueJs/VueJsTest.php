@@ -51,7 +51,7 @@ testCase('VueJsTest.php', function () {
                 }
             };
 
-            VueJsScript::getInstance()->setUri('https://cdn.jsdelivr.net/npm/vue@2');
+            VueJsScript::getInstance()->setUri('/node_modules/vue/dist/vue.min.js');
 
             $myTable = new MyTable;
             $myTable->setName('myTable');
