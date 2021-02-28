@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\StratusPHP\Plugin\VueJs;
 
 use ThenLabs\ComposedViews\AbstractCompositeView;
+use ThenLabs\ComposedViews\Event\RenderEvent;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ThenLabs\StratusPHP\JavaScript\JavaScriptInstanceInterface;
@@ -17,6 +18,22 @@ AnnotationRegistry::registerFile(__DIR__.'/Annotation/Data.php');
  */
 abstract class AbstractComponent extends AbstractCompositeView implements JavaScriptInstanceInterface
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->addFilter([$this, '_addContainerElement']);
+    }
+
+    public function _addContainerElement(RenderEvent $event): void
+    {
+        $event->setView(<<<HTML
+            <div class="stratus-vue-container stratus-vue-container-{$this->getId()}">
+                {$event->getView()}
+            </div>
+        HTML);
+    }
+
     /**
      * @return array
      */
@@ -55,7 +72,7 @@ abstract class AbstractComponent extends AbstractCompositeView implements JavaSc
         }
 
         $options = [
-            'el' => "#{$this->getId()}",
+            'el' => ".stratus-vue-container-{$this->getId()}",
             'data' => $data,
         ];
 
