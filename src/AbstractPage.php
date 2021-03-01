@@ -106,12 +106,13 @@ abstract class AbstractPage extends AbstractCompositeView
         $this->browser = new Browser;
         $this->browser->setPage($this);
 
-        $this->addFilter([$this, '_addStratusAssetScripts']);
         $this->on(BeforeInsertionEvent::class, [$this, '_beforeInsertionEvent']);
         $this->on(
             FilterDependenciesEvent::class."_{$this->getId()}",
             [$this, '_filterDependenciesEvent']
         );
+
+        $this->addFilter([$this, '_insertAssets']);
 
         if ($runPlugins) {
             $this->runPlugins();
@@ -277,20 +278,20 @@ abstract class AbstractPage extends AbstractCompositeView
     /**
      * @param RenderEvent $event
      */
-    public function _addStratusAssetScripts(RenderEvent $event): void
+    public function _insertAssets(RenderEvent $event): void
     {
         $body = $event->filter('body');
+        $dependencies = $this->getDependencies();
 
-        extract($this->getOwnDependencies());
+        foreach ($dependencies as $dependencyName => $dependency) {
+            if ($dependency instanceof Script) {
+                $dependency->setAttribute('class', $dependencyName);
+                $element = $body->filter("script.{$dependencyName}");
 
-        $stratusScriptElement = $body->filter("script.{$stratusScript->getName()}");
-        if (0 === count($stratusScriptElement)) {
-            $body->append($stratusScript->render());
-        }
-
-        $stratusInitScriptElement = $body->filter("script.{$stratusInitScript->getName()}");
-        if (0 === count($stratusInitScriptElement)) {
-            $body->append($stratusInitScript->render());
+                if (0 === count($element)) {
+                    $body->append($dependency->render());
+                }
+            }
         }
     }
 

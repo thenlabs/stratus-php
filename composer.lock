@@ -1586,16 +1586,16 @@
         },
         {
             "name": "thenlabs/composed-views",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thenlabs/composed-views.git",
-                "reference": "5efee54ccc0a807264c423cbcacdd0177051c064"
+                "reference": "b0afa99147ff5976527a39f6f1bfa5b298aa8231"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thenlabs/composed-views/zipball/5efee54ccc0a807264c423cbcacdd0177051c064",
-                "reference": "5efee54ccc0a807264c423cbcacdd0177051c064",
+                "url": "https://api.github.com/repos/thenlabs/composed-views/zipball/b0afa99147ff5976527a39f6f1bfa5b298aa8231",
+                "reference": "b0afa99147ff5976527a39f6f1bfa5b298aa8231",
                 "shasum": ""
             },
             "require": {
@@ -1628,9 +1628,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thenlabs/composed-views/issues",
-                "source": "https://github.com/thenlabs/composed-views/tree/v1.0.8"
+                "source": "https://github.com/thenlabs/composed-views/tree/v1.0.9"
             },
-            "time": "2021-02-27T19:42:56+00:00"
+            "time": "2021-03-01T20:52:37+00:00"
         },
         {
             "name": "wa72/htmlpagedom",

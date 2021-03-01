@@ -32,8 +32,6 @@ testCase('VueJsTest.php', function () {
 
                             <div>
                                 {$this->renderChildren()}
-
-                                {$this->renderScripts()}
                             </div>
                         </body>
                         </html>
