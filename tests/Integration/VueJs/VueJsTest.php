@@ -6,7 +6,6 @@ namespace ThenLabs\StratusPHP\Tests\Integration\VueJs;
 use ThenLabs\StratusPHP\Plugin\VueJs\Asset\VueJsScript;
 use ThenLabs\StratusPHP\Plugin\SElements\AbstractPage as TestApp;
 use ThenLabs\StratusPHP\Tests\SeleniumTestCase;
-use ThenLabs\StratusPHP\Tests\Integration\VueJs\MyTable;
 
 setTestCaseNamespace(__NAMESPACE__);
 setTestCaseClass(SeleniumTestCase::class);
@@ -15,7 +14,6 @@ testCase('VueJsTest.php', function () {
     testCase(function () {
         setUpBeforeClassOnce(function () {
             $page = new class('', false) extends TestApp {
-
                 public function getView(): string
                 {
                     return <<<HTML
