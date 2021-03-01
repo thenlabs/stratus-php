@@ -49,7 +49,7 @@ testCase('VueJsTest.php', function () {
 
             VueJsScript::getInstance()->setUri('/node_modules/vue/dist/vue.min.js');
 
-            $myTable = new MyTable;
+            $myTable = new \ThenLabs\StratusPHP\Tests\Integration\VueJs\MyTable;
             $myTable->setName('myTable');
 
             $page->addChild($myTable);
