@@ -143,6 +143,8 @@ class SeleniumTestCase extends TestCase
 
     public static function openApp(): void
     {
+        sleep(3);
+
         static::getDriver()->get($_ENV['TEST_URL'].'?data='.serialize(static::$vars));
     }
 
