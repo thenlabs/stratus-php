@@ -166,7 +166,7 @@ class SeleniumTestCase extends TestCase
     public static function waitForResponse()
     {
         do {
-            $httpRequestsLen = static::executeScript('return stratusAppInstance.httpRequests.length');
+            $httpRequestsLen = static::executeScript('return stratusAppInstance.bus.httpRequests.length');
         } while ($httpRequestsLen > 0);
     }
 }

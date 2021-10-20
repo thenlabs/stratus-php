@@ -20,8 +20,15 @@ class StratusInitScript extends Script
      */
     public function getSource(): string
     {
-        $jsClasses = '';
-        $jsInstances = '';
+        $bus = $this->page->getBus();
+
+        $jsClasses = <<<JAVASCRIPT
+            class Bus {
+                {$bus->getJavaScriptClassMembers()}
+            };
+        JAVASCRIPT;
+
+        $jsInstances = $bus->getJavaScriptCreateInstanceScript();
 
         foreach ($this->page->getJavaScriptClasses() as $className => $jsClassId) {
             $jsClassMembers = call_user_func([$className, 'getJavaScriptClassMembers']);
