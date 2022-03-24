@@ -7,8 +7,8 @@ StratusPHP is a framework for creating PHP applications that have reactive inter
 
 ## Documentation.
 
-- [English](https://thenlabs.org/en/doc/stratus-php/master/index.html)
-- [Español](https://thenlabs.org/es/doc/stratus-php/master/index.html)
+- [English](https://github.com/thenlabs/doc/blob/master/stratus-php/master/en/index.md)
+- [Español](https://github.com/thenlabs/doc/blob/master/stratus-php/master/es/index.md)
 
 ## Running the tests.
 
