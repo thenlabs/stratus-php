@@ -22,8 +22,10 @@ class StreamingBus implements BusInterface
     {
         echo json_encode($data).'%SSS%';
 
-        ob_flush();
-        flush();
+        if (ob_get_level() > 0) {
+            ob_flush();
+            flush();
+        }
     }
 
     /**
