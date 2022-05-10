@@ -3,10 +3,12 @@
 
 StratusPHP is a framework for creating PHP applications that have reactive interfaces using the paradigm of event-driven programming between the browser and the server.
 
+>If you like this project gift us a ⭐.
+
 ## Documentation.
 
-- [English](https://thenlabs.org/en/doc/stratus-php/master/index.html)
-- [Español](https://thenlabs.org/es/doc/stratus-php/master/index.html)
+- [English](https://github.com/thenlabs/doc/blob/master/stratus-php/master/en/index.md)
+- [Español](https://github.com/thenlabs/doc/blob/master/stratus-php/master/es/index.md)
 
 ## Running the tests.
 
