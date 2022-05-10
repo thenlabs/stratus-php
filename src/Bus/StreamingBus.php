@@ -24,8 +24,9 @@ class StreamingBus implements BusInterface
 
         if (ob_get_level() > 0) {
             ob_flush();
-            flush();
         }
+
+        flush();
     }
 
     /**
